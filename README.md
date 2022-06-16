@@ -67,7 +67,7 @@ Users are able to get a fortune cookie a day through this app. They can then sha
 * Friends -> Friend detailed view upon friend click
 
 ## Wireframes
-<img src="https://i.imgur.com/9CrjH1K.jpg" width=800><br>
+<img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Wireframe.jpg" width=800><br>
 
 ## Schema 
 ### Models
