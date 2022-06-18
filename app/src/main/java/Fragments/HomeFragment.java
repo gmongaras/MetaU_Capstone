@@ -143,13 +143,13 @@ public class HomeFragment extends Fragment {
                 long[] scores = module.forward(IValue.from(inputTensor)).toTensor().getDataAsLongArray();
 
                 // Get the output sequence
-                String text = "";
-                for (int i = 0; i < scores.length; i++) {
-                    text += vocab.get((int)scores[i]) + " ";
+                StringBuilder text = new StringBuilder();
+                for (long score : scores) {
+                    text.append(vocab.get((int) score)).append(" ");
                 }
 
                 // Change the displayed string
-                tvText.setText(text);
+                tvText.setText(text.toString());
             }
         });
     }

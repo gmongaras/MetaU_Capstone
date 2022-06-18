@@ -2,8 +2,6 @@ package com.example.metau_capstone;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
@@ -17,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import Fragments.HomeFragment;
+import Fragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +51,18 @@ public class MainActivity extends AppCompatActivity {
 
                         // Change the fragment
                         ft.replace(R.id.flContainer, fragmentHome);
+                        ft.commit();
+
+                        break;
+
+
+                    // If the menu item clicked is profile
+                    case R.id.action_profile:
+                        // Create the fragment with paramters
+                        ProfileFragment fragmentProfile = ProfileFragment.newInstance("a", "b");
+
+                        // Change the fragment
+                        ft.replace(R.id.flContainer, fragmentProfile);
                         ft.commit();
 
                         break;

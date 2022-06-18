@@ -29,14 +29,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initialize Parse
-        Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("Dwsfp3rsCpvhUvRpB8dtfiA97kOHeORreiuIAu4o")
-                .clientKey("Uk8DpECE78TqC1r4OUr8jYMUksag8lBdvC5TTnzh")
-                .server("https://parseapi.back4app.com")
-                .build()
-        );
-
         // If the user is already logged in, go straight to the main activity
         if (ParseUser.getCurrentUser() != null) {
             goMainActivity();

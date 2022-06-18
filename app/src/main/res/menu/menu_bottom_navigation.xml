@@ -13,12 +13,12 @@
         android:title="Home"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_compose"
+        android:id="@+id/action_profile"
         android:icon="@drawable/profile"
         android:title="Profile"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_profile"
+        android:id="@+id/action_friends"
         android:icon="@drawable/friends"
         android:title="Friend"
         app:showAsAction="always" />
