@@ -14,7 +14,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import Fragments.HomeFragment;
+import Fragments.HomeFragment_countdown;
+import Fragments.HomeFragment_fortune;
 import Fragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                     // If the menu item clicked is home
                     case R.id.action_home:
                         // Create the fragment with paramters
-                        HomeFragment fragmentHome = HomeFragment.newInstance("a", "b");
+                        HomeFragment_countdown fragmentHome = HomeFragment_countdown.newInstance("a", "b");
 
                         // Change the fragment
                         ft.replace(R.id.flContainer, fragmentHome);
