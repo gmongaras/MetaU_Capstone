@@ -20,6 +20,6 @@
     <item
         android:id="@+id/action_friends"
         android:icon="@drawable/friends"
-        android:title="Friend"
+        android:title="Friends"
         app:showAsAction="always" />
 </menu>

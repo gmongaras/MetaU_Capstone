@@ -50,6 +50,9 @@ public class HomeFragment_countdown extends Fragment {
     // Timer to track the time left until a fortune can be opened
     CountDownTimer timer;
 
+    // Time until next fortune in miliseconds (23 hours)
+    public static final double timeLeft = 8.28e+7;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -151,13 +154,13 @@ public class HomeFragment_countdown extends Fragment {
                 // Get the difference between the date times. If the difference
                 // is more than 23 hours, go to the fortune page
                 long diff = currentTime.getTime() - latestCreatedAt.getTime();
-                if (diff >= 8.28e+7) {
+                if (diff >= timeLeft) {
                     goToFortune();
                 }
                 // If the difference is less than 23 hours, start the countdown timer
                 // with a tick every second
                 else {
-                    timer =  new CountDownTimer((long) (8.28e+7-diff), 1000) {
+                    timer =  new CountDownTimer((long) (timeLeft-diff), 1000) {
 
                         // Every second, update the on screen timer
                         public void onTick(long millisUntilFinished) {

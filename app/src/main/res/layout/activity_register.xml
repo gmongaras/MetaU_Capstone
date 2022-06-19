@@ -5,39 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    tools:context=".LoginActivity"
+    tools:context=".RegisterActivity"
     android:orientation="vertical"
     android:layout_gravity="top">
 
     <EditText
-        android:id="@+id/etUsername"
+        android:id="@+id/etUsername_reg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:textColor="@color/black" />
+        android:minHeight="48dp" />
 
     <EditText
-        android:id="@+id/etPassword"
+        android:id="@+id/etPassword_reg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/password"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        tools:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/etPassword2_reg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="password again"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:textColor="@color/black" />
+        tools:inputType="textPassword" />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/subBtn" />
-
-    <Button
-        android:id="@+id/btnRegisterGoTo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="New here? Register" />
+        android:text="Register" />
 </LinearLayout>

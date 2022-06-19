@@ -1,5 +1,6 @@
 package com.example.metau_capstone;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -75,6 +76,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the default fragment to load
         bottomNav.setSelectedItemId(R.id.action_home);
+
+        // Handle back button presses so the user doesn't go to the wrong
+        // page after they logged out
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finishAffinity();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
 
