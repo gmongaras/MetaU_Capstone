@@ -16,7 +16,8 @@
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textColor="@color/black" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -25,7 +26,8 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textColor="@color/black" />
 
     <Button
         android:id="@+id/btnLogin"

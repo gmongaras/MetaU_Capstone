@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Fortune;
+import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.ProfileAdapter;
 import com.example.metau_capstone.R;
 import com.parse.FindCallback;
@@ -64,6 +66,7 @@ public class ProfileFragment extends Fragment {
     ImageView ivProfileImage;
     TextView tvUsername;
     RecyclerView rvProfile;
+    Button btnLogout;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -131,6 +134,7 @@ public class ProfileFragment extends Fragment {
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         tvUsername = view.findViewById(R.id.tvUsername);
         rvProfile = view.findViewById(R.id.rvProfile);
+        btnLogout = view.findViewById(R.id.btnLogout);
 
         // Get the current user
         user = ParseUser.getCurrentUser();
@@ -178,6 +182,23 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, 21);
+            }
+        });
+
+        // Put an onClick listener onto the logout button
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Log the user out
+                Toast.makeText(view.getContext(), "Logging out..", Toast.LENGTH_SHORT).show();
+                ParseUser.logOutInBackground();
+
+                // Exit this fragment
+                requireActivity().onBackPressed();
+
+                // Go back to the main page
+                Intent i = new Intent(view.getContext(), LoginActivity.class);
+                startActivity(i);
             }
         });
     }
