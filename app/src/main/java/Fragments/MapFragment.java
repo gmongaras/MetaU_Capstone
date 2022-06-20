@@ -16,6 +16,7 @@ import android.view.animation.BounceInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.metau_capstone.CustomWindowAdapter;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
 import com.google.android.gms.location.LocationRequest;
@@ -129,7 +130,7 @@ public class MapFragment extends Fragment {
             //map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
             // Set the custom info window for each marker
-            //map.setInfoWindowAdapter(new CustomWindowAdapter(getLayoutInflater()));
+            map.setInfoWindowAdapter(new CustomWindowAdapter(getLayoutInflater()));
 
 
             // Load in all the fortunes as pins into the map
