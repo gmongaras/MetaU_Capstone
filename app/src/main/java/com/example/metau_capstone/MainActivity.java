@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setSelectedItemId(R.id.action_home);
 
         // Handle back button presses so the user doesn't go to the wrong
-        // page after they logged out
+        // page after they logged in and pressed the back button.
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

@@ -1,20 +1,40 @@
 package Fragments;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.metau_capstone.Fortune;
+import com.example.metau_capstone.MainActivity;
 import com.example.metau_capstone.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.pytorch.IValue;
 import org.pytorch.LiteModuleLoader;
@@ -31,6 +51,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -52,8 +73,9 @@ public class HomeFragment_fortune extends Fragment {
     private static final String TAG = "HomeFragment_fortune";
 
     // Elements in the view
-    TextView tvText;
-    Button btnInfer;
+    TextView tvFortuneText;
+    TextView tvTextPrompt;
+    ImageView ivFortune;
 
     // Pytorch model
     Module module;
@@ -63,6 +85,10 @@ public class HomeFragment_fortune extends Fragment {
 
     // Saved vocab
     Map<Integer, String> vocab;
+
+    // Used for location
+    FusedLocationProviderClient fusedLocationProviderClient;
+    Location userLoc;
 
     public HomeFragment_fortune() {
         // Required empty public constructor
@@ -110,8 +136,9 @@ public class HomeFragment_fortune extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get the elements
-        tvText = view.findViewById(R.id.tvText);
-        btnInfer = view.findViewById(R.id.btnInfer);
+        tvFortuneText = view.findViewById(R.id.tvFortuneText);
+        tvTextPrompt = view.findViewById(R.id.tvTextPrompt);
+        ivFortune = view.findViewById(R.id.ivFortune);
 
         // Load the model
         try {
@@ -130,7 +157,7 @@ public class HomeFragment_fortune extends Fragment {
         }
 
         // Set on an onClick listener to the infer button
-        btnInfer.setOnClickListener(new View.OnClickListener() {
+        ivFortune.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Preparing trash input tensor
@@ -148,8 +175,69 @@ public class HomeFragment_fortune extends Fragment {
                     text.append(vocab.get((int) score)).append(" ");
                 }
 
-                // Change the displayed string
-                tvText.setText(text.toString());
+                // Save the fortune to the database
+                saveFortune(text.toString());
+
+                // Make the fortune invisible and the text visible
+                ivFortune.setVisibility(View.INVISIBLE);
+                tvFortuneText.setVisibility(View.VISIBLE);
+
+                // Change the displayed text
+                tvTextPrompt.setText(R.string.promptAfter);
+                tvFortuneText.setText(text.toString());
+            }
+        });
+    }
+
+
+    // Given a fortune, save the fortune to the database under this user
+    public void saveFortune(String fortune) {
+        // Setup the location manager to get the location
+        LocationManager locationManager = (LocationManager) getContext().getApplicationContext().getSystemService(requireContext().LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // If we don't have permission, request permission
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1);
+
+            return;
+        }
+
+        // Get the location of the phone
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        // The saved location
+        ParseGeoPoint loc = null;
+
+        // If the location is not null, save the location
+        if (location != null) {
+            loc = new ParseGeoPoint();
+
+            loc.setLongitude(location.getLongitude());
+            loc.setLatitude(location.getLatitude());
+        }
+
+        // Create a new fortune
+        Fortune newFortune = new Fortune();
+
+        // Add contents to the fortune
+        if (loc != null) {
+            newFortune.setLocation(loc);
+        }
+        newFortune.setMessage(fortune);
+        newFortune.setUser(ParseUser.getCurrentUser());
+
+        // Send the fortune to the database
+        newFortune.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error saving fortune", e);
+                }
+                else {
+                    Log.e(TAG, "Fortune saved!");
+                }
             }
         });
     }

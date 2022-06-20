@@ -2,8 +2,11 @@ package com.example.metau_capstone;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +33,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Get permission to get the user's location
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // If we don't have permission, request permission
+            ActivityCompat.requestPermissions(LoginActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1);
+
+            return;
+        }
 
         // If the user is already logged in, go straight to the main activity
         if (ParseUser.getCurrentUser() != null) {
