@@ -10,4 +10,6 @@
 
     <string name="promptBefore">Click on the cookie below to get your fortune!</string>
     <string name="promptAfter">"Here's your fortune!"</string>
+
+    <string name="mapError">Unable to load map. Does this phone have Google Play support?</string>
 </resources>

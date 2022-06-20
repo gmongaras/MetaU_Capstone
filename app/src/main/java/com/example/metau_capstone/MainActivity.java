@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import Fragments.HomeFragment_countdown;
 import Fragments.HomeFragment_fortune;
+import Fragments.MapFragment;
 import Fragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +47,17 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
                 switch (item.getItemId()) {
+                    // If the menu item clicked is map
+                    case R.id.action_map:
+                        // Create the fragment with paramters
+                        MapFragment fragmentMap = MapFragment.newInstance("a", "b");
+
+                        // Change the fragment
+                        ft.replace(R.id.flContainer, fragmentMap);
+                        ft.commit();
+
+                        break;
+
                     // If the menu item clicked is home
                     case R.id.action_home:
                         // Create the fragment with paramters

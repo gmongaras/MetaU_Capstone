@@ -143,7 +143,7 @@ public class HomeFragment_fortune extends Fragment {
         // Load the model
         try {
             //module = Module.load(assetFilePath(this, "model3.ptl"));
-            module = LiteModuleLoader.load(assetFilePath(view.getContext(), "model5.ptl"));
+            module = LiteModuleLoader.load(assetFilePath(view.getContext(), "model6.ptl"));
         } catch (IOException e) {
             Log.e(TAG, "Unable to load model", e);
             return;
@@ -162,7 +162,7 @@ public class HomeFragment_fortune extends Fragment {
             public void onClick(View v) {
                 // Preparing trash input tensor
                 int sequence_length = 64;
-                int embedding_size = 10;
+                int embedding_size = 20;
                 long[] shape = new long[]{sequence_length, embedding_size};
                 inputTensor = generateTensor(shape);
 

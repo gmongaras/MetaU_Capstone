@@ -40,8 +40,6 @@ public class LoginActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(LoginActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     1);
-
-            return;
         }
 
         // If the user is already logged in, go straight to the main activity
