@@ -4,30 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="top"
     android:layout_margin="10dp"
-    tools:context=".LoginActivity"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:layout_gravity="top">
+    tools:context=".LoginActivity">
 
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textColorHint="@color/light_grey"
+        tools:textColorHint="@color/light_grey" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textColorHint="@color/light_grey" />
 
     <Button
         android:id="@+id/btnLogin"

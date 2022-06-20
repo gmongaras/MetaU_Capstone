@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="top"
     android:layout_margin="10dp"
-    tools:context=".RegisterActivity"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:layout_gravity="top">
+    tools:context=".RegisterActivity">
 
     <EditText
         android:id="@+id/etUsername_reg"
