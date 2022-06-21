@@ -23,6 +23,7 @@ import com.parse.ParseUser;
 import java.util.List;
 
 import Fragments.ProfileDetailFragment;
+import Fragments.ProfileFragment;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
@@ -62,16 +63,15 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                // Setup the fragment switch
-//                FragmentTransaction ft = fragmentManager.beginTransaction();
-//
-//                // Create the fragment with paramters
-//                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune);
-//
-//                // Change the fragment
-//                ft.replace(R.id.flContainer, fragmentProfileDetail);
-//                ft.commit();
-                return;
+                // Setup the fragment switch
+                FragmentTransaction ft = fragmentManager.beginTransaction();
+
+                // Create the fragment with paramters
+                ProfileFragment fragmentProfile = ProfileFragment.newInstance(friend, 1);
+
+                // Change the fragment
+                ft.replace(R.id.flContainer, fragmentProfile);
+                ft.commit();
             }
         });
     }

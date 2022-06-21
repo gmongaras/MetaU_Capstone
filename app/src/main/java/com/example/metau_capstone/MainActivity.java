@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     // If the menu item clicked is profile
                     case R.id.action_profile:
                         // Create the fragment with paramters
-                        ProfileFragment fragmentProfile = ProfileFragment.newInstance("a", "b");
+                        ProfileFragment fragmentProfile = ProfileFragment.newInstance(ParseUser.getCurrentUser(), 0);
 
                         // Change the fragment
                         ft.replace(R.id.flContainer, fragmentProfile);

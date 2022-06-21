@@ -21,7 +21,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.Parse;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -116,7 +118,7 @@ public class ProfileDetailFragment extends Fragment {
                 FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
                 // Go back to the Profile fragment
-                ProfileFragment profileFragment = ProfileFragment.newInstance("a", "b");
+                ProfileFragment profileFragment = ProfileFragment.newInstance(ParseUser.getCurrentUser(), 0);
 
                 // Add back the profile fragment
                 ft.replace(R.id.flContainer, profileFragment);

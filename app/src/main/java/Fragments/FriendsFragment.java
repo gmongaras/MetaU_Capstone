@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,6 +26,7 @@ import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.FriendsAdapter;
 import com.example.metau_capstone.ProfileAdapter;
 import com.example.metau_capstone.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -170,6 +172,26 @@ public class FriendsFragment extends Fragment {
                 return false;
             }
         });
+
+        // Handle back button presses by going to the home fragment
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Setup the fragment switch
+                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                // Go back to the Profile fragment
+                HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance("a", "b");
+
+                // Add back the profile fragment
+                ft.replace(R.id.flContainer, homeFragment);
+                ft.commit();
+
+                ((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
+                //((BottomNavigationView)getParentFragment().getView().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
 
 

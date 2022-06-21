@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,7 @@ import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.ProfileAdapter;
 import com.example.metau_capstone.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -75,36 +78,25 @@ public class ProfileFragment extends Fragment {
     // List of fortunes for the recycler view
     List<Fortune> Fortunes;
 
-    // Current user logged in
-    ParseUser user;
+    // The user to load data for
+    private static final String ARG_USER = "user";
+    private ParseUser user;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // What mode should the profile be put in?
+    // 0 - Full permissions
+    // 1 - Cannot change profile picture
+    private static final String ARG_MODE = "mode";
+    private int mode;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance(ParseUser user, int mode) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable(ARG_USER, user);
+        args.putInt(ARG_MODE, mode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -113,8 +105,8 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            user = getArguments().getParcelable(ARG_USER);
+            mode = getArguments().getInt(ARG_MODE);
         }
     }
 
@@ -138,8 +130,11 @@ public class ProfileFragment extends Fragment {
         rvProfile = view.findViewById(R.id.rvProfile);
         btnLogout = view.findViewById(R.id.btnLogout);
 
-        // Get the current user
-        user = ParseUser.getCurrentUser();
+        // If the user is null, default to the current user
+        if (user == null) {
+            user = ParseUser.getCurrentUser();
+            mode = 0;
+        }
 
         // Store the username
         tvUsername.setText(user.getUsername());
@@ -175,34 +170,77 @@ public class ProfileFragment extends Fragment {
 
         // When the user profile picture is clicked, allow the
         // user to upload a new profile picture.
-        // Do this only if the mode is main
-        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+        // Do this only if the mode is 0
+        if (mode == 0) {
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ivProfileImage.setClickable(false);
+
+                    Intent intent = new Intent(Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, 21);
+                }
+            });
+        }
+
+        // If the mode is 1, remove the logout button
+        if (mode == 1) {
+            btnLogout.setVisibility(View.INVISIBLE);
+        }
+        // If the mode is 0, Put an onClick listener onto the logout button
+        else {
+            btnLogout.setVisibility(View.VISIBLE);
+            btnLogout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Log the user out
+                    Toast.makeText(view.getContext(), "Logging out..", Toast.LENGTH_SHORT).show();
+                    ParseUser.logOutInBackground();
+
+                    // Exit this fragment
+                    requireActivity().onBackPressed();
+
+                    // Go back to the main page
+                    Intent i = new Intent(view.getContext(), LoginActivity.class);
+                    startActivity(i);
+                }
+            });
+        }
+
+        // Handle back button presses
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View v) {
-                ivProfileImage.setClickable(false);
+            public void handleOnBackPressed() {
+                // If mode is 0, go back to the main page
+                if (mode == 0) {
+                    // Setup the fragment switch
+                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, 21);
+                    // Go back to the Profile fragment
+                    HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance("a", "b");
+
+                    // Add back the profile fragment
+                    ft.replace(R.id.flContainer, homeFragment);
+                    ft.commit();
+
+                    ((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
+                    //((BottomNavigationView)getParentFragment().getView().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
+                }
+                else {
+                    // Setup the fragment switch
+                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                    // Go back to the Profile fragment
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance("a", "b");
+
+                    // Add back the profile fragment
+                    ft.replace(R.id.flContainer, friendsFragment);
+                    ft.commit();
+                }
             }
-        });
-
-        // Put an onClick listener onto the logout button
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Log the user out
-                Toast.makeText(view.getContext(), "Logging out..", Toast.LENGTH_SHORT).show();
-                ParseUser.logOutInBackground();
-
-                // Exit this fragment
-                requireActivity().onBackPressed();
-
-                // Go back to the main page
-                Intent i = new Intent(view.getContext(), LoginActivity.class);
-                startActivity(i);
-            }
-        });
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
 
 
