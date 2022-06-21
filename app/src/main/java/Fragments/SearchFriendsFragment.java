@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,10 +20,9 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
-import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.FriendsAdapter;
-import com.example.metau_capstone.ProfileAdapter;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.SearchFriendsAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -36,10 +34,10 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FriendsFragment#newInstance} factory method to
+ * Use the {@link SearchFriendsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FriendsFragment extends Fragment {
+public class SearchFriendsFragment extends Fragment {
 
     // Number to skip when loading more posts
     private int skipVal;
@@ -47,54 +45,42 @@ public class FriendsFragment extends Fragment {
     // Constant number to load each time we want to load more posts
     private static final int loadRate = 10;
 
-    private static final String TAG = "FriendsFragment";
+    private static final String TAG = "SearchFriendsFragment";
 
     // Elements in the view
-    TextView tvNoFriends;
-    SearchView svFriends;
-    TextView tvSearchFriends;
-    RecyclerView rvFriends;
+    TextView tvAlert;
+    SearchView svFriends_search;
+    TextView tvSearchFriends_search;
+    RecyclerView rvFriends_search;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
-    FriendsAdapter adapter;
+    SearchFriendsAdapter adapter;
 
-    // List of friends (users) for the recycler view
-    List<ParseUser> Friends;
+    // List of users for the recycler view
+    List<ParseUser> Users;
 
     // Current user logged in
     ParseUser user;
 
-    // True if friends are being queried, false otherwise
+    // True if users are being queried, false otherwise
     boolean querying = false;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_QUERY_TEXT = "queryText";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String queryText;
 
-    public FriendsFragment() {
+    public SearchFriendsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FriendsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FriendsFragment newInstance(String param1, String param2) {
-        FriendsFragment fragment = new FriendsFragment();
+    public static SearchFriendsFragment newInstance(String queryText) {
+        SearchFriendsFragment fragment = new SearchFriendsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_QUERY_TEXT, queryText);
         fragment.setArguments(args);
         return fragment;
     }
@@ -103,8 +89,7 @@ public class FriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            queryText = getArguments().getString(ARG_QUERY_TEXT);
         }
     }
 
@@ -112,7 +97,7 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends, container, false);
+        return inflater.inflate(R.layout.fragment_search_friends, container, false);
     }
 
     @Override
@@ -122,23 +107,23 @@ public class FriendsFragment extends Fragment {
         skipVal = 0;
 
         // Get the elements in the view
-        tvNoFriends = view.findViewById(R.id.tvNoFriends);
-        svFriends = view.findViewById(R.id.svFriends);
-        int id = svFriends.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-        tvSearchFriends = ((TextView)svFriends.findViewById(id));
-        rvFriends = view.findViewById(R.id.rvFriends);
+        tvAlert = view.findViewById(R.id.tvAlert);
+        svFriends_search = view.findViewById(R.id.svFriends_search);
+        int id = svFriends_search.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        tvSearchFriends_search = ((TextView)svFriends_search.findViewById(id));
+        rvFriends_search = view.findViewById(R.id.rvFriends_search);
 
         // Get the current user
         user = ParseUser.getCurrentUser();
 
-        // Initialize the friends list
-        Friends = new ArrayList<>();
+        // Initialize the Users list
+        Users = new ArrayList<>();
 
-        // Get the friends
-        getFriends();
+        // Get the Users using the query text
+        queryUsers(queryText);
 
         // A a listener to look for a user entering a query into the search bar
-        tvSearchFriends.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        tvSearchFriends_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 // If friends are already being queried, do nothing
@@ -149,7 +134,7 @@ public class FriendsFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || event.getKeyCode() == 66) {
 
                     // Get the text from the text box
-                    String text = tvSearchFriends.getText().toString();
+                    String text = tvSearchFriends_search.getText().toString();
 
                     // If the text is blank, don't do anything
                     if (text.length() == 0) {
@@ -159,8 +144,15 @@ public class FriendsFragment extends Fragment {
                     // Set the querying state to true
                     querying = true;
 
+                    // Reset the skip value
+                    skipVal = 0;
+
+                    // Reset the list
+                    Users.clear();
+                    adapter.notifyDataSetChanged();
+
                     // Query for the username
-                    queryUsernames(text);
+                    queryUsers(text);
 
                     return true;
                 }
@@ -171,74 +163,63 @@ public class FriendsFragment extends Fragment {
     }
 
 
+    // Query users given a username to query for
+    private void queryUsers(String queryText) {
+        // Create a new query for users
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
 
-    // When querying, go to a new fragment
-    private void queryUsernames(String username) {
-        // Begin the querying process
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        // Search for the given username
+        query.whereEqualTo("username", queryText);
 
-        // Get the search fragment
-        SearchFriendsFragment fragment = SearchFriendsFragment.newInstance(username);
-
-        // Change the fragment
-        querying = false;
-        ft.replace(R.id.flContainer, fragment);
-        ft.commit();
-    }
-
-
-
-    private void getFriends() {
-        // Get the query to query the friends
-        ParseRelation<ParseUser> friends = user.getRelation("friends");
-        ParseQuery<ParseUser> query = friends.getQuery();
-
-
-        // Skip some fortunes that have already been loaded
+        // Skip some posts
         query.setSkip(skipVal*loadRate);
 
-        // Set the limit to loadRate
+        // Set the limit to loadRate posts
         query.setLimit(loadRate);
-
 
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public void done(List<ParseUser> friends, ParseException e) {
+            public void done(List<ParseUser> users, ParseException e) {
                 // Check if there was an exception
                 if (e != null) {
-                    Log.e(TAG, "Unable to load friends", e);
+                    Log.e(TAG, "Unable to load users", e);
                     return;
                 }
 
-                // If the user has no friends, display a message and don't setup the
-                // recycler view
-                if (friends.size() == 0 && Friends.size() == 0) {
-                    tvNoFriends.setVisibility(View.VISIBLE);
-                    return;
+                // If no users were found, display an alert message
+                if (users.size() == 0 && Users.size() == 0) {
+                    tvAlert.setVisibility(View.VISIBLE);
                 }
+                else {
+                    tvAlert.setVisibility(View.INVISIBLE);
 
-                // If the user has friends, setup the recycler view
+                    // Get all friends from the list and load them in
+                    Users.addAll(users);
 
-                // Get all friends from the list and load them in
-                Friends.addAll(friends);
+                    // Increase the skip value
+                    skipVal+=1;
+                }
 
                 // Setup the recycler view if it hasn't been setup already
-                if (rvFriends.getAdapter() == null) {
+                if (rvFriends_search.getAdapter() == null) {
 
-                    // When the fortunes have been loaded, setup the recycler view -->
+                    // When the users have been loaded, setup the recycler view -->
                     // Bind the adapter to the recycler view
-                    adapter = new FriendsAdapter(Friends, getContext(), requireActivity().getSupportFragmentManager());
-                    rvFriends.setAdapter(adapter);
+                    adapter = new SearchFriendsAdapter(Users, getContext(), requireActivity().getSupportFragmentManager());
+                    rvFriends_search.setAdapter(adapter);
 
                     // Configure the Recycler View: Layout Manager
                     layoutManager = new LinearLayoutManager(getContext());
-                    rvFriends.setLayoutManager(layoutManager);
+                    rvFriends_search.setLayoutManager(layoutManager);
 
                     // Used for infinite scrolling
-                    rvFriends.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+                    rvFriends_search.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
                         @Override
                         public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                            getFriends();
+                            // Set the querying flag to true
+                            querying = true;
+
+                            queryUsers(queryText);
                         }
                     });
                 }
@@ -247,8 +228,8 @@ public class FriendsFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                 }
 
-                // Increase the skip value
-                skipVal+=1;
+                // We are no longer querying
+                querying = false;
             }
         });
     }

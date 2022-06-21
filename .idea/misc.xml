@@ -16,6 +16,7 @@
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.18211752786220872" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.2696601535962976" />
         <entry key="app/src/main/res/layout/fragment_profile_detail.xml" value="0.1889564336372847" />
+        <entry key="app/src/main/res/layout/fragment_search_friends.xml" value="0.1889564336372847" />
         <entry key="app/src/main/res/layout/item_fortune.xml" value="0.38715501029980015" />
         <entry key="app/src/main/res/layout/item_friend.xml" value="0.33344304181527407" />
         <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.20208333333333334" />

@@ -238,7 +238,7 @@ public class HomeFragment_fortune extends Fragment {
                     Log.e(TAG, "Error saving fortune", e);
                 }
                 else {
-                    Log.e(TAG, "Fortune saved!");
+                    Log.i(TAG, "Fortune saved!");
 
                     // Save the fortune to the User's fortune list
                     ParseRelation<Fortune> fortunes = ParseUser.getCurrentUser().getRelation("fortunes");
