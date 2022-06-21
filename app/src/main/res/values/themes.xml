@@ -15,5 +15,6 @@
         <!-- Customize your theme here. -->
         <item name="android:editTextColor">@color/black</item>
         <item name="android:textColorHint">@color/light_grey</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

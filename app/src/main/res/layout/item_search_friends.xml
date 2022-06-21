@@ -65,6 +65,7 @@
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/black"
         android:text="Add Friend"
+        android:textColor="@color/white"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -77,6 +78,7 @@
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/darker_red"
         android:text="Remove Friend"
+        android:textColor="@color/white"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />

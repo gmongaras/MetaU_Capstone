@@ -126,6 +126,8 @@ public class FriendsFragment extends Fragment {
         svFriends = view.findViewById(R.id.svFriends);
         int id = svFriends.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         tvSearchFriends = ((TextView)svFriends.findViewById(id));
+        tvSearchFriends.setTextColor(getResources().getColor(R.color.black));
+        tvSearchFriends.setHintTextColor(getResources().getColor(R.color.light_grey));
         rvFriends = view.findViewById(R.id.rvFriends);
 
         // Get the current user

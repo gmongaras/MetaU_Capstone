@@ -4,9 +4,11 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -111,6 +113,8 @@ public class SearchFriendsFragment extends Fragment {
         svFriends_search = view.findViewById(R.id.svFriends_search);
         int id = svFriends_search.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         tvSearchFriends_search = ((TextView)svFriends_search.findViewById(id));
+        tvSearchFriends_search.setTextColor(getResources().getColor(R.color.black));
+        tvSearchFriends_search.setHintTextColor(getResources().getColor(R.color.black));
         rvFriends_search = view.findViewById(R.id.rvFriends_search);
 
         // Get the current user
@@ -160,6 +164,24 @@ public class SearchFriendsFragment extends Fragment {
                 return false;
             }
         });
+
+        // Handle back button presses so the user doesn't go to the wrong
+        // page after they logged in and pressed the back button.
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Setup the fragment switch
+                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                // Go back to the Profile fragment
+                FriendsFragment friendsFragment = FriendsFragment.newInstance("a", "b");
+
+                // Add back the profile fragment
+                ft.replace(R.id.flContainer, friendsFragment);
+                ft.commit();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
 
 
