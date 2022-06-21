@@ -32,6 +32,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
         app:layout_constraintTop_toTopOf="@+id/ivFriend_search"
         tools:text="username" />

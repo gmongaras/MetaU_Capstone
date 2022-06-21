@@ -14,29 +14,38 @@
         android:id="@+id/etUsername_reg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/light_grey" />
 
     <EditText
         android:id="@+id/etPassword_reg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:minHeight="48dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/light_grey"
         tools:inputType="textPassword" />
 
     <EditText
         android:id="@+id/etPassword2_reg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="password again"
         android:inputType="textPassword"
         android:minHeight="48dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/light_grey"
         tools:inputType="textPassword" />
 
     <Button
