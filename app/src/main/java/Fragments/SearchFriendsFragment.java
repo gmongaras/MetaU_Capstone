@@ -32,7 +32,9 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -192,6 +194,16 @@ public class SearchFriendsFragment extends Fragment {
 
         // Search for the given username
         query.whereEqualTo("username", queryText);
+        query.whereStartsWith("username", queryText.substring(0, 1));
+        query.whereContains("username", queryText);
+        query.whereContains("username", queryText.trim());
+        query.whereStartsWith("username", queryText.trim().substring(0, 1));
+
+        //Collection<String> c = new ArrayList<>();
+        //c.add(queryText);
+        //c.add(queryText.substring(0, 1));
+        //query.
+        //query.whereContainedIn("username", c);
 
         // Search for ids not equal to this user
         query.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
