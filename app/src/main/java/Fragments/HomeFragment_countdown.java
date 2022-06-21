@@ -179,7 +179,10 @@ public class HomeFragment_countdown extends Fragment {
 
                         // When the timer is finished, switch to the fortune page
                         public void onFinish() {
-                            goToFortune();
+                            Fragment fragment = getParentFragmentManager().findFragmentById(R.id.action_home);
+                            if (fragment != null && fragment.isVisible()) {
+                                goToFortune();
+                            }
                         }
                     }.start();
                 }

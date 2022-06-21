@@ -1,11 +1,14 @@
 package com.example.metau_capstone;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
@@ -18,10 +21,14 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.List;
+import java.util.Objects;
 
 public class SearchFriendsAdapter extends RecyclerView.Adapter<SearchFriendsAdapter.ViewHolder> {
+    private static final String TAG = "SearchFriendsAdapter";
+
     // List in the recycler view
     List<ParseUser> users;
 
@@ -82,6 +89,11 @@ public class SearchFriendsAdapter extends RecyclerView.Adapter<SearchFriendsAdap
         ImageView ivFriend_search;
         TextView tvFriendUsername_search;
         TextView tvFriendFortuneCt_search;
+        Button btnAddFriend;
+        Button btnRemoveFiend;
+
+        // Is the user friending someone?
+        boolean friending;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,6 +102,9 @@ public class SearchFriendsAdapter extends RecyclerView.Adapter<SearchFriendsAdap
             ivFriend_search = itemView.findViewById(R.id.ivFriend_search);
             tvFriendUsername_search = itemView.findViewById(R.id.tvFriendUsername_search);
             tvFriendFortuneCt_search = itemView.findViewById(R.id.tvFriendFortuneCt_search);
+            btnAddFriend = itemView.findViewById(R.id.btnAddFriend);
+            btnRemoveFiend = itemView.findViewById(R.id.btnRemoveFiend);
+            friending = false;
         }
 
         // Given a Friend (ParseUser), bind data to this object
@@ -129,6 +144,101 @@ public class SearchFriendsAdapter extends RecyclerView.Adapter<SearchFriendsAdap
                     tvFriendFortuneCt_search.setText(String.valueOf(objects.size()));
                 }
             });
+
+            // Get all the user's friends and check if the given friend is
+            // in their list to show the correct display
+            ParseRelation<ParseUser> users = ParseUser.getCurrentUser().getRelation("friends");
+            ParseQuery<ParseUser> friends_query = users.getQuery();
+            friends_query.findInBackground(new FindCallback<ParseUser>() {
+                @Override
+                public void done(List<ParseUser> friends, ParseException e) {
+                    // Iterate over all users. If the current given friend is in that
+                    // list, show the proper button.
+                    String id = friend.getObjectId();
+                    for (ParseUser item_friend : friends) {
+                        if (Objects.equals(item_friend.getObjectId(), id)) {
+                            btnAddFriend.setVisibility(View.INVISIBLE);
+                            btnRemoveFiend.setVisibility(View.VISIBLE);
+                            return;
+                        }
+                    }
+                    btnRemoveFiend.setVisibility(View.INVISIBLE);
+                    btnAddFriend.setVisibility(View.VISIBLE);
+                }
+            });
+
+            // Add an onClick listener to the add friend button so the user can add
+            // this user as a friend.
+            btnAddFriend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (friending == true) {
+                        return;
+                    }
+
+                    // When clicked, add this user as a friend in the current
+                    // user's friend list
+                    friending = true;
+                    ParseUser user = ParseUser.getCurrentUser();
+                    ParseRelation<ParseUser> friends = user.getRelation("friends");
+                    friends.add(friend);
+                    user.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "Unable to friend user", e);
+                                Toast.makeText(context, "Unable to friend user", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(context, "User friended!", Toast.LENGTH_SHORT).show();
+
+                                // Swap the buttons
+                                btnAddFriend.setVisibility(View.INVISIBLE);
+                                btnRemoveFiend.setVisibility(View.VISIBLE);
+                                friending = false;
+                            }
+                        }
+                    });
+                }
+            });
+
+
+            // Add an onClick listener to the remove friend button so the user can remove
+            // this user as a friend.
+            btnRemoveFiend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (friending == true) {
+                        return;
+                    }
+
+                    // When clicked, add this user as a friend in the current
+                    // user's friend list
+                    friending = true;
+                    ParseUser user = ParseUser.getCurrentUser();
+                    ParseRelation<ParseUser> friends = user.getRelation("friends");
+                    friends.remove(friend);
+                    user.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "Unable to remove friend", e);
+                                Toast.makeText(context, "Unable to remove friend", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(context, "User unfriended", Toast.LENGTH_SHORT).show();
+
+                                // Swap the buttons
+                                btnRemoveFiend.setVisibility(View.INVISIBLE);
+                                btnAddFriend.setVisibility(View.VISIBLE);
+                                friending = false;
+                            }
+                        }
+                    });
+                }
+            });
+
+
         }
     }
 }
