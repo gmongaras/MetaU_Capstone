@@ -45,7 +45,7 @@ public class MapHelper {
 
 
 
-    public void loadMap(TextView errorText) {
+    public void loadMap(ParseUser user, TextView errorText) {
         // If the map was loaded properly
         if (map != null) {
             // Once map is loaded
@@ -59,7 +59,7 @@ public class MapHelper {
 
 
             // Load in all the fortunes as pins into the map
-            loadPins();
+            loadPins(user);
         }
         // If the map was not loaded properly, display some text
         else {
@@ -72,12 +72,12 @@ public class MapHelper {
 
 
 
-    private void loadPins() {
+    private void loadPins(ParseUser user) {
         // Specify which class to query
         ParseQuery<Fortune> query = ParseQuery.getQuery(Fortune.class);
 
         // Get only this user's fortunes
-        query.whereEqualTo("user", ParseUser.getCurrentUser());
+        query.whereEqualTo("user", user);
 
         // Find all the fortunes the user owns
         query.findInBackground(new FindCallback<Fortune>() {

@@ -45,15 +45,20 @@ public class ProfileDetailFragment extends Fragment {
     // Used to work with the map
     MapHelper mapHelper;
 
+    // The user to load the map for
+    private static final String ARG_USER = "user";
+    private ParseUser user;
+
     public ProfileDetailFragment() {
         // Required empty public constructor
     }
 
     // When the fragment is created, get the fortune that was passed in
-    public static ProfileDetailFragment newInstance(Fortune fortune) {
+    public static ProfileDetailFragment newInstance(Fortune fortune, ParseUser user) {
         ProfileDetailFragment fragment = new ProfileDetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_FORTUNE, fortune);
+        args.putParcelable(ARG_USER, user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,6 +68,7 @@ public class ProfileDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             fortune = (Fortune) getArguments().get(ARG_FORTUNE);
+            user = getArguments().getParcelable(ARG_USER);
         }
     }
 
@@ -95,7 +101,7 @@ public class ProfileDetailFragment extends Fragment {
                     mapHelper = new MapHelper(map, mapFragment, getContext());
 
                     // Load the map using the helper
-                    mapHelper.loadMap(null);
+                    mapHelper.loadMap(user, null);
 
                     // Go to the spot on the map
                     ParseGeoPoint loc = fortune.getLocation();
@@ -118,7 +124,13 @@ public class ProfileDetailFragment extends Fragment {
                 FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
                 // Go back to the Profile fragment
-                ProfileFragment profileFragment = ProfileFragment.newInstance(ParseUser.getCurrentUser(), 0);
+                ProfileFragment profileFragment;
+                if (user.getObjectId() == ParseUser.getCurrentUser().getObjectId()) {
+                     profileFragment = ProfileFragment.newInstance(user, 0);
+                }
+                else {
+                    profileFragment = ProfileFragment.newInstance(user, 1);
+                }
 
                 // Add back the profile fragment
                 ft.replace(R.id.flContainer, profileFragment);

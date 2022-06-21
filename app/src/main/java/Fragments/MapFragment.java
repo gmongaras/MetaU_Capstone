@@ -112,7 +112,7 @@ public class MapFragment extends Fragment {
                     mapHelper = new MapHelper(map, mapFragment, getContext());
 
                     // Load the map using the helper
-                    mapHelper.loadMap(errorText);
+                    mapHelper.loadMap(ParseUser.getCurrentUser(), errorText);
                 }
             });
         } else {

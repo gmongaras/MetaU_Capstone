@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.parse.ParseUser;
+
 import java.util.List;
 
 import Fragments.HomeFragment_countdown;
@@ -28,9 +30,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     Context context;
 
+    // User to load the profile for
+    ParseUser user;
+
     // Constructor to create the adapter with context and a list
-    public ProfileAdapter(List<Fortune> fortunes, Context context, FragmentManager manager) {
+    public ProfileAdapter(List<Fortune> fortunes, ParseUser user, Context context, FragmentManager manager) {
         this.fortunes = fortunes;
+        this.user = user;
         this.context = context;
         fragmentManager = manager;
     }
@@ -61,7 +67,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 FragmentTransaction ft = fragmentManager.beginTransaction();
 
                 // Create the fragment with paramters
-                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune);
+                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune, user);
 
                 // Change the fragment
                 ft.replace(R.id.flContainer, fragmentProfileDetail);

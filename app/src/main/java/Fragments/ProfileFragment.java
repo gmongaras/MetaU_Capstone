@@ -284,7 +284,7 @@ public class ProfileFragment extends Fragment {
 
                     // When the fortunes have been loaded, setup the recycler view -->
                     // Bind the adapter to the recycler view
-                    adapter = new ProfileAdapter(Fortunes, getContext(), requireActivity().getSupportFragmentManager());
+                    adapter = new ProfileAdapter(Fortunes, user, getContext(), requireActivity().getSupportFragmentManager());
                     rvProfile.setAdapter(adapter);
 
                     // Configure the Recycler View: Layout Manager
