@@ -199,7 +199,7 @@ public class ProfileFragment extends Fragment {
                     ParseUser.logOutInBackground();
 
                     // Exit this fragment
-                    requireActivity().onBackPressed();
+                    requireActivity().finishAffinity();
 
                     // Go back to the main page
                     Intent i = new Intent(view.getContext(), LoginActivity.class);

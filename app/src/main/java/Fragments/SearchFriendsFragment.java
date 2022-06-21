@@ -193,6 +193,9 @@ public class SearchFriendsFragment extends Fragment {
         // Search for the given username
         query.whereEqualTo("username", queryText);
 
+        // Search for ids not equal to this user
+        query.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+
         // Skip some posts
         query.setSkip(skipVal*loadRate);
 

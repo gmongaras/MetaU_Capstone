@@ -80,8 +80,8 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                             else {
                                 Log.e(TAG, "Unable to register user", e);
+                                Toast.makeText(RegisterActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                                 finish();
-                                Toast.makeText(RegisterActivity.this, "Unable to register user", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

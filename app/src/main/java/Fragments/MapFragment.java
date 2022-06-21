@@ -2,9 +2,11 @@ package Fragments;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.SystemClock;
 import android.util.Log;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -118,6 +121,25 @@ public class MapFragment extends Fragment {
         } else {
             Log.e(TAG, "Error - Map Fragment was null!!");
         }
+
+        // Handle back button presses by going to the home fragment
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Setup the fragment switch
+                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                // Go back to the Profile fragment
+                HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance("a", "b");
+
+                // Add back the profile fragment
+                ft.replace(R.id.flContainer, homeFragment);
+                ft.commit();
+
+                ((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
 
 }
