@@ -17,6 +17,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -124,7 +125,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             });
 
             // Load in the fortune count
-            friend.get("fortunes");
+            ParseRelation<Fortune> fortunes = friend.getRelation("fortunes");
+            ParseQuery<Fortune> query = fortunes.getQuery();
+            query.findInBackground(new FindCallback<Fortune>() {
+                @Override
+                public void done(List<Fortune> objects, ParseException e) {
+                    tvFriendFortuneCt.setText(String.valueOf(objects.size()));
+                }
+            });
         }
     }
 }

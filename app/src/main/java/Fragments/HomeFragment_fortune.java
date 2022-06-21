@@ -33,6 +33,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -237,6 +239,22 @@ public class HomeFragment_fortune extends Fragment {
                 }
                 else {
                     Log.e(TAG, "Fortune saved!");
+
+                    // Save the fortune to the User's fortune list
+                    ParseRelation<Fortune> fortunes = ParseUser.getCurrentUser().getRelation("fortunes");
+                    fortunes.add(newFortune);
+
+                    newFortune.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "Error adding fortune to fortune list", e);
+                            }
+                            else {
+                                Log.i(TAG, "Fortune successfully saved to fortune list");
+                            }
+                        }
+                    });
                 }
             }
         });
