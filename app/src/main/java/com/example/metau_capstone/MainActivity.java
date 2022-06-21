@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import Fragments.FriendsFragment;
 import Fragments.HomeFragment_countdown;
 import Fragments.HomeFragment_fortune;
 import Fragments.MapFragment;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Hide the action bar
+        getSupportActionBar().hide();
 
         // Get the elements
         bottomNav = findViewById(R.id.bottomNav);
@@ -77,6 +81,17 @@ public class MainActivity extends AppCompatActivity {
 
                         // Change the fragment
                         ft.replace(R.id.flContainer, fragmentProfile);
+                        ft.commit();
+
+                        break;
+
+                    // If the menu item clicked is friends
+                    case R.id.action_friends:
+                        // Create the fragment with paramters
+                        FriendsFragment fragmentFriends = FriendsFragment.newInstance("a", "b");
+
+                        // Change the fragment
+                        ft.replace(R.id.flContainer, fragmentFriends);
                         ft.commit();
 
                         break;

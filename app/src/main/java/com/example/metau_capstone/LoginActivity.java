@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // If the user is already logged in, go straight to the main activity
         if (ParseUser.getCurrentUser() != null) {
+            getSupportActionBar().hide();
             goMainActivity();
         }
 

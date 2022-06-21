@@ -130,6 +130,8 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        skipVal = 0;
+
         // Get the elements
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         tvUsername = view.findViewById(R.id.tvUsername);
@@ -143,7 +145,7 @@ public class ProfileFragment extends Fragment {
         tvUsername.setText(user.getUsername());
 
         // Store the user image
-        ParseQuery<ParseUser> q = new ParseQuery<ParseUser>(ParseUser.class);
+        ParseQuery<ParseUser> q = new ParseQuery<>(ParseUser.class);
         q.whereEqualTo("objectId", user.getObjectId());
         q.findInBackground(new FindCallback<ParseUser>() {
             @Override
