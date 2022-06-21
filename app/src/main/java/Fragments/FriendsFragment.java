@@ -181,6 +181,7 @@ public class FriendsFragment extends Fragment {
                 FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
                 // Go back to the Profile fragment
+                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
                 HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance("a", "b");
 
                 // Add back the profile fragment

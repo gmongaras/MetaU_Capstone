@@ -197,6 +197,7 @@ public class HomeFragment_countdown extends Fragment {
         FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
         // Create the fragment with paramters
+        ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         HomeFragment_fortune fragmentHome = HomeFragment_fortune.newInstance("a", "b");
 
         // Change the fragment

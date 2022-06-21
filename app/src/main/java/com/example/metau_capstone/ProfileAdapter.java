@@ -67,6 +67,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 FragmentTransaction ft = fragmentManager.beginTransaction();
 
                 // Create the fragment with paramters
+                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
                 ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune, user);
 
                 // Change the fragment

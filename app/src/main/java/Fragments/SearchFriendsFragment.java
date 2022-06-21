@@ -176,6 +176,7 @@ public class SearchFriendsFragment extends Fragment {
                 FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
                 // Go back to the Profile fragment
+                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
                 FriendsFragment friendsFragment = FriendsFragment.newInstance("a", "b");
 
                 // Add back the profile fragment

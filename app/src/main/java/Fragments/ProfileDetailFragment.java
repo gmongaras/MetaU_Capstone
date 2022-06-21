@@ -124,6 +124,7 @@ public class ProfileDetailFragment extends Fragment {
                 FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
                 // Go back to the Profile fragment
+                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
                 ProfileFragment profileFragment;
                 if (user.getObjectId() == ParseUser.getCurrentUser().getObjectId()) {
                      profileFragment = ProfileFragment.newInstance(user, 0);

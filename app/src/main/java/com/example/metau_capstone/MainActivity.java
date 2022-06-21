@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
+    // Stores the current fragment for animation purposes
+    int curFrag = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +57,16 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     // If the menu item clicked is map
                     case R.id.action_map:
+                        // If the same fragment was clicked, do nothing
+                        if (curFrag == 0) {
+                            break;
+                        }
+
                         // Create the fragment with paramters
+                        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
                         MapFragment fragmentMap = MapFragment.newInstance("a", "b");
+
+                        curFrag = 0;
 
                         // Change the fragment
                         ft.replace(R.id.flContainer, fragmentMap);
@@ -65,8 +76,23 @@ public class MainActivity extends AppCompatActivity {
 
                     // If the menu item clicked is home
                     case R.id.action_home:
+                        // If the same fragment was clicked, do nothing
+                        if (curFrag == 1) {
+                            break;
+                        }
+
+                        // Animation
+                        if (curFrag < 1) {
+                            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right);
+                        }
+                        else {
+                            ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+                        }
+
                         // Create the fragment with paramters
                         HomeFragment_countdown fragmentHome = HomeFragment_countdown.newInstance("a", "b");
+
+                        curFrag = 1;
 
                         // Change the fragment
                         ft.replace(R.id.flContainer, fragmentHome);
@@ -77,8 +103,23 @@ public class MainActivity extends AppCompatActivity {
 
                     // If the menu item clicked is profile
                     case R.id.action_profile:
+                        // If the same fragment was clicked, do nothing
+                        if (curFrag == 2) {
+                            break;
+                        }
+
+                        // Animation
+                        if (curFrag < 2) {
+                            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right);
+                        }
+                        else {
+                            ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+                        }
+
                         // Create the fragment with paramters
                         ProfileFragment fragmentProfile = ProfileFragment.newInstance(ParseUser.getCurrentUser(), 0);
+
+                        curFrag = 2;
 
                         // Change the fragment
                         ft.replace(R.id.flContainer, fragmentProfile);
@@ -88,8 +129,16 @@ public class MainActivity extends AppCompatActivity {
 
                     // If the menu item clicked is friends
                     case R.id.action_friends:
+                        // If the same fragment was clicked, do nothing
+                        if (curFrag == 3) {
+                            break;
+                        }
+
                         // Create the fragment with paramters
+                        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right);
                         FriendsFragment fragmentFriends = FriendsFragment.newInstance("a", "b");
+
+                        curFrag = 3;
 
                         // Change the fragment
                         ft.replace(R.id.flContainer, fragmentFriends);

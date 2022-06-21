@@ -67,6 +67,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 FragmentTransaction ft = fragmentManager.beginTransaction();
 
                 // Create the fragment with paramters
+                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
                 ProfileFragment fragmentProfile = ProfileFragment.newInstance(friend, 1);
 
                 // Change the fragment

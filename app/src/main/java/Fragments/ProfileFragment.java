@@ -218,6 +218,7 @@ public class ProfileFragment extends Fragment {
                     FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
                     // Go back to the Profile fragment
+                    ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
                     HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance("a", "b");
 
                     // Add back the profile fragment
@@ -227,11 +228,13 @@ public class ProfileFragment extends Fragment {
                     ((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
                     //((BottomNavigationView)getParentFragment().getView().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
                 }
+                // If mode is 1, go back to the friends page
                 else {
                     // Setup the fragment switch
                     FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
                     // Go back to the Profile fragment
+                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
                     FriendsFragment friendsFragment = FriendsFragment.newInstance("a", "b");
 
                     // Add back the profile fragment
