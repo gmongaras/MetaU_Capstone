@@ -1,18 +1,22 @@
 package com.example.metau_capstone;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import Fragments.HomeFragment_countdown;
+import Fragments.ProfileDetailFragment;
+import Fragments.ProfileFragment;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
 
@@ -25,9 +29,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     Context context;
 
     // Constructor to create the adapter with context and a list
-    public ProfileAdapter(List<Fortune> fortunes, Context context) {
+    public ProfileAdapter(List<Fortune> fortunes, Context context, FragmentManager manager) {
         this.fortunes = fortunes;
         this.context = context;
+        fragmentManager = manager;
     }
 
     @NonNull
@@ -52,7 +57,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                return;
+                // Setup the fragment switch
+                FragmentTransaction ft = fragmentManager.beginTransaction();
+
+                // Create the fragment with paramters
+                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune);
+
+                // Change the fragment
+                ft.replace(R.id.flContainer, fragmentProfileDetail);
+                ft.commit();
             }
         });
     }
@@ -79,7 +92,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         // Given a fortune, bind data to this object
         public void bind(Fortune fortune) {
             tvDate.setText(fortune.getCreatedAt().toString());
-            tvFortune.setText(fortune.getMessage());
+
+            String message = fortune.getMessage().toString();
+            if (message.length() > 50) {
+                message = message.substring(0, 50) + "...";
+            }
+            tvFortune.setText(message);
         }
     }
 }
