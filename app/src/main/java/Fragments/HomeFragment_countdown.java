@@ -172,10 +172,23 @@ public class HomeFragment_countdown extends Fragment {
                             minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)%60;
                             seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)%60;
 
+                            // Get the values as a string and make sure
+                            // there are two characters.
+                            String h = String.valueOf(hours);
+                            if (h.length() == 1) {
+                                h = "0" + h;
+                            }
+                            String m = String.valueOf(minutes);
+                            if (m.length() == 1) {
+                                m = "0" + m;
+                            }
+                            String s = String.valueOf(seconds);
+                            if (s.length() == 1) {
+                                s = "0" + s;
+                            }
+
                             // Display the new time left
-                            tvCountdown.setText(String.valueOf(hours) + ":" +
-                                    String.valueOf(minutes) + ":" +
-                                    String.valueOf(seconds));
+                            tvCountdown.setText(h + ":" + m + ":" + s);
                         }
 
                         // When the timer is finished, switch to the fortune page

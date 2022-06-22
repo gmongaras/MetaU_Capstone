@@ -101,13 +101,13 @@ public class ProfileDetailFragment extends Fragment {
                     mapHelper = new MapHelper(map, mapFragment, getContext());
 
                     // Load the map using the helper
-                    mapHelper.loadMap(user, null);
+                    mapHelper.loadMap(user, null, false);
 
                     // Go to the spot on the map
                     ParseGeoPoint loc = fortune.getLocation();
                     if (loc != null) {
                         LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
-                        mapHelper.goToLatLng(latLng);
+                        mapHelper.goToLatLng(latLng, 10);
                     }
                 }
             });
