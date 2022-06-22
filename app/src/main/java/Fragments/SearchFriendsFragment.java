@@ -198,7 +198,9 @@ public class SearchFriendsFragment extends Fragment {
         query.whereStartsWith("username", queryText.substring(0, 1));
         query.whereContains("username", queryText);
         query.whereContains("username", queryText.trim());
-        query.whereStartsWith("username", queryText.trim().substring(0, 1));
+        if (queryText.trim().length() > 0) {
+            query.whereStartsWith("username", queryText.trim().substring(0, 1));
+        }
 
         //Collection<String> c = new ArrayList<>();
         //c.add(queryText);

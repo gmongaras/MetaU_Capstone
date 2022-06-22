@@ -60,6 +60,8 @@ public class MapHelper {
             // Supported types include: MAP_TYPE_NORMAL, MAP_TYPE_SATELLITE
             // MAP_TYPE_TERRAIN, MAP_TYPE_HYBRID
             //map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            map.setIndoorEnabled(true);
+            map.setBuildingsEnabled(true);
 
             // Set the custom info window for each marker
             LayoutInflater inflater = LayoutInflater.from(context);
