@@ -1,7 +1,5 @@
 package Fragments;
 
-import android.app.SearchManager;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -22,26 +20,22 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
-import com.example.metau_capstone.FriendsAdapter;
+import com.example.metau_capstone.FriendsSearchAdapter;
 import com.example.metau_capstone.R;
-import com.example.metau_capstone.SearchFriendsAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SearchFriendsFragment#newInstance} factory method to
+ * Use the {@link FriendsSearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFriendsFragment extends Fragment {
+public class FriendsSearchFragment extends Fragment {
 
     // Number to skip when loading more posts
     private int skipVal;
@@ -49,17 +43,18 @@ public class SearchFriendsFragment extends Fragment {
     // Constant number to load each time we want to load more posts
     private static final int loadRate = 10;
 
-    private static final String TAG = "SearchFriendsFragment";
+    private static final String TAG = "FriendsSearchFragment";
 
     // Elements in the view
     TextView tvAlert;
     SearchView svFriends_search;
     TextView tvSearchFriends_search;
     RecyclerView rvFriends_search;
+    TextView tvPrompt;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
-    SearchFriendsAdapter adapter;
+    FriendsSearchAdapter adapter;
 
     // List of users for the recycler view
     List<ParseUser> Users;
@@ -77,14 +72,13 @@ public class SearchFriendsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String queryText;
 
-    public SearchFriendsFragment() {
+    public FriendsSearchFragment() {
         // Required empty public constructor
     }
 
-    public static SearchFriendsFragment newInstance(String queryText) {
-        SearchFriendsFragment fragment = new SearchFriendsFragment();
+    public static FriendsSearchFragment newInstance() {
+        FriendsSearchFragment fragment = new FriendsSearchFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_QUERY_TEXT, queryText);
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,7 +87,7 @@ public class SearchFriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            queryText = getArguments().getString(ARG_QUERY_TEXT);
+            //queryText = getArguments().getString(ARG_QUERY_TEXT);
         }
     }
 
@@ -118,6 +112,7 @@ public class SearchFriendsFragment extends Fragment {
         tvSearchFriends_search.setTextColor(getResources().getColor(R.color.black));
         tvSearchFriends_search.setHintTextColor(getResources().getColor(R.color.black));
         rvFriends_search = view.findViewById(R.id.rvFriends_search);
+        tvPrompt = view.findViewById(R.id.tvPrompt);
 
         // Get the current user
         user = ParseUser.getCurrentUser();
@@ -126,7 +121,35 @@ public class SearchFriendsFragment extends Fragment {
         Users = new ArrayList<>();
 
         // Get the Users using the query text
-        queryUsers(queryText);
+        //queryUsers(" ");
+
+
+
+
+        // When the users have been loaded, setup the recycler view -->
+        // Bind the adapter to the recycler view
+        adapter = new FriendsSearchAdapter(Users, getContext(), requireActivity().getSupportFragmentManager());
+        rvFriends_search.setAdapter(adapter);
+
+        // Configure the Recycler View: Layout Manager
+        layoutManager = new LinearLayoutManager(getContext());
+        rvFriends_search.setLayoutManager(layoutManager);
+
+        // Used for infinite scrolling
+        rvFriends_search.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Set the querying flag to true
+                querying = true;
+
+                queryUsers(queryText);
+            }
+        });
+
+
+
+
+
 
         // A a listener to look for a user entering a query into the search bar
         tvSearchFriends_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -138,7 +161,6 @@ public class SearchFriendsFragment extends Fragment {
                 }
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || event.getKeyCode() == 66) {
-
                     // Get the text from the text box
                     String text = tvSearchFriends_search.getText().toString();
 
@@ -146,6 +168,9 @@ public class SearchFriendsFragment extends Fragment {
                     if (text.length() == 0) {
                         return false;
                     }
+
+                    // If the prompt text is visible, make it invisible
+                    tvPrompt.setVisibility(View.INVISIBLE);
 
                     // Set the querying state to true
                     querying = true;
@@ -190,6 +215,12 @@ public class SearchFriendsFragment extends Fragment {
 
     // Query users given a username to query for
     private void queryUsers(String queryText) {
+        // If the query is null, do nothing
+        if (queryText == null) {
+            querying = false;
+            return;
+        }
+
         // Create a new query for users
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
 
@@ -240,33 +271,9 @@ public class SearchFriendsFragment extends Fragment {
                     skipVal+=1;
                 }
 
-                // Setup the recycler view if it hasn't been setup already
-                if (rvFriends_search.getAdapter() == null) {
 
-                    // When the users have been loaded, setup the recycler view -->
-                    // Bind the adapter to the recycler view
-                    adapter = new SearchFriendsAdapter(Users, getContext(), requireActivity().getSupportFragmentManager());
-                    rvFriends_search.setAdapter(adapter);
-
-                    // Configure the Recycler View: Layout Manager
-                    layoutManager = new LinearLayoutManager(getContext());
-                    rvFriends_search.setLayoutManager(layoutManager);
-
-                    // Used for infinite scrolling
-                    rvFriends_search.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-                        @Override
-                        public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                            // Set the querying flag to true
-                            querying = true;
-
-                            queryUsers(queryText);
-                        }
-                    });
-                }
-                else {
-                    // Notify the recycler view adapter of a change in data
-                    adapter.notifyDataSetChanged();
-                }
+                // Notify the recycler view adapter of a change in data
+                adapter.notifyDataSetChanged();
 
                 // We are no longer querying
                 querying = false;

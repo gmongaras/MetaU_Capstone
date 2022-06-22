@@ -62,9 +62,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Hide the action bar
-        getSupportActionBar().hide();
-
         // Get the elements
         bottomNav = findViewById(R.id.bottomNav);
         flContainer = findViewById(R.id.flContainer);

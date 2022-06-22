@@ -26,8 +26,8 @@ import com.parse.SaveCallback;
 import java.util.List;
 import java.util.Objects;
 
-public class SearchFriendsAdapter extends RecyclerView.Adapter<SearchFriendsAdapter.ViewHolder> {
-    private static final String TAG = "SearchFriendsAdapter";
+public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdapter.ViewHolder> {
+    private static final String TAG = "FriendsSearchAdapter";
 
     // List in the recycler view
     List<ParseUser> users;
@@ -37,7 +37,7 @@ public class SearchFriendsAdapter extends RecyclerView.Adapter<SearchFriendsAdap
 
     Context context;
 
-    public SearchFriendsAdapter(List<ParseUser> users, Context context, FragmentManager fragmentManager) {
+    public FriendsSearchAdapter(List<ParseUser> users, Context context, FragmentManager fragmentManager) {
         this.users = users;
         this.fragmentManager = fragmentManager;
         this.context = context;
@@ -45,16 +45,16 @@ public class SearchFriendsAdapter extends RecyclerView.Adapter<SearchFriendsAdap
 
     @NonNull
     @Override
-    public SearchFriendsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FriendsSearchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Create the view and inflate it
-        View view = LayoutInflater.from(context).inflate(R.layout.item_search_friends, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_friends_search, parent, false);
 
         // Return the view
-        return new SearchFriendsAdapter.ViewHolder(view);
+        return new FriendsSearchAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchFriendsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FriendsSearchAdapter.ViewHolder holder, int position) {
         // Get the item at the given position
         ParseUser friend = users.get(position);
 

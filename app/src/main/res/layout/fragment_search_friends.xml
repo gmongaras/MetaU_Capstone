@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="Fragments.SearchFriendsFragment">
+    tools:context="Fragments.FriendsSearchFragment">
 
     <SearchView
         android:id="@+id/svFriends_search"
@@ -51,6 +51,21 @@
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/rvFriends_search"
+        app:layout_constraintEnd_toEndOf="@+id/rvFriends_search"
+        app:layout_constraintStart_toStartOf="@+id/rvFriends_search"
+        app:layout_constraintTop_toTopOf="@+id/rvFriends_search" />
+
+    <TextView
+        android:id="@+id/tvPrompt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:gravity="center_horizontal"
+        android:text="Click on the search bar above to search for friends!"
+        android:textSize="20sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/rvFriends_search"
         app:layout_constraintStart_toStartOf="@+id/rvFriends_search"
         app:layout_constraintTop_toTopOf="@+id/rvFriends_search" />
