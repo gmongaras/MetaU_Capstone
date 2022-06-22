@@ -145,7 +145,7 @@ public class HomeFragment_fortune extends Fragment {
         // Load the model
         try {
             //module = Module.load(assetFilePath(this, "model3.ptl"));
-            module = LiteModuleLoader.load(assetFilePath(view.getContext(), "model6.ptl"));
+            module = LiteModuleLoader.load(assetFilePath(view.getContext(), "model7.ptl"));
         } catch (IOException e) {
             Log.e(TAG, "Unable to load model", e);
             return;

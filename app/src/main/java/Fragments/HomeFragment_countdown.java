@@ -22,6 +22,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -52,7 +53,7 @@ public class HomeFragment_countdown extends Fragment {
 
     // Time until next fortune in miliseconds (23 hours)
     public static final double timeLeft = 8.28e+7;
-    //public static final double timeLeft = 10;
+    //public static final double timeLeft = 10000;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -179,8 +180,10 @@ public class HomeFragment_countdown extends Fragment {
 
                         // When the timer is finished, switch to the fortune page
                         public void onFinish() {
-                            Fragment fragment = getParentFragmentManager().findFragmentById(R.id.action_home);
-                            if (fragment != null && fragment.isVisible()) {
+                            // If the user is on the main page, swap to the
+                            // fortune view when the timer is up
+                            ArrayList<Fragment> stack = (ArrayList<Fragment>) getActivity().getSupportFragmentManager().getFragments();
+                            if (stack.get(stack.size()-1).getClass() == HomeFragment_countdown.class) {
                                 goToFortune();
                             }
                         }
