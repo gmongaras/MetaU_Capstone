@@ -127,7 +127,7 @@ public class FriendsRequestFragment extends Fragment {
 
     private void getRequests() {
         // Get the query to query the requests
-        ParseRelation<ParseUser> requests = user.getRelation("requests");
+        ParseRelation<ParseUser> requests = user.getRelation("friend_requests");
         ParseQuery<ParseUser> query = requests.getQuery();
 
 

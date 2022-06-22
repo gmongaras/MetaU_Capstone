@@ -18,11 +18,14 @@ import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -120,11 +123,11 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
         // Given a Friend (ParseUser), bind data to this object
         public void bind(ParseUser Nfriend) {
-            // Set the username
-            tvFriendUsername_request.setText(friend.getUsername());
-
             // Store the friend
             friend = Nfriend;
+
+            // Set the username
+            tvFriendUsername_request.setText(friend.getUsername());
 
             // Store the user image
             ParseQuery<ParseUser> q = new ParseQuery<>(ParseUser.class);
@@ -177,7 +180,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
                     addFriend(curUser, friend);
 
                     // Add the current user as a friend of the user that sent the request
-                    addFriend(friend, curUser);
+                    addFriendToQueue(friend, curUser);
 
                     // Remove the user from the requests
                     removeRequest(curUser, friend, "accept");
@@ -226,9 +229,27 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
 
 
+        // Given a user and a friend, add the friend to the user's friend's queue
+        private void addFriendToQueue(ParseUser user, ParseUser friend) {
+            Friend_queue queue = new Friend_queue();
+            queue.setFriend(friend);
+            queue.setUser(user);
+            //queue.add("friend", friend);
+            queue.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null) {
+                        Log.e(TAG, "Unable to save to queue", e);
+                    }
+                }
+            });
+        }
+
+
+
         // Given a user and a friend, remove the friend from the user's requests list
         private void removeRequest(ParseUser user, ParseUser friend, String mode) {
-            ParseRelation<ParseUser> requests = user.getRelation("requests");
+            ParseRelation<ParseUser> requests = user.getRelation("friend_requests");
             requests.remove(friend);
             user.saveInBackground(new SaveCallback() {
                 @Override

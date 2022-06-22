@@ -12,8 +12,9 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Register Fortune as a class
+        // Register classes
         ParseObject.registerSubclass(Fortune.class);
+        ParseObject.registerSubclass(Friend_queue.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("Dwsfp3rsCpvhUvRpB8dtfiA97kOHeORreiuIAu4o")

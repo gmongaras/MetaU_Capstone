@@ -14,10 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,6 +50,9 @@ public class LoginActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     1);
         }
+
+        // When the user logs in, check if they have any new friends and add them
+        addFriends();
 
         // If the user is already logged in, go straight to the main activity
         if (ParseUser.getCurrentUser() != null) {
@@ -117,6 +129,56 @@ public class LoginActivity extends AppCompatActivity {
                 // we should take them to the main page
                 goMainActivity();
                 Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+
+    private void addFriends() {
+        ParseUser curUser = ParseUser.getCurrentUser();
+        ParseQuery<Friend_queue> q = new ParseQuery<Friend_queue>(Friend_queue.class);
+        q.whereEqualTo("user", curUser);
+        q.findInBackground(new FindCallback<Friend_queue>() {
+            @Override
+            public void done(List<Friend_queue> new_friends, ParseException e) {
+                // If there are no new friends, skip this function
+                if (new_friends.size() == 0) {
+                    return;
+                }
+
+                // Get the relation and add all friends to it
+                //curUser.add("friends", new_friends.get(0).getFriend());
+                ParseRelation<ParseUser> friends = curUser.getRelation("friends");
+                for (Friend_queue f : new_friends) {
+                    friends.add(f.getFriend());
+                    f.deleteInBackground();
+                }
+
+                // Save the new friends to the user
+                curUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Could not save new friends", e);
+                        }
+                        else {
+                            Log.i(TAG, "Saved new friends");
+                        }
+                    }
+                });
+
+                // Save the new friends
+//                curUser.add("friends", c);
+//                curUser.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(ParseException e) {
+//                        if (e != null) {
+//                            Log.e(TAG, "Error saving new friends", e);
+//                        }
+//                    }
+//                });
             }
         });
     }
