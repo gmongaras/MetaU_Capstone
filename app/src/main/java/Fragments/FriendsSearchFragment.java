@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -51,6 +52,7 @@ public class FriendsSearchFragment extends Fragment {
     TextView tvSearchFriends_search;
     RecyclerView rvFriends_search;
     TextView tvPrompt;
+    ProgressBar pbFriends;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -113,6 +115,7 @@ public class FriendsSearchFragment extends Fragment {
         tvSearchFriends_search.setHintTextColor(getResources().getColor(R.color.black));
         rvFriends_search = view.findViewById(R.id.rvFriends_search);
         tvPrompt = view.findViewById(R.id.tvPrompt);
+        pbFriends = requireActivity().findViewById(R.id.pbFriends);
 
         // Get the current user
         user = ParseUser.getCurrentUser();
@@ -196,6 +199,8 @@ public class FriendsSearchFragment extends Fragment {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                pbFriends.setVisibility(View.INVISIBLE);
+
                 // Setup the fragment switch
                 FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
@@ -221,6 +226,9 @@ public class FriendsSearchFragment extends Fragment {
             querying = false;
             return;
         }
+
+        pbFriends.setVisibility(View.VISIBLE);
+
 
         // Create a new query for users
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
@@ -278,6 +286,8 @@ public class FriendsSearchFragment extends Fragment {
 
                 // We are no longer querying
                 querying = false;
+
+                pbFriends.setVisibility(View.INVISIBLE);
             }
         });
     }

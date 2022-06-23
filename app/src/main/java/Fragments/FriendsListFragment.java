@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
@@ -47,6 +48,7 @@ public class FriendsListFragment extends Fragment {
     // Elements in the view
     TextView tvNoFriends;
     RecyclerView rvFriends;
+    ProgressBar pbFriends;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -113,6 +115,7 @@ public class FriendsListFragment extends Fragment {
         // Get the elements
         rvFriends = view.findViewById(R.id.rvFriendRequests);
         tvNoFriends = view.findViewById(R.id.tvNoFriends);
+        pbFriends = requireActivity().findViewById(R.id.pbFriends);
 
 
 
@@ -129,6 +132,8 @@ public class FriendsListFragment extends Fragment {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                pbFriends.setVisibility(View.INVISIBLE);
+
                 // Setup the fragment switch
                 FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
@@ -149,6 +154,8 @@ public class FriendsListFragment extends Fragment {
 
 
     private void getFriends() {
+        pbFriends.setVisibility(View.VISIBLE);
+
         // Get the query to query the friends
         ParseRelation<ParseUser> friends = user.getRelation("friends");
         ParseQuery<ParseUser> query = friends.getQuery();
@@ -206,6 +213,8 @@ public class FriendsListFragment extends Fragment {
                     // Notify the recycler view adapter of a change in data
                     adapter.notifyDataSetChanged();
                 }
+
+                pbFriends.setVisibility(View.INVISIBLE);
 
                 // Increase the skip value
                 skipVal+=1;

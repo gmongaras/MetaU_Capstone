@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -50,6 +51,7 @@ public class FriendsRequestFragment extends Fragment {
     // Elements in the view
     TextView tvNoRequests;
     RecyclerView rvFriendRequests;
+    ProgressBar pbFriends;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -116,6 +118,7 @@ public class FriendsRequestFragment extends Fragment {
         // Get the elements
         rvFriendRequests = view.findViewById(R.id.rvFriendRequests);
         tvNoRequests = view.findViewById(R.id.tvNoRequests);
+        pbFriends = requireActivity().findViewById(R.id.pbFriends);
 
 
 
