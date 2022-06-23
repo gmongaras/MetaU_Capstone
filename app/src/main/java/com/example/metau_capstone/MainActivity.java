@@ -141,19 +141,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
-
-
-        // Handle back button presses so the user doesn't go to the wrong
-        // page after they logged in and pressed the back button.
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                finishAffinity();
-            }
-        };
-        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
 
