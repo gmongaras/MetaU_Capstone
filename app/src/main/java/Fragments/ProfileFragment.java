@@ -146,27 +146,20 @@ public class ProfileFragment extends Fragment {
         tvUsername.setText(user.getUsername());
 
         // Store the user image
-        ParseQuery<ParseUser> q = new ParseQuery<>(ParseUser.class);
-        q.whereEqualTo("objectId", user.getObjectId());
-        q.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> user, ParseException e) {
-                ParseFile pic = user.get(0).getParseFile("profilePic");
-                if (pic == null) {
-                    Glide.with(view.getContext())
-                            .load(R.drawable.default_pfp)
-                            .circleCrop()
-                            .into(ivProfileImage);
-                }
-                else {
-                    Glide.with(view.getContext())
-                            .load(pic.getUrl())
-                            .error(R.drawable.default_pfp)
-                            .circleCrop()
-                            .into(ivProfileImage);
-                }
-            }
-        });
+        ParseFile pic = user.getParseFile("profilePic");
+        if (pic == null) {
+            Glide.with(view.getContext())
+                    .load(R.drawable.default_pfp)
+                    .circleCrop()
+                    .into(ivProfileImage);
+        }
+        else {
+            Glide.with(view.getContext())
+                    .load(pic.getUrl())
+                    .error(R.drawable.default_pfp)
+                    .circleCrop()
+                    .into(ivProfileImage);
+        }
 
         // Initialize the fortunes
         Fortunes = new ArrayList<>();

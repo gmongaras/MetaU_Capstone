@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,9 +17,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -26,8 +32,10 @@ import com.parse.SaveCallback;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -44,13 +52,30 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Get permission to get the user's location
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // If we don't have permission, request permission
-            ActivityCompat.requestPermissions(LoginActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    1);
-        }
+
+
+        final HashMap<String, String> params = new HashMap<>();
+        // Calling the cloud code function
+        ParseCloud.callFunctionInBackground("pushsample", params, new FunctionCallback<Object>() {
+            @Override
+            public void done(Object response, ParseException exc) {
+                if(exc == null) {
+                    // The function was executed, but it's interesting to check its response
+                    //alertDisplayer("Successful Push","Check on your phone the notifications to confirm!");
+                }
+                else {
+                    // Something went wrong
+                    Toast.makeText(LoginActivity.this, exc.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        ParsePush push = new ParsePush();
+        push.setMessage("hello");
+        //push.setPushTime(100000000);
+        push.sendInBackground();
+
+
 
         // If the user is already logged in, go straight to the main activity
         if (ParseUser.getCurrentUser() != null) {

@@ -1,9 +1,14 @@
 package com.example.metau_capstone;
 
+import com.google.firebase.iid.FirebaseInstanceIdReceiver;
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal;
 import com.parse.Parse;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 
 import android.app.Application;
+
+import java.util.Objects;
 
 public class ParseApplication extends Application {
 
@@ -22,5 +27,10 @@ public class ParseApplication extends Application {
                 .server("https://parseapi.back4app.com")
                 .build()
         );
+
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("GCMSenderId", "576974311785");
+        installation.getDeviceToken();
+        installation.saveInBackground();
     }
 }
