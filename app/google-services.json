@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "576974311785",
+    "project_id": "metau-capstone",
+    "storage_bucket": "metau-capstone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576974311785:android:cffb86c8c194162fe66df8",
+        "android_client_info": {
+          "package_name": "com.example.metau_capstone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576974311785-96ngl3ljj1qpfblnb8jsb98qlk0j0deq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYELKBKwD96XCf5lcyx8c-M3EASlbEmo0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576974311785-96ngl3ljj1qpfblnb8jsb98qlk0j0deq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

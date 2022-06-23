@@ -122,27 +122,20 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             tvFriendUsername_search.setText(friend.getUsername());
 
             // Store the user image
-            ParseQuery<ParseUser> q = new ParseQuery<>(ParseUser.class);
-            q.whereEqualTo("objectId", friend.getObjectId());
-            q.findInBackground(new FindCallback<ParseUser>() {
-                @Override
-                public void done(List<ParseUser> user, ParseException e) {
-                    ParseFile pic = user.get(0).getParseFile("profilePic");
-                    if (pic == null) {
-                        Glide.with(context)
-                                .load(R.drawable.default_pfp)
-                                .circleCrop()
-                                .into(ivFriend_search);
-                    }
-                    else {
-                        Glide.with(context)
-                                .load(pic.getUrl())
-                                .error(R.drawable.default_pfp)
-                                .circleCrop()
-                                .into(ivFriend_search);
-                    }
-                }
-            });
+            ParseFile pic = friend.getParseFile("profilePic");
+            if (pic == null) {
+                Glide.with(context)
+                        .load(R.drawable.default_pfp)
+                        .circleCrop()
+                        .into(ivFriend_search);
+            }
+            else {
+                Glide.with(context)
+                        .load(pic.getUrl())
+                        .error(R.drawable.default_pfp)
+                        .circleCrop()
+                        .into(ivFriend_search);
+            }
 
             // Load in the fortune count
             ParseRelation<Fortune> fortunes = friend.getRelation("fortunes");
@@ -166,10 +159,12 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                     String id = friend.getObjectId();
                     for (ParseUser item_friend : friends) {
                         if (Objects.equals(item_friend.getObjectId(), id)) {
+                            btnSendRequest.setVisibility(View.INVISIBLE);
                             btnAlreadyFriends.setVisibility(View.VISIBLE);
                             return;
                         }
                     }
+                    btnAlreadyFriends.setVisibility(View.INVISIBLE);
                     btnSendRequest.setVisibility(View.VISIBLE);
                 }
             });

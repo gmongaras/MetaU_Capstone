@@ -103,27 +103,20 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             tvFriendUsername.setText(friend.getUsername());
 
             // Store the user image
-            ParseQuery<ParseUser> q = new ParseQuery<>(ParseUser.class);
-            q.whereEqualTo("objectId", friend.getObjectId());
-            q.findInBackground(new FindCallback<ParseUser>() {
-                @Override
-                public void done(List<ParseUser> user, ParseException e) {
-                    ParseFile pic = user.get(0).getParseFile("profilePic");
-                    if (pic == null) {
-                        Glide.with(context)
-                                .load(R.drawable.default_pfp)
-                                .circleCrop()
-                                .into(ivFriend);
-                    }
-                    else {
-                        Glide.with(context)
-                                .load(pic.getUrl())
-                                .error(R.drawable.default_pfp)
-                                .circleCrop()
-                                .into(ivFriend);
-                    }
-                }
-            });
+            ParseFile pic = friend.getParseFile("profilePic");
+            if (pic == null) {
+                Glide.with(context)
+                        .load(R.drawable.default_pfp)
+                        .circleCrop()
+                        .into(ivFriend);
+            }
+            else {
+                Glide.with(context)
+                        .load(pic.getUrl())
+                        .error(R.drawable.default_pfp)
+                        .circleCrop()
+                        .into(ivFriend);
+            }
 
             // Load in the fortune count
             ParseRelation<Fortune> fortunes = friend.getRelation("fortunes");
