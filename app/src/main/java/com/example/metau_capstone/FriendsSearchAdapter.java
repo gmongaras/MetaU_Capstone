@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -89,8 +90,12 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         ImageView ivFriend_search;
         TextView tvFriendUsername_search;
         TextView tvFriendFortuneCt_search;
-        Button btnAddFriend;
-        Button btnRemoveFiend;
+        Button btnSendRequest;
+        Button btnRemoveRequest;
+        Button btnAlreadyFriends;
+
+        // The current user
+        ParseUser curUser;
 
         // Is the user friending someone?
         boolean friending;
@@ -102,9 +107,13 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             ivFriend_search = itemView.findViewById(R.id.ivFriend_search);
             tvFriendUsername_search = itemView.findViewById(R.id.tvFriendUsername_search);
             tvFriendFortuneCt_search = itemView.findViewById(R.id.tvFriendFortuneCt_search);
-            btnAddFriend = itemView.findViewById(R.id.btnAddFriend);
-            btnRemoveFiend = itemView.findViewById(R.id.btnRemoveFiend);
+            btnSendRequest = itemView.findViewById(R.id.btnSendRequest);
+            btnRemoveRequest = itemView.findViewById(R.id.btnRemoveRequest);
+            btnAlreadyFriends = itemView.findViewById(R.id.btnAlreadyFriends);
             friending = false;
+
+            // Get the current user
+            curUser = ParseUser.getCurrentUser();
         }
 
         // Given a Friend (ParseUser), bind data to this object
@@ -147,7 +156,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
             // Get all the user's friends and check if the given friend is
             // in their list to show the correct display
-            ParseRelation<ParseUser> users = ParseUser.getCurrentUser().getRelation("friends");
+            ParseRelation<ParseUser> users = curUser.getRelation("friends");
             ParseQuery<ParseUser> friends_query = users.getQuery();
             friends_query.findInBackground(new FindCallback<ParseUser>() {
                 @Override
@@ -157,82 +166,113 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                     String id = friend.getObjectId();
                     for (ParseUser item_friend : friends) {
                         if (Objects.equals(item_friend.getObjectId(), id)) {
-                            btnAddFriend.setVisibility(View.INVISIBLE);
-                            btnRemoveFiend.setVisibility(View.VISIBLE);
+                            btnAlreadyFriends.setVisibility(View.VISIBLE);
                             return;
                         }
                     }
-                    btnRemoveFiend.setVisibility(View.INVISIBLE);
-                    btnAddFriend.setVisibility(View.VISIBLE);
+                    btnSendRequest.setVisibility(View.VISIBLE);
                 }
             });
 
-            // Add an onClick listener to the add friend button so the user can add
-            // this user as a friend.
-            btnAddFriend.setOnClickListener(new View.OnClickListener() {
+            // Add an onClick listener to the send request button to send a friend request
+            btnSendRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (friending == true) {
                         return;
                     }
 
-                    // When clicked, add this user as a friend in the current
-                    // user's friend list
+                    // When clicked, add the request to the queue and the
+                    // user's requests
                     friending = true;
-                    ParseUser user = ParseUser.getCurrentUser();
-                    ParseRelation<ParseUser> friends = user.getRelation("friends");
-                    friends.add(friend);
-                    user.saveInBackground(new SaveCallback() {
+
+                    // Add the requests to the user's requests
+                    ParseRelation<ParseUser> sent_requests = curUser.getRelation("sent_requests");
+                    sent_requests.add(friend);
+                    curUser.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e != null) {
-                                Log.e(TAG, "Unable to friend user", e);
-                                Toast.makeText(context, "Unable to friend user", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                Toast.makeText(context, "User friended!", Toast.LENGTH_SHORT).show();
-
-                                // Swap the buttons
-                                btnAddFriend.setVisibility(View.INVISIBLE);
-                                btnRemoveFiend.setVisibility(View.VISIBLE);
-                                friending = false;
+                                Log.e(TAG, "Unable to save user to sent requests", e);
                             }
                         }
                     });
+
+                    // Add the request to the queue
+                    Friend_queue queue = new Friend_queue();
+                    queue.setUser(friend);
+                    queue.setFriend(curUser);
+                    queue.setMode("request");
+                    queue.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "Unable to request save to queue", e);
+                            }
+                            else {
+                                btnSendRequest.setVisibility(View.INVISIBLE);
+                                btnRemoveRequest.setVisibility(View.VISIBLE);
+                            }
+                            friending = false;
+                        }
+                    });
+
+
                 }
             });
 
 
-            // Add an onClick listener to the remove friend button so the user can remove
-            // this user as a friend.
-            btnRemoveFiend.setOnClickListener(new View.OnClickListener() {
+            // Add an onClick listener to the remove friend request button to
+            // remove the request from the queue
+            btnRemoveRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (friending == true) {
                         return;
                     }
 
-                    // When clicked, add this user as a friend in the current
-                    // user's friend list
                     friending = true;
-                    ParseUser user = ParseUser.getCurrentUser();
-                    ParseRelation<ParseUser> friends = user.getRelation("friends");
-                    friends.remove(friend);
-                    user.saveInBackground(new SaveCallback() {
+
+                    // Find request in set_requests and remove it
+                    ParseRelation<ParseUser> sent_requests = curUser.getRelation("sent_requests");
+                    sent_requests.remove(friend);
+                    curUser.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e != null) {
-                                Log.e(TAG, "Unable to remove friend", e);
-                                Toast.makeText(context, "Unable to remove friend", Toast.LENGTH_SHORT).show();
+                                Log.e(TAG, "Unable to remove user from sent requests", e);
                             }
-                            else {
-                                Toast.makeText(context, "User unfriended", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                                // Swap the buttons
-                                btnRemoveFiend.setVisibility(View.INVISIBLE);
-                                btnAddFriend.setVisibility(View.VISIBLE);
+                    // Find the request in the queue and remove it
+                    ParseQuery<Friend_queue> q = new ParseQuery<Friend_queue>("Friend_queue");
+                    q.whereEqualTo("user", friend);
+                    q.whereEqualTo("friend", curUser);
+                    q.whereEqualTo("mode", "request");
+                    q.findInBackground(new FindCallback<Friend_queue>() {
+                        @Override
+                        public void done(List<Friend_queue> objects, ParseException e) {
+                            if (objects.size() == 0 || e != null) {
+                                Log.e(TAG, "Unable to remove request from queue", e);
                                 friending = false;
+                                return;
                             }
+
+                            objects.get(0).deleteInBackground(new DeleteCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e != null) {
+                                        Log.e(TAG, "Error removing request from queue", e);
+                                    }
+                                    else {
+                                        Log.i(TAG, "Removed request from queue");
+                                        btnRemoveRequest.setVisibility(View.INVISIBLE);
+                                        btnSendRequest.setVisibility(View.VISIBLE);
+                                    }
+                                    friending = false;
+                                }
+                            });
                         }
                     });
                 }

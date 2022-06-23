@@ -59,26 +59,39 @@
         tools:text="10" />
 
     <Button
-        android:id="@+id/btnAddFriend"
+        android:id="@+id/btnSendRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/black"
-        android:text="Add Friend"
+        android:text="Send Friend Request"
         android:textColor="@color/white"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
-        android:id="@+id/btnRemoveFiend"
+        android:id="@+id/btnRemoveRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/darker_red"
-        android:text="Remove Friend"
+        android:text="Remove Friend Request"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/btnAlreadyFriends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="@color/light_grey"
+        android:text="Already Friends!"
         android:textColor="@color/white"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_search"

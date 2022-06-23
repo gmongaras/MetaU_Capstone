@@ -234,7 +234,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             Friend_queue queue = new Friend_queue();
             queue.setFriend(friend);
             queue.setUser(user);
-            //queue.add("friend", friend);
+            queue.setMode("add");
             queue.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -264,14 +264,47 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
                         btnAcceptRequest.setVisibility(View.INVISIBLE);
                         btnDeclineRequest.setVisibility(View.INVISIBLE);
 
-                        // Set the new button as visible
-                        if (mode == "accept") {
-                            Toast.makeText(context, "User friended!", Toast.LENGTH_SHORT).show();
-                            btnRequestAccepted.setVisibility(View.VISIBLE);
+                        // Set the new button as visible and send a new request
+                        // to the database
+                        if (Objects.equals(mode, "accept")) {
+                            // Send back a accepted request to the database
+                            Friend_queue queue = new Friend_queue();
+                            queue.setUser(friend);
+                            queue.setFriend(user);
+                            queue.setMode("accept");
+                            queue.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e != null) {
+                                        Log.e(TAG, "Unable to save accepted request to queue", e);
+                                    }
+                                    else {
+                                        Toast.makeText(context, "User friended!", Toast.LENGTH_SHORT).show();
+                                        btnRequestAccepted.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            });
+
+
                         }
                         else {
-                            Toast.makeText(context, "Request declined", Toast.LENGTH_SHORT).show();
-                            btnRequestDeclined.setVisibility(View.VISIBLE);
+                            // Send back a rejected request to the database
+                            Friend_queue queue = new Friend_queue();
+                            queue.setUser(friend);
+                            queue.setFriend(user);
+                            queue.setMode("rejected");
+                            queue.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e != null) {
+                                        Log.e(TAG, "Unable to save rejected request to queue", e);
+                                    }
+                                    else {
+                                        Toast.makeText(context, "Request declined", Toast.LENGTH_SHORT).show();
+                                        btnRequestDeclined.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            });
                         }
 
                         friending = false;

@@ -27,6 +27,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -50,9 +51,6 @@ public class LoginActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     1);
         }
-
-        // When the user logs in, check if they have any new friends and add them
-        addFriends();
 
         // If the user is already logged in, go straight to the main activity
         if (ParseUser.getCurrentUser() != null) {
@@ -136,6 +134,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+    // Add or removes all friends in the queue
     private void addFriends() {
         ParseUser curUser = ParseUser.getCurrentUser();
         ParseQuery<Friend_queue> q = new ParseQuery<Friend_queue>(Friend_queue.class);
@@ -148,11 +147,26 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Get the relation and add all friends to it
-                //curUser.add("friends", new_friends.get(0).getFriend());
+                // Get the relation and add or remove all friends to it
                 ParseRelation<ParseUser> friends = curUser.getRelation("friends");
+                ParseRelation<ParseUser> requests = curUser.getRelation("friend_requests");
+                ParseRelation<ParseUser> sent_requests = curUser.getRelation("sent_requests");
                 for (Friend_queue f : new_friends) {
-                    friends.add(f.getFriend());
+                    if (Objects.equals(f.getMode(), "add")) {
+                        friends.add(f.getFriend());
+                    }
+                    else if (Objects.equals(f.getMode(), "request")) {
+                        requests.add(f.getFriend());
+                    }
+                    else if (Objects.equals(f.getMode(), "accept")) {
+                        sent_requests.remove(f.getFriend());
+                    }
+                    else if (Objects.equals(f.getMode(), "rejected")) {
+                        sent_requests.remove(f.getFriend());
+                    }
+                    else if (Objects.equals(f.getMode(), "remove")) {
+                        friends.remove(f.getFriend());
+                    }
                     f.deleteInBackground();
                 }
 
@@ -188,6 +202,9 @@ public class LoginActivity extends AppCompatActivity {
 
     // Go to the main activity when the user has logged in
     private void goMainActivity() {
+        // When the user logs in, check if they have any new friends and add them
+        addFriends();
+
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
