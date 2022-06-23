@@ -192,21 +192,22 @@ public class FriendsSearchFragment extends Fragment {
             }
         });
 
-        // Handle back button presses so the user doesn't go to the wrong
-        // page after they logged in and pressed the back button.
+        // Handle back button presses by going to the friends fragment
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 // Setup the fragment switch
                 FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
-                // Go back to the Profile fragment
-                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                FriendsFragment friendsFragment = FriendsFragment.newInstance("a", "b");
+                // Go back to the Friends fragment
+                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+                FriendsListFragment listFragment = FriendsListFragment.newInstance("a", "b");
 
-                // Add back the profile fragment
-                ft.replace(R.id.flContainer, friendsFragment);
+                // Add back the friends fragment
+                ft.replace(R.id.fragmentFriends, listFragment);
                 ft.commit();
+
+                //((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);

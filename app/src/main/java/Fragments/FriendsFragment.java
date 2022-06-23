@@ -135,25 +135,25 @@ public class FriendsFragment extends Fragment {
 
 
 
-        // Handle back button presses by going to the home fragment
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                // Setup the fragment switch
-                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
-
-                // Go back to the Profile fragment
-                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-                HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance("a", "b");
-
-                // Add back the profile fragment
-                ft.replace(R.id.flContainer, homeFragment);
-                ft.commit();
-
-                ((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
-            }
-        };
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+//        // Handle back button presses by going to the home fragment
+//        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                // Setup the fragment switch
+//                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+//
+//                // Go back to the Profile fragment
+//                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+//                HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance("a", "b");
+//
+//                // Add back the profile fragment
+//                ft.replace(R.id.flContainer, homeFragment);
+//                ft.commit();
+//
+//                ((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
+//            }
+//        };
+//        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
 
 
