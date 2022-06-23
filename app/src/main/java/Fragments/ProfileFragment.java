@@ -1,5 +1,7 @@
 package Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
@@ -30,6 +32,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Fortune;
+import com.example.metau_capstone.Friend_queue;
 import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.ProfileAdapter;
 import com.example.metau_capstone.R;
@@ -40,6 +43,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -71,6 +75,7 @@ public class ProfileFragment extends Fragment {
     TextView tvUsername;
     RecyclerView rvProfile;
     Button btnLogout;
+    Button btnUnfriend;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -84,8 +89,8 @@ public class ProfileFragment extends Fragment {
     private ParseUser user;
 
     // What mode should the profile be put in?
-    // 0 - Full permissions
-    // 1 - Cannot change profile picture
+    // 0 - Current user
+    // 1 - Friend
     private static final String ARG_MODE = "mode";
     private int mode;
 
@@ -129,6 +134,7 @@ public class ProfileFragment extends Fragment {
         tvUsername = view.findViewById(R.id.tvUsername);
         rvProfile = view.findViewById(R.id.rvProfile);
         btnLogout = view.findViewById(R.id.btnLogout);
+        btnUnfriend = view.findViewById(R.id.btnUnfriend);
 
         // If the user is null, default to the current user
         if (user == null) {
@@ -184,9 +190,74 @@ public class ProfileFragment extends Fragment {
             });
         }
 
-        // If the mode is 1, remove the logout button
+        // If the mode is 1, remove the logout button and change it with
+        // an unfriend button
         if (mode == 1) {
             btnLogout.setVisibility(View.INVISIBLE);
+            btnUnfriend.setVisibility(View.VISIBLE);
+
+            // Put an onClick listener onto the unfriend button to unfriend
+            // this user
+            btnUnfriend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Display an alert dialog to make the user confirm they
+                    // want to unfriend that user
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle("Unfriend")
+                            .setMessage("Are you sure you want to unfriend " + tvUsername.getText().toString() + "?")
+
+                            // If the user clicks yes, unfriend this friend
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Get the current user
+                                    ParseUser curUser = ParseUser.getCurrentUser();
+
+                                    // Remove the friend from the current user's friend list
+                                    ParseRelation<ParseUser> friends = curUser.getRelation("friends");
+                                    friends.remove(user);
+                                    curUser.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e != null) {
+                                                Log.e(TAG, "Unable to unfriend user", e);
+                                                Toast.makeText(requireContext(), "Unable to unfriend user", Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+
+                                            // Send a request to remove the friend from the
+                                            // other user's friend's list
+                                            Friend_queue queue = new Friend_queue();
+                                            queue.setUser(user);
+                                            queue.setFriend(curUser);
+                                            queue.setMode("remove");
+                                            queue.saveInBackground(new SaveCallback() {
+                                                @Override
+                                                public void done(ParseException e) {
+                                                    if (e != null) {
+                                                        Log.e(TAG, "Unable to send remove request to queue", e);
+                                                    }
+                                                    else {
+                                                        Toast.makeText(requireActivity(), "User unfriended", Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                    // Go back to the friends fragment
+                                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                                                    ft.replace(R.id.flContainer, new FriendsFragment());
+                                                    ft.commit();
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            })
+
+                            // If the user clicks no, do nothing
+                            .setNegativeButton("No", null)
+                            .show();
+                }
+            });
         }
         // If the mode is 0, Put an onClick listener onto the logout button
         else {
