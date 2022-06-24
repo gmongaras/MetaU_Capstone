@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -205,6 +206,15 @@ public class HomeFragment_countdown extends Fragment {
                 }
             }
         });
+
+        // Handle back button presses by going to the home fragment
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().finishAffinity();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
 
 

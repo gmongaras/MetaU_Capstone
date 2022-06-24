@@ -52,4 +52,6 @@ dependencies {
 
     implementation "com.github.parse-community.Parse-SDK-Android:parse:3.0.1"
     implementation "com.github.parse-community.Parse-SDK-Android:fcm:3.0.1"
+
+    implementation "com.airbnb.android:lottie:5.2.0"
 }

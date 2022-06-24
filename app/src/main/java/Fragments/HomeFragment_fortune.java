@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
@@ -18,10 +19,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.MainActivity;
 import com.example.metau_capstone.R;
@@ -80,9 +83,10 @@ public class HomeFragment_fortune extends Fragment {
     private static final String TAG = "HomeFragment_fortune";
 
     // Elements in the view
+    LottieAnimationView avCookie;
     TextView tvFortuneText;
     TextView tvTextPrompt;
-    ImageView ivFortune;
+    //ImageView ivFortune;
 
     // Pytorch model
     Module module;
@@ -96,6 +100,10 @@ public class HomeFragment_fortune extends Fragment {
     // Used for location
     FusedLocationProviderClient fusedLocationProviderClient;
     Location userLoc;
+
+    // Animations
+    protected AlphaAnimation fadeIn = new AlphaAnimation(0.0f , 1.0f ) ;
+    protected AlphaAnimation fadeOut = new AlphaAnimation( 1.0f , 0.0f ) ;
 
     public HomeFragment_fortune() {
         // Required empty public constructor
@@ -145,7 +153,15 @@ public class HomeFragment_fortune extends Fragment {
         // Get the elements
         tvFortuneText = view.findViewById(R.id.tvFortuneText);
         tvTextPrompt = view.findViewById(R.id.tvTextPrompt);
-        ivFortune = view.findViewById(R.id.ivFortune);
+        avCookie = view.findViewById(R.id.avCookie);
+        //ivFortune = view.findViewById(R.id.ivFortune);
+
+        // Create the animations
+        fadeIn.setDuration(1200);
+        fadeIn.setFillAfter(true);
+        fadeOut.setDuration(1200);
+        fadeOut.setFillAfter(true);
+        fadeOut.setStartOffset(4200+fadeIn.getStartOffset());
 
         // Load the model
         try {
@@ -163,35 +179,63 @@ public class HomeFragment_fortune extends Fragment {
             Log.e(TAG, "Unable to load file", e);
         }
 
-        // Set on an onClick listener to the infer button
-        ivFortune.setOnClickListener(new View.OnClickListener() {
+        // Set on an onClick listener to the cookie
+        avCookie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Preparing trash input tensor
-                int sequence_length = 64;
-                int embedding_size = 20;
-                long[] shape = new long[]{sequence_length, embedding_size};
-                inputTensor = generateTensor(shape);
+                // Play the animation
+                avCookie.playAnimation();
+                avCookie.addAnimatorListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                    }
 
-                // Get the output
-                long[] scores = module.forward(IValue.from(inputTensor)).toTensor().getDataAsLongArray();
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        // When the animation is over, get the fortune
 
-                // Get the output sequence
-                StringBuilder text = new StringBuilder();
-                for (long score : scores) {
-                    text.append(vocab.get((int) score)).append(" ");
-                }
+                        // Preparing trash input tensor
+                        int sequence_length = 64;
+                        int embedding_size = 20;
+                        long[] shape = new long[]{sequence_length, embedding_size};
+                        inputTensor = generateTensor(shape);
 
-                // Save the fortune to the database
-                saveFortune(text.toString());
+                        // Get the output
+                        long[] scores = module.forward(IValue.from(inputTensor)).toTensor().getDataAsLongArray();
 
-                // Make the fortune invisible and the text visible
-                ivFortune.setVisibility(View.INVISIBLE);
-                tvFortuneText.setVisibility(View.VISIBLE);
+                        // Get the output sequence
+                        StringBuilder text = new StringBuilder();
+                        for (long score : scores) {
+                            text.append(vocab.get((int) score)).append(" ");
+                        }
 
-                // Change the displayed text
-                tvTextPrompt.setText(R.string.promptAfter);
-                tvFortuneText.setText(text.toString());
+                        // Save the fortune to the database
+                        saveFortune(text.toString());
+
+                        // Make the fortune invisible and the text visible
+                        avCookie.setAnimation(fadeOut);
+                        tvFortuneText.setAnimation(fadeIn);
+                        tvTextPrompt.setAnimation(fadeIn);
+//                        avCookie.setVisibility(View.INVISIBLE);
+//                        tvFortuneText.setVisibility(View.VISIBLE);
+
+                        // Change the displayed text
+                        tvTextPrompt.setText(R.string.promptAfter);
+                        tvFortuneText.setText(text.toString());
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+
+
             }
         });
     }
