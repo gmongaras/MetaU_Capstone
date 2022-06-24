@@ -52,31 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-
-        final HashMap<String, String> params = new HashMap<>();
-        // Calling the cloud code function
-        ParseCloud.callFunctionInBackground("pushsample", params, new FunctionCallback<Object>() {
-            @Override
-            public void done(Object response, ParseException exc) {
-                if(exc == null) {
-                    // The function was executed, but it's interesting to check its response
-                    //alertDisplayer("Successful Push","Check on your phone the notifications to confirm!");
-                }
-                else {
-                    // Something went wrong
-                    Toast.makeText(LoginActivity.this, exc.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        ParsePush push = new ParsePush();
-        push.setMessage("hello");
-        //push.setPushTime(100000000);
-        push.sendInBackground();
-
-
-
         // If the user is already logged in, go straight to the main activity
         if (ParseUser.getCurrentUser() != null) {
             goMainActivity();

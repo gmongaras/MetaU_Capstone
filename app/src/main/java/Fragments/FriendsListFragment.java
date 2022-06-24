@@ -181,6 +181,7 @@ public class FriendsListFragment extends Fragment {
                 // recycler view
                 if (friends.size() == 0 && Friends.size() == 0) {
                     tvNoFriends.setVisibility(View.VISIBLE);
+                    pbFriends.setVisibility(View.INVISIBLE);
                     return;
                 }
 

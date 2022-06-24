@@ -54,7 +54,7 @@ public class HomeFragment_countdown extends Fragment {
 
     // Time until next fortune in miliseconds (23 hours)
     public static final double timeLeft = 8.28e+7;
-    //public static final double timeLeft = 10000;
+    //public static final double timeLeft = 5000;
 
 
     // TODO: Rename parameter arguments, choose names that match

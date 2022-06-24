@@ -7,6 +7,7 @@ import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.util.Objects;
 
@@ -22,15 +23,10 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Friend_queue.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("Dwsfp3rsCpvhUvRpB8dtfiA97kOHeORreiuIAu4o")
-                .clientKey("Uk8DpECE78TqC1r4OUr8jYMUksag8lBdvC5TTnzh")
-                .server("https://parseapi.back4app.com")
+                .applicationId(getString(R.string.back4app_app_id))
+                .clientKey(getString(R.string.back4app_client_key))
+                .server(getString(R.string.back4app_server_url))
                 .build()
         );
-
-        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-        installation.put("GCMSenderId", "576974311785");
-        installation.getDeviceToken();
-        installation.saveInBackground();
     }
 }

@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.MainActivity;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.WakefulReceiver;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -256,6 +257,10 @@ public class HomeFragment_fortune extends Fragment {
                             }
                             else {
                                 Log.i(TAG, "Fortune successfully saved to fortune list");
+
+                                // When the user opens the fortune, create a push notification timer
+                                WakefulReceiver wr = new WakefulReceiver();
+                                wr.setAlarm(requireContext());
                             }
                         }
                     });
