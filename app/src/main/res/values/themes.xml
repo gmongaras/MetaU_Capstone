@@ -19,4 +19,9 @@
         <!-- Action bar formatting -->
         <item name="android:actionBarStyle">@style/CustomActionBarStyle</item>
     </style>
+
+
+    <style name="Splashscreen" parent="Theme.MetaU_Capstone" >
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
 </resources>
