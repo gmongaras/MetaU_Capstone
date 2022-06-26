@@ -93,6 +93,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         Button btnSendRequest;
         Button btnRemoveRequest;
         Button btnAlreadyFriends;
+        Button btnHaveARequest;
 
         // The current user
         ParseUser curUser;
@@ -110,6 +111,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             btnSendRequest = itemView.findViewById(R.id.btnSendRequest);
             btnRemoveRequest = itemView.findViewById(R.id.btnRemoveRequest);
             btnAlreadyFriends = itemView.findViewById(R.id.btnAlreadyFriends);
+            btnHaveARequest = itemView.findViewById(R.id.btnHaveARequest);
             friending = false;
 
             // Get the current user
@@ -160,12 +162,33 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                     for (ParseUser item_friend : friends) {
                         if (Objects.equals(item_friend.getObjectId(), id)) {
                             btnSendRequest.setVisibility(View.INVISIBLE);
+                            btnHaveARequest.setVisibility(View.INVISIBLE);
                             btnAlreadyFriends.setVisibility(View.VISIBLE);
                             return;
                         }
                     }
-                    btnAlreadyFriends.setVisibility(View.INVISIBLE);
-                    btnSendRequest.setVisibility(View.VISIBLE);
+
+                    // If the other user is not in the friends list, check if
+                    // the user is in the requests list
+                    ParseRelation<ParseUser> requests = curUser.getRelation("friend_requests");
+                    ParseQuery<ParseUser> requests_query = requests.getQuery();
+                    requests_query.whereEqualTo("objectId", friend.getObjectId());
+                    requests_query.findInBackground(new FindCallback<ParseUser>() {
+                        @Override
+                        public void done(List<ParseUser> objects, ParseException e) {
+                            // If the list is not empty, then there is a request
+                            if (objects.size() > 0) {
+                                btnAlreadyFriends.setVisibility(View.INVISIBLE);
+                                btnSendRequest.setVisibility(View.INVISIBLE);
+                                btnHaveARequest.setVisibility(View.VISIBLE);
+                                return;
+                            }
+
+                            btnAlreadyFriends.setVisibility(View.INVISIBLE);
+                            btnHaveARequest.setVisibility(View.INVISIBLE);
+                            btnSendRequest.setVisibility(View.VISIBLE);
+                        }
+                    });
                 }
             });
 

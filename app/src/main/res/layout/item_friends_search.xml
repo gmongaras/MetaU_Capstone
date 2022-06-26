@@ -96,4 +96,18 @@
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/btnHaveARequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="@color/light_grey"
+        android:text="Currently have a request"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
