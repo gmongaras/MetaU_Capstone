@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.MapHelper;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.dateFormatter;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -24,6 +25,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.parse.Parse;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +51,9 @@ public class ProfileDetailFragment extends Fragment {
     // The user to load the map for
     private static final String ARG_USER = "user";
     private ParseUser user;
+
+    // Used to load date information
+    dateFormatter df = new dateFormatter();
 
     public ProfileDetailFragment() {
         // Required empty public constructor
@@ -88,7 +94,7 @@ public class ProfileDetailFragment extends Fragment {
         tvFortune_detail = view.findViewById(R.id.tvFortune_detail);
 
         // Get the fortune information and store it
-        tvDate_detail.setText(fortune.getCreatedAt().toString());
+        tvDate_detail.setText(df.toMonthDayTime(fortune.getCreatedAt()));
         tvFortune_detail.setText(fortune.getMessage());
 
         // Get the map information and load it
@@ -126,7 +132,7 @@ public class ProfileDetailFragment extends Fragment {
                 // Go back to the Profile fragment
                 ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
                 ProfileFragment profileFragment;
-                if (user.getObjectId() == ParseUser.getCurrentUser().getObjectId()) {
+                if (Objects.equals(user.getObjectId(), ParseUser.getCurrentUser().getObjectId())) {
                      profileFragment = ProfileFragment.newInstance(user, 0);
                 }
                 else {

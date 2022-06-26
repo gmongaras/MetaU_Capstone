@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.parse.ParseUser;
 
+import java.util.Date;
 import java.util.List;
 
 import Fragments.HomeFragment_countdown;
@@ -32,6 +33,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     // User to load the profile for
     ParseUser user;
+
+    // Used to convert the date
+    dateFormatter df = new dateFormatter();
 
     // Constructor to create the adapter with context and a list
     public ProfileAdapter(List<Fortune> fortunes, ParseUser user, Context context, FragmentManager manager) {
@@ -98,9 +102,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
         // Given a fortune, bind data to this object
         public void bind(Fortune fortune) {
-            tvDate.setText(fortune.getCreatedAt().toString());
+            // Get the date in the proper form and set it
+            tvDate.setText(df.toMonthDay(fortune.getCreatedAt()));
 
-            String message = fortune.getMessage().toString();
+            String message = fortune.getMessage();
             if (message.length() > 50) {
                 message = message.substring(0, 50) + "...";
             }
