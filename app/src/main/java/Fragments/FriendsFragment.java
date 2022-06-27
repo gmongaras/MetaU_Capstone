@@ -156,7 +156,7 @@ public class FriendsFragment extends Fragment {
                     ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
                 }
 
-                // Create the fragment with paramters
+                // Create the fragment with parameters
                 FriendsListFragment fragmentFriends = FriendsListFragment.newInstance("a", "b");
 
                 curFrag = 0;

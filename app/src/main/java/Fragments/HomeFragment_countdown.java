@@ -197,9 +197,11 @@ public class HomeFragment_countdown extends Fragment {
                         public void onFinish() {
                             // If the user is on the main page, swap to the
                             // fortune view when the timer is up
-                            ArrayList<Fragment> stack = (ArrayList<Fragment>) getActivity().getSupportFragmentManager().getFragments();
-                            if (stack.get(stack.size()-1).getClass() == HomeFragment_countdown.class) {
-                                goToFortune();
+                            if (getActivity() != null) {
+                                ArrayList<Fragment> stack = (ArrayList<Fragment>) getActivity().getSupportFragmentManager().getFragments();
+                                if (stack.get(stack.size() - 1).getClass() == HomeFragment_countdown.class) {
+                                    goToFortune();
+                                }
                             }
                         }
                     }.start();

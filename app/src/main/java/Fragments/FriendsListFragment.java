@@ -177,6 +177,11 @@ public class FriendsListFragment extends Fragment {
                     return;
                 }
 
+                // If the fragment is not added, don't do anything
+                if (!isAdded()) {
+                    return;
+                }
+
                 // If the user has no friends, display a message and don't setup the
                 // recycler view
                 if (friends.size() == 0 && Friends.size() == 0) {
