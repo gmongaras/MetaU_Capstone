@@ -1,14 +1,9 @@
 package Fragments;
 
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
@@ -18,15 +13,12 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,31 +36,21 @@ import com.example.metau_capstone.Friend_queue;
 import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.ProfileAdapter;
 import com.example.metau_capstone.R;
-import com.example.metau_capstone.WakefulReceiver;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseInstallation;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,27 +59,18 @@ import java.util.Objects;
  */
 public class ProfileFragment extends Fragment {
 
-    // Number to skip when loading more posts
-    private int skipVal;
-
-    // Constant number to load each time we want to load more posts
-    private static final int loadRate = 20;
-
     private static final String TAG = "ProfileFragment";
 
     // Elements in the view
     ImageView ivProfileImage;
     TextView tvUsername;
-    RecyclerView rvProfile;
     Button btnLogout;
     Button btnUnfriend;
 
-    // Recycler view stuff
-    LinearLayoutManager layoutManager;
-    ProfileAdapter adapter;
-
-    // List of fortunes for the recycler view
-    List<Fortune> Fortunes;
+    // View Pager stuff
+    TabLayout tlProfile;
+    ViewPager2 pagerProfile;
+    ProfileCollectionAdapter profileCollectionAdapter;
 
     // The user to load data for
     private static final String ARG_USER = "user";
@@ -143,12 +116,9 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        skipVal = 0;
-
         // Get the elements
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         tvUsername = view.findViewById(R.id.tvUsername);
-        rvProfile = view.findViewById(R.id.rvProfile);
         btnLogout = view.findViewById(R.id.btnLogout);
         btnUnfriend = view.findViewById(R.id.btnUnfriend);
 
@@ -177,11 +147,41 @@ public class ProfileFragment extends Fragment {
                     .into(ivProfileImage);
         }
 
-        // Initialize the fortunes
-        Fortunes = new ArrayList<>();
 
-        // Load in the fortunes
-        queryFortunes();
+
+        // Initialize the view pager
+        profileCollectionAdapter = new ProfileCollectionAdapter(ProfileFragment.this, user);
+        pagerProfile = view.findViewById(R.id.pagerProfile);
+        pagerProfile.setAdapter(profileCollectionAdapter);
+
+        // Initialize the tab layout on top of the pager
+        tlProfile = view.findViewById(R.id.tlProfile);
+        tlProfile.addTab(tlProfile.newTab().setText("Fortune List"));
+        tlProfile.addTab(tlProfile.newTab().setText("Search Fortunes"));
+        tlProfile.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                pagerProfile.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        pagerProfile.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                tlProfile.selectTab(tlProfile.getTabAt(position));
+            }
+        });
+
+
 
         // When the user profile picture is clicked, allow the
         // user to upload a new profile picture.
@@ -328,73 +328,6 @@ public class ProfileFragment extends Fragment {
 
 
 
-
-    // Get fortunes the user owns
-    private void queryFortunes() {
-        // Specify which class to query
-        ParseQuery<Fortune> query = ParseQuery.getQuery(Fortune.class);
-
-        // Include data from the user table
-        query.include(Fortune.KEY_USER);
-
-        // Get only this user's fortunes
-        query.whereEqualTo("user", user);
-
-        // Have the newest fortunes on top
-        query.orderByDescending(Fortune.KEY_TIME_CREATED);
-
-        // Skip some fortunes that have already been loaded
-        query.setSkip(skipVal*loadRate);
-
-        // Set the limit to loadRate
-        query.setLimit(loadRate);
-
-        // Find all the fortunes the user owns
-        query.findInBackground(new FindCallback<Fortune>() {
-            @Override
-            public void done(List<Fortune> objects, ParseException e) {
-                // If an error occurred, log an error
-                if (e != null) {
-                    Log.e(TAG, "Issue retrieving all posts", e);
-                    return;
-                }
-
-                // Store all new fortunes in the Fortunes list
-                Fortunes.addAll(objects);
-
-                // Setup the recycler view if it isn't setup
-                if (rvProfile.getAdapter() == null) {
-
-                    // When the fortunes have been loaded, setup the recycler view -->
-                    // Bind the adapter to the recycler view
-                    adapter = new ProfileAdapter(Fortunes, user, getContext(), requireActivity().getSupportFragmentManager());
-                    rvProfile.setAdapter(adapter);
-
-                    // Configure the Recycler View: Layout Manager
-                    layoutManager = new LinearLayoutManager(getContext());
-                    rvProfile.setLayoutManager(layoutManager);
-
-                    // Used for infinite scrolling
-                    rvProfile.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-                        @Override
-                        public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                            queryFortunes();
-                        }
-                    });
-                }
-                else {
-                    // Notify the recycler view adapter of a change in data
-                    adapter.notifyDataSetChanged();
-                }
-
-                // Increase the skip value
-                skipVal+=1;
-            }
-        });
-    }
-
-
-
     // When the get file intent is done, get the file information
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -477,3 +410,8 @@ public class ProfileFragment extends Fragment {
         return image;
     }
 }
+
+
+
+
+
