@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.metau_capstone.ProfileSearch;
 import com.parse.ParseUser;
 
 public class ProfileCollectionAdapter extends FragmentStateAdapter {
@@ -27,7 +28,7 @@ public class ProfileCollectionAdapter extends FragmentStateAdapter {
         }
         // If position is 1, load the search fragment
         else {
-            fragment = ProfileList.newInstance(user);
+            fragment = ProfileSearch.newInstance(user);
         }
 
         return fragment;

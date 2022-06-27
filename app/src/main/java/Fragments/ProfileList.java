@@ -12,8 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Fortune;
@@ -43,7 +41,7 @@ public class ProfileList extends Fragment {
     private static final String TAG = "ProfileList";
 
     // Elements in the views
-    RecyclerView rvProfile;
+    RecyclerView rvProfileList;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -90,7 +88,7 @@ public class ProfileList extends Fragment {
         skipVal = 0;
 
         // Get the elements
-        rvProfile = view.findViewById(R.id.rvProfile);
+        rvProfileList = view.findViewById(R.id.rvProfileList);
 
         // Initialize the fortunes
         Fortunes = new ArrayList<>();
@@ -135,19 +133,19 @@ public class ProfileList extends Fragment {
                 Fortunes.addAll(objects);
 
                 // Setup the recycler view if it isn't setup
-                if (rvProfile.getAdapter() == null) {
+                if (rvProfileList.getAdapter() == null) {
 
                     // When the fortunes have been loaded, setup the recycler view -->
                     // Bind the adapter to the recycler view
                     adapter = new ProfileAdapter(Fortunes, user, getContext(), requireActivity().getSupportFragmentManager());
-                    rvProfile.setAdapter(adapter);
+                    rvProfileList.setAdapter(adapter);
 
                     // Configure the Recycler View: Layout Manager
                     layoutManager = new LinearLayoutManager(getContext());
-                    rvProfile.setLayoutManager(layoutManager);
+                    rvProfileList.setLayoutManager(layoutManager);
 
                     // Used for infinite scrolling
-                    rvProfile.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+                    rvProfileList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
                         @Override
                         public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                             queryFortunes();
