@@ -120,6 +120,12 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
         // Given a Friend (ParseUser), bind data to this object
         public void bind(ParseUser friend) {
+            // Make all buttons invisible to start
+            btnRemoveRequest.setVisibility(View.INVISIBLE);
+            btnAlreadyFriends.setVisibility(View.INVISIBLE);
+            btnHaveARequest.setVisibility(View.INVISIBLE);
+            btnSendRequest.setVisibility(View.INVISIBLE);
+
             // Set the username
             tvFriendUsername_search.setText(friend.getUsername());
 
@@ -161,6 +167,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                     String id = friend.getObjectId();
                     for (ParseUser item_friend : friends) {
                         if (Objects.equals(item_friend.getObjectId(), id)) {
+                            btnRemoveRequest.setVisibility(View.INVISIBLE);
                             btnSendRequest.setVisibility(View.INVISIBLE);
                             btnHaveARequest.setVisibility(View.INVISIBLE);
                             btnAlreadyFriends.setVisibility(View.VISIBLE);
@@ -178,15 +185,39 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                         public void done(List<ParseUser> objects, ParseException e) {
                             // If the list is not empty, then there is a request
                             if (objects.size() > 0) {
+                                btnRemoveRequest.setVisibility(View.INVISIBLE);
                                 btnAlreadyFriends.setVisibility(View.INVISIBLE);
                                 btnSendRequest.setVisibility(View.INVISIBLE);
                                 btnHaveARequest.setVisibility(View.VISIBLE);
                                 return;
                             }
 
-                            btnAlreadyFriends.setVisibility(View.INVISIBLE);
-                            btnHaveARequest.setVisibility(View.INVISIBLE);
-                            btnSendRequest.setVisibility(View.VISIBLE);
+                            // If the other user is not in the friend_requests list
+                            // or the friends list, check if they are in the
+                            // sent_requests list meaning a request was sent to
+                            // the other user
+                            ParseRelation<ParseUser> sent = curUser.getRelation("sent_requests");
+                            ParseQuery<ParseUser> sent_query = sent.getQuery();
+                            sent_query.whereEqualTo("objectId", friend.getObjectId());
+                            sent_query.findInBackground(new FindCallback<ParseUser>() {
+                                @Override
+                                public void done(List<ParseUser> objects, ParseException e) {
+                                    // If an object exists, then the other user has a request
+                                    // sent to them, so allow the user to remove that request
+                                    if (objects.size() > 0) {
+                                        btnAlreadyFriends.setVisibility(View.INVISIBLE);
+                                        btnHaveARequest.setVisibility(View.INVISIBLE);
+                                        btnSendRequest.setVisibility(View.INVISIBLE);
+                                        btnRemoveRequest.setVisibility(View.VISIBLE);
+                                        return;
+                                    }
+
+                                    btnRemoveRequest.setVisibility(View.INVISIBLE);
+                                    btnAlreadyFriends.setVisibility(View.INVISIBLE);
+                                    btnHaveARequest.setVisibility(View.INVISIBLE);
+                                    btnSendRequest.setVisibility(View.VISIBLE);
+                                }
+                            });
                         }
                     });
                 }
