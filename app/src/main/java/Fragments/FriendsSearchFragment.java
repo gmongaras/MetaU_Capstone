@@ -264,6 +264,7 @@ public class FriendsSearchFragment extends Fragment {
                 if (e != null) {
                     Log.e(TAG, "Unable to load users", e);
                     pbFriends.setVisibility(View.INVISIBLE);
+                    querying = false;
                     return;
                 }
 

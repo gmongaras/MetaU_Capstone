@@ -197,11 +197,33 @@ public class ProfileSearch extends Fragment {
         pbProfileSearch.setVisibility(View.VISIBLE);
 
 
-        // Create a new query for fortunes
-        ParseQuery<Fortune> query = ParseQuery.getQuery(Fortune.class);
+        // Create a new set of queries
+        List<ParseQuery<Fortune>> queries = new ArrayList<>();
 
-        // Search for the given username
-        query.whereContains("message", queryText);
+        // Break up the query by spaces
+        String[] queryWords = queryText.split(" ");
+
+        // Clean the words
+        String[] queryWordsClean = queryWords.clone();
+        for (int i = 0; i < queryWordsClean.length; i++) {
+            queryWordsClean[i] = queryWordsClean[i].trim();
+        }
+
+        // Search for the given text using multiple queries
+        queries.add(ParseQuery.getQuery(Fortune.class).whereContains("message", queryText));
+        for (String s : queryWords) {
+            if (s.length() > 0) {
+                queries.add(ParseQuery.getQuery(Fortune.class).whereContains("message", s));
+            }
+        }
+        for (String s : queryWordsClean) {
+            if (s.length() > 0) {
+                queries.add(ParseQuery.getQuery(Fortune.class).whereContains("message", s));
+            }
+        }
+
+        // Combine the queries into a single query
+        ParseQuery<Fortune> mainQuery = ParseQuery.or(queries);
 //        query.whereEqualTo("username", queryText);
 //        query.whereStartsWith("username", queryText.substring(0, 1));
 //        query.whereContains("username", queryText);
@@ -217,21 +239,22 @@ public class ProfileSearch extends Fragment {
         //query.whereContainedIn("username", c);
 
         // Search for ids equal to this user
-        query.whereEqualTo("user", user);
+        mainQuery.whereEqualTo("user", user);
 
         // Skip some posts
-        query.setSkip(skipVal*loadRate);
+        mainQuery.setSkip(skipVal*loadRate);
 
         // Set the limit to loadRate posts
-        query.setLimit(loadRate);
+        mainQuery.setLimit(loadRate);
 
-        query.findInBackground(new FindCallback<Fortune>() {
+        mainQuery.findInBackground(new FindCallback<Fortune>() {
             @Override
             public void done(List<Fortune> fortunes, ParseException e) {
                 // Check if there was an exception
                 if (e != null) {
                     Log.e(TAG, "Unable to load fortunes", e);
                     pbProfileSearch.setVisibility(View.INVISIBLE);
+                    querying = false;
                     return;
                 }
 
