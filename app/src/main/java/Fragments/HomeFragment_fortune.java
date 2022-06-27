@@ -183,6 +183,16 @@ public class HomeFragment_fortune extends Fragment {
         avCookie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // If we don't have location permission, ask for permission.
+                if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // If we don't have permission, request permission and don't open the fortune
+                    Toast.makeText(requireContext(), "Location required to get fortune", Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(requireActivity(),
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            1);
+                    return;
+                }
+
                 // Play the animation
                 avCookie.playAnimation();
                 avCookie.addAnimatorListener(new Animator.AnimatorListener() {
