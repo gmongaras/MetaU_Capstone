@@ -3,6 +3,7 @@ package com.example.metau_capstone;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+
+import Fragments.FriendsFragment;
 
 public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAdapter.ViewHolder> {
     private static final String TAG = "FriendsRequestAdapter";
@@ -119,6 +122,25 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             btnRequestAccepted = itemView.findViewById(R.id.btnRequestAccepted);
             btnRequestDeclined = itemView.findViewById(R.id.btnRequestDeclined);
             friending = false;
+
+            // Handle left and right swipes
+            itemView.setClickable(true);
+            itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // Get the parent fragment
+                    FriendsFragment parentFrag;
+                    try {
+                        parentFrag = (FriendsFragment) fragmentManager.getFragments().get(0);
+                    }
+                    catch (Exception e) {
+                        parentFrag = (FriendsFragment) fragmentManager.getFragments().get(1);
+                    }
+
+                    // Handle the event
+                    return parentFrag.handleSwipe(v, event);
+                }
+            });
         }
 
         // Given a Friend (ParseUser), bind data to this object

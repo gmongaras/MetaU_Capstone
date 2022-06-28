@@ -58,44 +58,17 @@ public class HomeFragment_countdown extends Fragment {
     //public static final double timeLeft = 5000;
 
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public HomeFragment_countdown() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment_countdown.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment_countdown newInstance(String param1, String param2) {
-        HomeFragment_countdown fragment = new HomeFragment_countdown();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static HomeFragment_countdown newInstance() {
+        return new HomeFragment_countdown();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -227,7 +200,7 @@ public class HomeFragment_countdown extends Fragment {
 
         // Create the fragment with paramters
         ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-        HomeFragment_fortune fragmentHome = HomeFragment_fortune.newInstance("a", "b");
+        HomeFragment_fortune fragmentHome = HomeFragment_fortune.newInstance();
 
         // Change the fragment
         ft.replace(R.id.flContainer, fragmentHome);

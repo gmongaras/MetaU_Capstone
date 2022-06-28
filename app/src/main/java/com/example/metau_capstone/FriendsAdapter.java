@@ -2,6 +2,7 @@ package com.example.metau_capstone;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
+import Fragments.FriendsFragment;
 import Fragments.ProfileDetailFragment;
 import Fragments.ProfileFragment;
 
@@ -95,6 +97,25 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             ivFriend = itemView.findViewById(R.id.ivFriend);
             tvFriendUsername = itemView.findViewById(R.id.tvFriendUsername);
             tvFriendFortuneCt = itemView.findViewById(R.id.tvFriendFortuneCt);
+
+            // Handle left and right swipes
+            itemView.setClickable(true);
+            itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // Get the parent fragment
+                    FriendsFragment parentFrag;
+                    try {
+                        parentFrag = (FriendsFragment) fragmentManager.getFragments().get(0);
+                    }
+                    catch (Exception e) {
+                        parentFrag = (FriendsFragment) fragmentManager.getFragments().get(1);
+                    }
+
+                    // Handle the event
+                    return parentFrag.handleSwipe(v, event);
+                }
+            });
         }
 
         // Given a Friend (ParseUser), bind data to this object

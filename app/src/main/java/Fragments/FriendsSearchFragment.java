@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -227,6 +228,27 @@ public class FriendsSearchFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+
+
+
+        // Handle left and right swipes
+        rvFriends_search.setClickable(true);
+        rvFriends_search.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Get the parent fragment
+                FriendsFragment parentFrag;
+                try {
+                    parentFrag = (FriendsFragment) getParentFragmentManager().getFragments().get(0);
+                }
+                catch (Exception e) {
+                    parentFrag = (FriendsFragment) getParentFragmentManager().getFragments().get(1);
+                }
+
+                // Handle the event
+                return parentFrag.handleSwipe(v, event);
+            }
+        });
     }
 
 
