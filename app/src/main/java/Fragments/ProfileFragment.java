@@ -15,8 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.provider.MediaStore;
@@ -30,27 +28,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
-import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.Friend_queue;
 import com.example.metau_capstone.LoginActivity;
-import com.example.metau_capstone.ProfileAdapter;
+import com.example.metau_capstone.ProfileCollectionAdapter;
 import com.example.metau_capstone.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -157,7 +148,8 @@ public class ProfileFragment extends Fragment {
         // Initialize the tab layout on top of the pager
         tlProfile = view.findViewById(R.id.tlProfile);
         tlProfile.addTab(tlProfile.newTab().setText("Fortune List"));
-        tlProfile.addTab(tlProfile.newTab().setText("Search Fortunes"));
+        tlProfile.addTab(tlProfile.newTab().setText("Text Search"));
+        tlProfile.addTab(tlProfile.newTab().setText("Location Search"));
         tlProfile.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

@@ -1,13 +1,14 @@
-package Fragments;
-
-import android.os.Bundle;
+package com.example.metau_capstone;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.metau_capstone.ProfileSearch;
 import com.parse.ParseUser;
+
+import Fragments.ProfileList;
+import Fragments.ProfileSearchLoc;
+import Fragments.ProfileSearchText;
 
 public class ProfileCollectionAdapter extends FragmentStateAdapter {
     // User to load data for
@@ -26,9 +27,13 @@ public class ProfileCollectionAdapter extends FragmentStateAdapter {
         if (position == 0) {
             fragment = ProfileList.newInstance(user);
         }
-        // If position is 1, load the search fragment
+        // If position is 1, load the search by text fragment
+        else if (position == 1) {
+            fragment = ProfileSearchText.newInstance(user);
+        }
+        // If the position is 2, load the search by location fragment
         else {
-            fragment = ProfileSearch.newInstance(user);
+            fragment = ProfileSearchLoc.newInstance(user);
         }
 
         return fragment;
@@ -37,6 +42,6 @@ public class ProfileCollectionAdapter extends FragmentStateAdapter {
     // Number of fragments in the page viewer
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 }

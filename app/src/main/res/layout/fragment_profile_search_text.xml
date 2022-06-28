@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileSearch"
+    tools:context="Fragments.ProfileSearchText"
     >
 
 
     <SearchView
-        android:id="@+id/svProfileSearch"
+        android:id="@+id/svProfileSearchText"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:closeIcon="@drawable/close"
@@ -25,41 +25,41 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProfileSearch"
+        android:id="@+id/rvProfileSearchText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/svProfileSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/svProfileSearchText" />
 
     <TextView
-        android:id="@+id/tvNoResults"
+        android:id="@+id/tvNoResultsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No results for query"
         android:textSize="20sp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearch"
+        app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/svProfileSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/svProfileSearchText" />
 
     <TextView
-        android:id="@+id/tvSearchPrompt"
+        android:id="@+id/tvSearchTextPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Use the search bar above to\nsearch for fortunes by text!"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearch"
+        app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/rvProfileSearch"
-        app:layout_constraintTop_toBottomOf="@+id/svProfileSearch" />
+        app:layout_constraintStart_toStartOf="@+id/rvProfileSearchText"
+        app:layout_constraintTop_toBottomOf="@+id/svProfileSearchText" />
 
     <ProgressBar
-        android:id="@+id/pbProfileSearch"
+        android:id="@+id/pbProfileSearchText"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,5 +67,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/svProfileSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/svProfileSearchText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

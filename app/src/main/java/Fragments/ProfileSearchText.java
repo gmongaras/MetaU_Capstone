@@ -1,4 +1,4 @@
-package com.example.metau_capstone;
+package Fragments;
 
 import android.os.Bundle;
 
@@ -18,22 +18,24 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
+import com.example.metau_capstone.Fortune;
+import com.example.metau_capstone.ProfileAdapter;
+import com.example.metau_capstone.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProfileSearch#newInstance} factory method to
+ * Use the {@link ProfileSearchText#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileSearch extends Fragment {
+public class ProfileSearchText extends Fragment {
 
     // Number to skip when loading more posts
     private int skipVal;
@@ -41,15 +43,15 @@ public class ProfileSearch extends Fragment {
     // Constant number to load each time we want to load more posts
     private static final int loadRate = 20;
 
-    private static final String TAG = "ProfileSearch";
+    private static final String TAG = "ProfileSearchText";
 
     // Elements in the views
-    SearchView svProfileSearch;
-    TextView tvProfileSearch;
-    RecyclerView rvProfileSearch;
-    TextView tvNoResults;
-    TextView tvSearchPrompt;
-    ProgressBar pbProfileSearch;
+    SearchView svProfileSearchText;
+    TextView tvProfileSearchText;
+    RecyclerView rvProfileSearchText;
+    TextView tvNoResultsText;
+    TextView tvSearchTextPrompt;
+    ProgressBar pbProfileSearchText;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -68,12 +70,12 @@ public class ProfileSearch extends Fragment {
     // Text from the query
     String queryText;
 
-    public ProfileSearch() {
+    public ProfileSearchText() {
         // Required empty public constructor
     }
 
-    public static ProfileSearch newInstance(ParseUser user) {
-        ProfileSearch fragment = new ProfileSearch();
+    public static ProfileSearchText newInstance(ParseUser user) {
+        ProfileSearchText fragment = new ProfileSearchText();
         Bundle args = new Bundle();
         args.putParcelable(ARG_USER, user);
         fragment.setArguments(args);
@@ -92,7 +94,7 @@ public class ProfileSearch extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_search, container, false);
+        return inflater.inflate(R.layout.fragment_profile_search_text, container, false);
     }
 
     @Override
@@ -102,15 +104,15 @@ public class ProfileSearch extends Fragment {
         skipVal = 0;
 
         // Get the elements
-        svProfileSearch = view.findViewById(R.id.svProfileSearch);
-        rvProfileSearch = view.findViewById(R.id.rvProfileSearch);
-        tvNoResults = view.findViewById(R.id.tvNoResults);
-        tvSearchPrompt = view.findViewById(R.id.tvSearchPrompt);
-        pbProfileSearch = view.findViewById(R.id.pbProfileSearch);
-        int id = svProfileSearch.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-        tvProfileSearch = ((TextView)svProfileSearch.findViewById(id));
-        tvProfileSearch.setTextColor(getResources().getColor(R.color.black));
-        tvProfileSearch.setHintTextColor(getResources().getColor(R.color.black));
+        svProfileSearchText = view.findViewById(R.id.svProfileSearchText);
+        rvProfileSearchText = view.findViewById(R.id.rvProfileSearchText);
+        tvNoResultsText = view.findViewById(R.id.tvNoResultsText);
+        tvSearchTextPrompt = view.findViewById(R.id.tvSearchTextPrompt);
+        pbProfileSearchText = view.findViewById(R.id.pbProfileSearchText);
+        int id = svProfileSearchText.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        tvProfileSearchText = ((TextView)svProfileSearchText.findViewById(id));
+        tvProfileSearchText.setTextColor(getResources().getColor(R.color.black));
+        tvProfileSearchText.setHintTextColor(getResources().getColor(R.color.black));
 
         // Initialize the fortunes
         Fortunes = new ArrayList<>();
@@ -118,14 +120,14 @@ public class ProfileSearch extends Fragment {
         // When the fortunes have been loaded, setup the recycler view -->
         // Bind the adapter to the recycler view
         adapter = new ProfileAdapter(Fortunes, user, getContext(), requireActivity().getSupportFragmentManager());
-        rvProfileSearch.setAdapter(adapter);
+        rvProfileSearchText.setAdapter(adapter);
 
         // Configure the Recycler View: Layout Manager
         layoutManager = new LinearLayoutManager(getContext());
-        rvProfileSearch.setLayoutManager(layoutManager);
+        rvProfileSearchText.setLayoutManager(layoutManager);
 
         // Used for infinite scrolling
-        rvProfileSearch.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+        rvProfileSearchText.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Set the querying flag to true
@@ -140,17 +142,17 @@ public class ProfileSearch extends Fragment {
 
 
         // A a listener to look for a user entering a query into the search bar
-        tvProfileSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        tvProfileSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                // If friends are already being queried, do nothing
+                // If fortunes are already being queried, do nothing
                 if (querying == true) {
                     return false;
                 }
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || event.getKeyCode() == 66) {
                     // Get the text from the text box
-                    String text = tvProfileSearch.getText().toString();
+                    String text = tvProfileSearchText.getText().toString();
 
                     // If the text is blank, don't do anything
                     if (text.length() == 0) {
@@ -158,7 +160,7 @@ public class ProfileSearch extends Fragment {
                     }
 
                     // If the prompt text is visible, make it invisible
-                    tvSearchPrompt.setVisibility(View.INVISIBLE);
+                    tvSearchTextPrompt.setVisibility(View.INVISIBLE);
 
                     // Set the querying state to true
                     querying = true;
@@ -186,7 +188,7 @@ public class ProfileSearch extends Fragment {
 
 
 
-    // Query users given a username to query for
+    // Query fortunes given text to query for
     private void queryFortunes(String queryText) {
         // If the query is null, do nothing
         if (queryText == null) {
@@ -194,7 +196,7 @@ public class ProfileSearch extends Fragment {
             return;
         }
 
-        pbProfileSearch.setVisibility(View.VISIBLE);
+        pbProfileSearchText.setVisibility(View.VISIBLE);
 
 
         // Create a new set of queries
@@ -224,19 +226,6 @@ public class ProfileSearch extends Fragment {
 
         // Combine the queries into a single query
         ParseQuery<Fortune> mainQuery = ParseQuery.or(queries);
-//        query.whereEqualTo("username", queryText);
-//        query.whereStartsWith("username", queryText.substring(0, 1));
-//        query.whereContains("username", queryText);
-//        query.whereContains("username", queryText.trim());
-//        if (queryText.trim().length() > 0) {
-//            query.whereStartsWith("username", queryText.trim().substring(0, 1));
-//        }
-
-        //Collection<String> c = new ArrayList<>();
-        //c.add(queryText);
-        //c.add(queryText.substring(0, 1));
-        //query.
-        //query.whereContainedIn("username", c);
 
         // Search for ids equal to this user
         mainQuery.whereEqualTo("user", user);
@@ -253,17 +242,17 @@ public class ProfileSearch extends Fragment {
                 // Check if there was an exception
                 if (e != null) {
                     Log.e(TAG, "Unable to load fortunes", e);
-                    pbProfileSearch.setVisibility(View.INVISIBLE);
+                    pbProfileSearchText.setVisibility(View.INVISIBLE);
                     querying = false;
                     return;
                 }
 
                 // If no fortunes were found, display an alert message
                 if (fortunes.size() == 0 && Fortunes.size() == 0) {
-                    tvNoResults.setVisibility(View.VISIBLE);
+                    tvNoResultsText.setVisibility(View.VISIBLE);
                 }
                 else {
-                    tvNoResults.setVisibility(View.INVISIBLE);
+                    tvNoResultsText.setVisibility(View.INVISIBLE);
 
                     // Get all fortunes from the list and load them in
                     Fortunes.addAll(fortunes);
@@ -279,7 +268,7 @@ public class ProfileSearch extends Fragment {
                 // We are no longer querying
                 querying = false;
 
-                pbProfileSearch.setVisibility(View.INVISIBLE);
+                pbProfileSearchText.setVisibility(View.INVISIBLE);
             }
         });
     }
