@@ -135,16 +135,24 @@ public class FriendsRequestFragment extends Fragment {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                // Setup the fragment switch
-                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+//                // Setup the fragment switch
+//                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+//
+//                // Go back to the Friends fragment
+//                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+//                FriendsListFragment listFragment = FriendsListFragment.newInstance("a", "b");
+//
+//                // Add back the friends fragment
+//                ft.replace(R.id.fragmentFriends, listFragment);
+//                ft.commit();
 
-                // Go back to the Friends fragment
-                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-                FriendsListFragment listFragment = FriendsListFragment.newInstance("a", "b");
-
-                // Add back the friends fragment
-                ft.replace(R.id.fragmentFriends, listFragment);
-                ft.commit();
+                // Change the fragment to the list fragment
+                try {
+                    ((FriendsFragment) getParentFragmentManager().getFragments().get(0)).changeFrag(0);
+                }
+                catch (Exception e) {
+                    ((FriendsFragment) getParentFragmentManager().getFragments().get(1)).changeFrag(0);
+                }
 
                 //((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
             }

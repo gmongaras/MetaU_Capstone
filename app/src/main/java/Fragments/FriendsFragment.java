@@ -136,7 +136,7 @@ public class FriendsFragment extends Fragment {
 
 
     // Handle fragment changes
-    private void changeFrag(int fragVal) {
+    public void changeFrag(int fragVal) {
         // Start the fragment transition
         FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 

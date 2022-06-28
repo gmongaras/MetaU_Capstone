@@ -21,7 +21,9 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
+import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.FriendsSearchAdapter;
+import com.example.metau_capstone.MainActivity;
 import com.example.metau_capstone.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -30,6 +32,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -202,15 +205,23 @@ public class FriendsSearchFragment extends Fragment {
                 pbFriends.setVisibility(View.INVISIBLE);
 
                 // Setup the fragment switch
-                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+//                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+//
+//                // Go back to the Friends fragment
+//                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+//                FriendsListFragment listFragment = FriendsListFragment.newInstance("a", "b");
+//
+//                // Add back the friends fragment
+//                ft.replace(R.id.fragmentFriends, listFragment);
+//                ft.commit();
 
-                // Go back to the Friends fragment
-                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-                FriendsListFragment listFragment = FriendsListFragment.newInstance("a", "b");
-
-                // Add back the friends fragment
-                ft.replace(R.id.fragmentFriends, listFragment);
-                ft.commit();
+                // Change the fragment to the list fragment
+                try {
+                    ((FriendsFragment) getParentFragmentManager().getFragments().get(0)).changeFrag(0);
+                }
+                catch (Exception e) {
+                    ((FriendsFragment) getParentFragmentManager().getFragments().get(1)).changeFrag(0);
+                }
 
                 //((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
             }
@@ -230,23 +241,21 @@ public class FriendsSearchFragment extends Fragment {
         pbFriends.setVisibility(View.VISIBLE);
 
 
-        // Create a new query for users
-        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+
+        // Create a new set of queries
+        List<ParseQuery<ParseUser>> queries = new ArrayList<>();
 
         // Search for the given username
-        query.whereEqualTo("username", queryText);
-        query.whereStartsWith("username", queryText.substring(0, 1));
-        query.whereContains("username", queryText);
-        query.whereContains("username", queryText.trim());
+        queries.add(ParseQuery.getQuery(ParseUser.class).whereEqualTo("username", queryText));
+        queries.add(ParseQuery.getQuery(ParseUser.class).whereStartsWith("username", queryText.substring(0, 1)));
+        queries.add(ParseQuery.getQuery(ParseUser.class).whereContains("username", queryText));
+        queries.add(ParseQuery.getQuery(ParseUser.class).whereContains("username", queryText.trim()));
         if (queryText.trim().length() > 0) {
-            query.whereStartsWith("username", queryText.trim().substring(0, 1));
+            queries.add(ParseQuery.getQuery(ParseUser.class).whereStartsWith("username", queryText.trim().substring(0, 1)));
         }
 
-        //Collection<String> c = new ArrayList<>();
-        //c.add(queryText);
-        //c.add(queryText.substring(0, 1));
-        //query.
-        //query.whereContainedIn("username", c);
+        // Combine the queries into a single query
+        ParseQuery<ParseUser> query = ParseQuery.or(queries);
 
         // Search for ids not equal to this user
         query.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
