@@ -32,17 +32,31 @@
         app:layout_constraintTop_toBottomOf="@+id/ivProfileImage"
         tools:text="username" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProfile"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/tvUsername">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tlProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabSelectedTextColor="@color/purple_500"
+            app:tabTextColor="@color/black" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pagerProfile"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnLogout"
@@ -52,7 +66,7 @@
         android:layout_marginBottom="5dp"
         android:backgroundTint="@color/darker_red"
         android:text="Logout"
-        app:layout_constraintBottom_toBottomOf="@+id/rvProfile"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
@@ -64,6 +78,6 @@
         android:backgroundTint="@color/darker_red"
         android:text="Unfriend"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/rvProfile"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

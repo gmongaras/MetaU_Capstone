@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Fragments.ProfileSearchLoc"
+    >
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProfileSearchLoc"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <TextView
+        android:id="@+id/tvNoResultsLoc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No results for query"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rvProfileSearchLoc" />
+
+    <TextView
+        android:id="@+id/tvSearchLocPrompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Use the search bar above to search for\nfortunes by latitude and logitude!"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rvProfileSearchLoc"
+        app:layout_constraintTop_toTopOf="@+id/rvProfileSearchLoc" />
+
+    <ProgressBar
+        android:id="@+id/pbProfileSearchLoc"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rvProfileSearchLoc" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/svProfileSearchLat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Latitude"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/svProfileSearchLng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Longitude"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/svProfileSearchDist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Distance (mi)"
+            android:inputType="numberDecimal" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -108,7 +108,7 @@ public class FriendsSearchFragment extends Fragment {
 
         // Get the elements in the view
         tvAlert = view.findViewById(R.id.tvAlert);
-        svFriends_search = view.findViewById(R.id.svFriends_search);
+        svFriends_search = view.findViewById(R.id.svProfileSearchText);
         int id = svFriends_search.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         tvSearchFriends_search = ((TextView)svFriends_search.findViewById(id));
         tvSearchFriends_search.setTextColor(getResources().getColor(R.color.black));
@@ -264,6 +264,7 @@ public class FriendsSearchFragment extends Fragment {
                 if (e != null) {
                     Log.e(TAG, "Unable to load users", e);
                     pbFriends.setVisibility(View.INVISIBLE);
+                    querying = false;
                     return;
                 }
 
