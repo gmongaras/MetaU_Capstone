@@ -137,29 +137,6 @@ public class FriendsRequestFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
-
-
-
-
-
-        // Handle left and right swipes
-        rvFriendRequests.setClickable(true);
-        rvFriendRequests.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // Get the parent fragment
-                FriendsFragment parentFrag;
-                try {
-                    parentFrag = (FriendsFragment) getParentFragmentManager().getFragments().get(0);
-                }
-                catch (Exception e) {
-                    parentFrag = (FriendsFragment) getParentFragmentManager().getFragments().get(1);
-                }
-
-                // Handle the event
-                return parentFrag.handleSwipe(v, event);
-            }
-        });
     }
 
 

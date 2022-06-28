@@ -97,25 +97,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             ivFriend = itemView.findViewById(R.id.ivFriend);
             tvFriendUsername = itemView.findViewById(R.id.tvFriendUsername);
             tvFriendFortuneCt = itemView.findViewById(R.id.tvFriendFortuneCt);
-
-            // Handle left and right swipes
-            itemView.setClickable(true);
-            itemView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    // Get the parent fragment
-                    FriendsFragment parentFrag;
-                    try {
-                        parentFrag = (FriendsFragment) fragmentManager.getFragments().get(0);
-                    }
-                    catch (Exception e) {
-                        parentFrag = (FriendsFragment) fragmentManager.getFragments().get(1);
-                    }
-
-                    // Handle the event
-                    return parentFrag.handleSwipe(v, event);
-                }
-            });
         }
 
         // Given a Friend (ParseUser), bind data to this object

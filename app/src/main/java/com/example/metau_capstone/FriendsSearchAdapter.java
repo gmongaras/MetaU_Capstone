@@ -119,25 +119,6 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
             // Get the current user
             curUser = ParseUser.getCurrentUser();
-
-            // Handle left and right swipes
-            itemView.setClickable(true);
-            itemView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    // Get the parent fragment
-                    FriendsFragment parentFrag;
-                    try {
-                        parentFrag = (FriendsFragment) fragmentManager.getFragments().get(0);
-                    }
-                    catch (Exception e) {
-                        parentFrag = (FriendsFragment) fragmentManager.getFragments().get(1);
-                    }
-
-                    // Handle the event
-                    return parentFrag.handleSwipe(v, event);
-                }
-            });
         }
 
         // Given a Friend (ParseUser), bind data to this object

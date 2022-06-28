@@ -210,7 +210,14 @@ public class ProfileSearchLoc extends Fragment {
         // If the input is not empty, get the text as numbers
         int Lat = Integer.parseInt(Lat_str);
         int Lng = Integer.parseInt(Lng_str);
-        int Dist = Integer.parseInt(Dist_str);
+        int Dist;
+        try {
+            Dist = Integer.parseInt(Dist_str);
+        }
+        catch (Exception e) {
+            Toast.makeText(requireContext(), "Distance must be less than " + String.valueOf(Integer.MAX_VALUE), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // If the input is too large or too small, handle the issue
         if (Lat < -90 || Lat > 90) {
