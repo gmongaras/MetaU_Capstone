@@ -143,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(List<Friend_queue> new_friends, ParseException e) {
                 // If there are no new friends, skip this function
-                if (new_friends.size() == 0) {
+                if (new_friends == null || new_friends.size() == 0) {
                     return;
                 }
 

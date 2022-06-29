@@ -88,12 +88,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // Put on onTouch listener onto the view
+        // Handle left and right swipes
         flContainer.setClickable(true);
         flContainer.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                // If the touch event is two fingers
+                // If the touch event is one finger or more
                 if (event.getPointerCount() >= 1) {
                     int action = event.getActionMasked();
                     int actionIndex = event.getActionIndex();
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                         // If the current position is greater than the past position,
                         // swipe left
                         else {
-                            changeFrag(Math.min(3, curFrag-1));
+                            changeFrag(Math.max(0, curFrag-1));
                         }
 
                         bottomNav.setSelectedItemId(fragVal_to_Id.get(curFrag));
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Create the fragment with paramters
                 ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-                MapFragment fragmentMap = MapFragment.newInstance("a", "b");
+                MapFragment fragmentMap = MapFragment.newInstance();
 
                 curFrag = 0;
 
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // Create the fragment with paramters
-                HomeFragment_countdown fragmentHome = HomeFragment_countdown.newInstance("a", "b");
+                HomeFragment_countdown fragmentHome = HomeFragment_countdown.newInstance();
 
                 curFrag = 1;
 
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Create the fragment with paramters
                 ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right);
-                FriendsFragment fragmentFriends = FriendsFragment.newInstance("a", "b");
+                FriendsFragment fragmentFriends = FriendsFragment.newInstance();
 
                 curFrag = 3;
 

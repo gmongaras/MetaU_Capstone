@@ -3,6 +3,7 @@ package com.example.metau_capstone;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -26,6 +27,8 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 import java.util.Objects;
+
+import Fragments.FriendsFragment;
 
 public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdapter.ViewHolder> {
     private static final String TAG = "FriendsSearchAdapter";

@@ -291,7 +291,7 @@ public class ProfileFragment extends Fragment {
 
                     // Go back to the Profile fragment
                     ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-                    HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance("a", "b");
+                    HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance();
 
                     // Add back the profile fragment
                     ft.replace(R.id.flContainer, homeFragment);
@@ -307,7 +307,7 @@ public class ProfileFragment extends Fragment {
 
                     // Go back to the Profile fragment
                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                    FriendsFragment friendsFragment = FriendsFragment.newInstance("a", "b");
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
 
                     // Add back the profile fragment
                     ft.replace(R.id.flContainer, friendsFragment);

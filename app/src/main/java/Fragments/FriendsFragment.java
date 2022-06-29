@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -45,44 +46,22 @@ public class FriendsFragment extends Fragment {
     // The current fragment in view
     int curFrag = -1;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // Position states for the touch gestures
+    int posX = 0;
+    int curPosX = 0;
+    boolean hasMoved = false;
 
     public FriendsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FriendsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FriendsFragment newInstance(String param1, String param2) {
-        FriendsFragment fragment = new FriendsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static FriendsFragment newInstance() {
+        return new FriendsFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -130,13 +109,24 @@ public class FriendsFragment extends Fragment {
 
         // Load in the initial fragment
         changeFrag(0);
+
+
+
+        // Handle left and right swipes
+        fragmentFriends.setClickable(true);
+        fragmentFriends.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return handleSwipe(v, event);
+            }
+        });
     }
 
 
 
 
     // Handle fragment changes
-    private void changeFrag(int fragVal) {
+    public void changeFrag(int fragVal) {
         // Start the fragment transition
         FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
@@ -157,7 +147,7 @@ public class FriendsFragment extends Fragment {
                 }
 
                 // Create the fragment with parameters
-                FriendsListFragment fragmentFriends = FriendsListFragment.newInstance("a", "b");
+                FriendsListFragment fragmentFriends = FriendsListFragment.newInstance();
 
                 curFrag = 0;
 
@@ -183,7 +173,7 @@ public class FriendsFragment extends Fragment {
                 }
 
                 // Create the fragment with paramters
-                FriendsRequestFragment fragmentRequests = FriendsRequestFragment.newInstance("a", "b");
+                FriendsRequestFragment fragmentRequests = FriendsRequestFragment.newInstance();
 
                 curFrag = 1;
 
@@ -212,5 +202,57 @@ public class FriendsFragment extends Fragment {
 
                 break;
         }
+    }
+
+
+
+    // Handle swipes on the fragment view
+    public boolean handleSwipe(View v, MotionEvent event) {
+        // If the touch event is one finger or more
+        if (event.getPointerCount() >= 1) {
+            int action = event.getActionMasked();
+            int actionIndex = event.getActionIndex();
+
+            // If the action is a down action, save the X position
+            if (action == MotionEvent.ACTION_DOWN) {
+                posX = (int) event.getX(0);
+                hasMoved = false;
+            }
+
+            // If an action has already happened, don't allow another one
+            // to happen until there is no more touch
+            if (hasMoved == true) {
+                return true;
+            }
+
+            // If the action is a move action
+            else if (action == MotionEvent.ACTION_MOVE) {
+                // Get the current x position
+                curPosX = (int) event.getX(0);
+
+                // The difference shouldn't be too small
+                if (Math.abs(curPosX-posX) < 20) {
+                    return true;
+                }
+
+                // If the current position is less than the past position,
+                // swipe right
+                if (curPosX < posX) {
+                    changeFrag(Math.min(3, curFrag+1));
+                }
+                // If the current position is greater than the past position,
+                // swipe left
+                else {
+                    changeFrag(Math.max(0, curFrag-1));
+                }
+
+                //bottomNav.setSelectedItemId(fragVal_to_Id.get(curFrag));
+
+                hasMoved = true;
+            }
+
+            return true;
+        }
+        return false;
     }
 }
