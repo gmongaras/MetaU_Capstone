@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,13 +14,18 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.provider.MediaStore;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -250,20 +256,36 @@ public class ProfileFragment extends Fragment {
 
 
 
+    // Used for menu item with icons
+    private CharSequence menuIconWithText(Drawable r, String title) {
+
+        r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
+        SpannableString sb = new SpannableString("    " + title);
+        ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return sb;
+    }
+
+
 
     private void showUserMenu(View v) {
         // Show the popup menu
         PopupMenu popup = new PopupMenu(requireContext(), v);
+        popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.settings), "Settings"));
+        popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.logout), "Logout"));
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_profile_options, popup.getMenu());
         popup.show();
+
+        // Show the icons
 
         // Add an on click listener for the menu items
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 // If the item is logout, log the user out
-                if (item.getItemId() == R.id.itemLogout) {
+                if (item.getItemId() == 2) {
                     // Log the user out
                     Toast.makeText(v.getContext(), "Logging out..", Toast.LENGTH_SHORT).show();
                     ParseUser.logOutInBackground();
@@ -290,6 +312,8 @@ public class ProfileFragment extends Fragment {
         // Show the popup menu
         PopupMenu popup = new PopupMenu(requireContext(), v);
         MenuInflater inflater = popup.getMenuInflater();
+        popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.unfriend), "Unfriend"));
+        popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));
         inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
         popup.show();
 
@@ -298,7 +322,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 // If the item is unfriend, unfriend the user
-                if (item.getItemId() == R.id.itemUnfriend) {
+                if (item.getItemId() == 1) {
                     // Display an alert dialog to make the user confirm they
                     // want to unfriend that user
                     new AlertDialog.Builder(requireContext())

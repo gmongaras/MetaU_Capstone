@@ -196,7 +196,13 @@ public class HomeFragment_countdown extends Fragment {
     // Go to the home fortune fragment so the user can open a new fortune.
     private void goToFortune() {
         // Start the fragment transition
-        FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft;
+        try {
+            ft = requireActivity().getSupportFragmentManager().beginTransaction();
+        }
+        catch (Exception e) {
+            return;
+        }
 
         // Create the fragment with paramters
         ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
