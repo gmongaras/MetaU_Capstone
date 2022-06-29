@@ -9,11 +9,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.util.Log;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.metau_capstone.BootReceiver;
 import com.example.metau_capstone.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -36,6 +39,9 @@ import com.parse.SaveCallback;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
+
+import Fragments.Main.HomeFragment_countdown;
+import Fragments.Main.ProfileFragment;
 
 public class SettingsFragment extends Fragment {
 
@@ -215,6 +221,24 @@ public class SettingsFragment extends Fragment {
                 startActivityForResult(intent, 21);
             }
         });
+
+        // Handle back button presses
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Setup the fragment switch
+                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                // Go back to the Profile fragment
+                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                ProfileFragment profileFragment = ProfileFragment.newInstance(ParseUser.getCurrentUser(), 0);
+
+                // Add back the profile fragment
+                ft.replace(R.id.flContainer, profileFragment);
+                ft.commit();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
 
 
