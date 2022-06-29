@@ -269,8 +269,17 @@ public class HomeFragment_fortune extends Fragment {
                                 Log.i(TAG, "Fortune successfully saved to fortune list");
 
                                 // When the user opens the fortune, create a push notification timer
-                                WakefulReceiver wr = new WakefulReceiver();
-                                wr.setAlarm(requireContext());
+                                // if the user wants to have notifications
+                                ParseUser user = null;
+                                try {
+                                    user = ParseUser.getCurrentUser().fetch();
+                                } catch (ParseException ex) {
+                                    ex.printStackTrace();
+                                }
+                                if (user != null && user.getBoolean("pushNotifications") == true) {
+                                    WakefulReceiver wr = new WakefulReceiver();
+                                    wr.setAlarm(requireContext());
+                                }
                             }
                         }
                     });
