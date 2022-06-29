@@ -176,17 +176,6 @@
                 app:layout_constraintStart_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/swLocationAccess"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="Allow location access"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/swPushNotif"
-                app:layout_constraintTop_toBottomOf="@+id/swPushNotif" />
-
             <View
                 android:id="@+id/colored_bar5"
                 android:layout_width="0dp"
@@ -197,11 +186,34 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Allow location access"
+                app:layout_constraintStart_toStartOf="@+id/textView7"
+                app:layout_constraintTop_toBottomOf="@+id/swPushNotif" />
+
+            <Button
+                android:id="@+id/btnLocPerm"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Give permission"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView10"
+                app:layout_constraintTop_toBottomOf="@+id/swPushNotif"
+                app:layout_goneMarginStart="10dp"
+                tools:layout_marginStart="10dp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/btnDeleteAccount"
-            android:layout_width="168dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"

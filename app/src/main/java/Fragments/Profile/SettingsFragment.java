@@ -26,6 +26,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.metau_capstone.BootReceiver;
 import com.example.metau_capstone.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -48,11 +49,14 @@ public class SettingsFragment extends Fragment {
     SwitchCompat swShowMapFriends;
     SwitchCompat swShowMapUsers;
     SwitchCompat swPushNotif;
-    SwitchCompat swLocationAccess;
+    Button btnLocPerm;
     Button btnDeleteAccount;
 
     // The current parse user
     ParseUser user;
+
+    // Is a switch being changed?
+    boolean changing;
 
     // Map from element ID to Parse columns name
     Map<Integer, String> idToString = Map.of(
@@ -96,8 +100,10 @@ public class SettingsFragment extends Fragment {
         swShowMapFriends = view.findViewById(R.id.swShowMapFriends);
         swShowMapUsers = view.findViewById(R.id.swShowMapUsers);
         swPushNotif = view.findViewById(R.id.swPushNotif);
-        swLocationAccess = view.findViewById(R.id.swLocationAccess);
+        btnLocPerm = view.findViewById(R.id.btnLocPerm);
         btnDeleteAccount = view.findViewById(R.id.btnDeleteAccount);
+
+        changing = false;
 
         // Store the current user
         try {
@@ -130,16 +136,72 @@ public class SettingsFragment extends Fragment {
         initializeState(swShowMapUsers);
         initializeState(swPushNotif);
 
-        // Initialize the location access switch
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            swLocationAccess.setChecked(false);
-        }
-        else {
-            swLocationAccess.setChecked(true);
-        }
-
         // Put on click listeners on all switches
-        //swFriendable.set
+        swFriendable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleClick(swFriendable);
+            }
+        });
+        swShowFortunesFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleClick(swShowFortunesFriends);
+            }
+        });
+        swShowFortunesUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleClick(swShowFortunesUsers);
+            }
+        });
+        swShowMapFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleClick(swShowMapFriends);
+            }
+        });
+        swShowMapUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleClick(swShowMapUsers);
+            }
+        });
+        swPushNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleClick(swPushNotif);
+            }
+        });
+
+        // Put an onCLick listener onto the location access button
+        btnLocPerm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // If the state is changing, do nothing
+                if (changing) {
+                    return;
+                }
+
+                // Make the button unclickable
+                btnLocPerm.setClickable(false);
+                changing = true;
+
+                // If the user doesn't have permission, ask for permission
+                if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(requireActivity(),
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            1);
+                }
+                else {
+                    Toast.makeText(requireContext(), "Already granted permission!", Toast.LENGTH_SHORT).show();
+                }
+                
+                // Make the button clickable again
+                changing = false;
+                btnLocPerm.setClickable(true);
+            }
+        });
 
         // When the user profile picture is clicked, allow the
         // user to upload a new profile picture.
@@ -151,6 +213,54 @@ public class SettingsFragment extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, 21);
+            }
+        });
+    }
+
+
+
+    // Handle clicks on the switches
+    private void handleClick(SwitchCompat Switch) {
+        // If the switch is changing, do nothing
+        if (changing) {
+            return;
+        }
+
+        // The switch is now changing
+        changing = true;
+        Switch.setClickable(false);
+
+        // Get the switch name
+        String name = idToString.get(Switch.getId());
+
+        // Get the boolean value
+        boolean state = user.getBoolean(name);
+
+        // Swap the boolean value
+        boolean newState = Boolean.logicalXor(state, true);
+
+        // Set the new boolean value
+        user.put(name, newState);
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Unable to change switch", e);
+                    Toast.makeText(requireContext(), "Unable to change setting", Toast.LENGTH_SHORT).show();
+
+                    // Change the switch
+                    Switch.setChecked(state);
+                }
+                else {
+                    Log.i(TAG, "Switch changed!");
+
+                    // Change the switch
+                    Switch.setChecked(newState);
+                }
+
+                // Make the switch clickable again
+                Switch.setClickable(true);
+                changing = false;
             }
         });
     }
