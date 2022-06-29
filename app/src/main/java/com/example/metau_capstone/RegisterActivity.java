@@ -14,8 +14,6 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import Fragments.ProfileFragment;
-
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
@@ -63,6 +61,12 @@ public class RegisterActivity extends AppCompatActivity {
                     // Fill in the user details
                     user.setUsername(etUsername_reg.getText().toString());
                     user.setPassword(etPassword_reg.getText().toString());
+                    user.put("showFortunesFriends", true);
+                    user.put("showFortunesUsers", true);
+                    user.put("showMapFriends", true);
+                    user.put("showMapUsers", false);
+                    user.put("pushNotifications", true);
+                    user.put("friendable", true);
 
                     // Sign the user up
                     user.signUpInBackground(new SignUpCallback() {

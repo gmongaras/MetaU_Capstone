@@ -1,4 +1,4 @@
-package Fragments;
+package Fragments.Main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,7 +14,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
@@ -25,21 +24,19 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.metau_capstone.Friend_queue;
+import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.LoginActivity;
-import com.example.metau_capstone.ProfileCollectionAdapter;
+import com.example.metau_capstone.Profile.ProfileCollectionAdapter;
 import com.example.metau_capstone.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -51,6 +48,8 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import Fragments.Profile.SettingsFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -278,12 +277,25 @@ public class ProfileFragment extends Fragment {
         inflater.inflate(R.menu.menu_profile_options, popup.getMenu());
         popup.show();
 
-        // Show the icons
-
         // Add an on click listener for the menu items
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                // If the settings item is clicked, go to the users settings
+                if (item.getItemId() == 1) {
+                    // Setup the fragment switch
+                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                    // Go to the settings fragment
+                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                    SettingsFragment settingsFragment = SettingsFragment.newInstance();
+
+                    ft.replace(R.id.flContainer, settingsFragment);
+                    ft.commit();
+
+                    return true;
+                }
+
                 // If the item is logout, log the user out
                 if (item.getItemId() == 2) {
                     // Log the user out

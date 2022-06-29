@@ -1,6 +1,5 @@
 package com.example.metau_capstone;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,11 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
 
-import Fragments.FriendsFragment;
-import Fragments.HomeFragment_countdown;
-import Fragments.HomeFragment_fortune;
-import Fragments.MapFragment;
-import Fragments.ProfileFragment;
+import Fragments.Main.FriendsFragment;
+import Fragments.Main.HomeFragment_countdown;
+import Fragments.Main.MapFragment;
+import Fragments.Main.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 

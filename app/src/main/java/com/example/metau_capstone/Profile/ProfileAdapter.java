@@ -1,4 +1,4 @@
-package com.example.metau_capstone;
+package com.example.metau_capstone.Profile;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,19 +7,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.metau_capstone.Fortune;
+import com.example.metau_capstone.R;
+import com.example.metau_capstone.dateFormatter;
 import com.parse.ParseUser;
 
-import java.util.Date;
 import java.util.List;
 
-import Fragments.HomeFragment_countdown;
-import Fragments.ProfileDetailFragment;
-import Fragments.ProfileFragment;
+import Fragments.Main.ProfileDetailFragment;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
 

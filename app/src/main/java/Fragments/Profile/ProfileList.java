@@ -1,4 +1,4 @@
-package Fragments;
+package Fragments.Profile;
 
 import android.os.Bundle;
 
@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Fortune;
-import com.example.metau_capstone.ProfileAdapter;
+import com.example.metau_capstone.Profile.ProfileAdapter;
 import com.example.metau_capstone.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;

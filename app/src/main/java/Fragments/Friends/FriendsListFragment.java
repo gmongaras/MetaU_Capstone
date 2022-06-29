@@ -1,4 +1,4 @@
-package Fragments;
+package Fragments.Friends;
 
 import android.os.Bundle;
 
@@ -12,14 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
-import com.example.metau_capstone.FriendsAdapter;
+import com.example.metau_capstone.Friends.FriendsAdapter;
 import com.example.metau_capstone.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
@@ -30,6 +29,8 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import Fragments.Main.HomeFragment_countdown;
 
 /**
  * A simple {@link Fragment} subclass.

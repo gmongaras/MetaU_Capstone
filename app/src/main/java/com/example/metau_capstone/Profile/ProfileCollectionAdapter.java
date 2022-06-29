@@ -1,4 +1,4 @@
-package com.example.metau_capstone;
+package com.example.metau_capstone.Profile;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -6,9 +6,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.parse.ParseUser;
 
-import Fragments.ProfileList;
-import Fragments.ProfileSearchLoc;
-import Fragments.ProfileSearchText;
+import Fragments.Profile.ProfileList;
+import Fragments.Profile.ProfileSearchLoc;
+import Fragments.Profile.ProfileSearchText;
 
 public class ProfileCollectionAdapter extends FragmentStateAdapter {
     // User to load data for

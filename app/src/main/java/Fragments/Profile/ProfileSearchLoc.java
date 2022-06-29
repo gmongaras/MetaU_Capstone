@@ -1,4 +1,4 @@
-package Fragments;
+package Fragments.Profile;
 
 import android.os.Bundle;
 
@@ -13,15 +13,13 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Fortune;
-import com.example.metau_capstone.ProfileAdapter;
+import com.example.metau_capstone.Profile.ProfileAdapter;
 import com.example.metau_capstone.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
