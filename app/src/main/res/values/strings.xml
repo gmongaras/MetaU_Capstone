@@ -12,8 +12,4 @@
     <string name="promptAfter">"Here's your fortune!"</string>
 
     <string name="mapError">Unable to load map. Does this phone have Google Play support?</string>
-
-    <string name="back4app_server_url">https://parseapi.back4app.com</string>
-    <string name="back4app_client_key">Uk8DpECE78TqC1r4OUr8jYMUksag8lBdvC5TTnzh</string>
-    <string name="back4app_app_id">Dwsfp3rsCpvhUvRpB8dtfiA97kOHeORreiuIAu4o</string>
 </resources>
