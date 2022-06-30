@@ -113,7 +113,7 @@ public class ProfileDetailFragment extends Fragment {
         }
 
         // If the mode is 2 (other user), check if the user has access
-        if (mode == 2) {
+        else if (mode == 2) {
             // If the user doesn't allow other users to see their map, set
             // access to false
             if (user.getBoolean("showMapUsers") == false) {
@@ -138,6 +138,8 @@ public class ProfileDetailFragment extends Fragment {
             tvNoAccessMap = view.findViewById(R.id.tvNoAccessMap);
             tvNoAccessMap.setVisibility(View.VISIBLE);
             profileMap.getView().setVisibility(View.INVISIBLE);
+            ivLike.setVisibility(View.INVISIBLE);
+            ivShare.setVisibility(View.INVISIBLE);
         }
 
         // If the user has access, load the map
@@ -165,6 +167,22 @@ public class ProfileDetailFragment extends Fragment {
             } else {
                 Log.e(TAG, "Error - Map Fragment was null!!");
             }
+        }
+
+        // Add an onClick listener to the
+
+        // If the mode is not 0, remove the like button
+        if (mode != 0) {
+            ivLike.setVisibility(View.INVISIBLE);
+        }
+        // If the mode is 0, set an on click listener to the like button
+        else {
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ;
+                }
+            });
         }
 
         // Handle clicks on the share button

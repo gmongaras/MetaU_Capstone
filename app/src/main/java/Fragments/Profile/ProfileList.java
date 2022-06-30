@@ -46,6 +46,7 @@ public class ProfileList extends Fragment {
     TextView tvNoAccess;
     TextView tvBlocked1;
     TextView tvBlocked2;
+    TextView tvNoFortunes;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -95,6 +96,8 @@ public class ProfileList extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        tvNoFortunes = view.findViewById(R.id.tvNoFortunes);
+
         // Should the fortunes be loaded
         boolean load = true;
 
@@ -137,7 +140,7 @@ public class ProfileList extends Fragment {
             skipVal = 0;
 
             // Get the elements
-            rvProfileList = view.findViewById(R.id.rvProfileList);
+            rvProfileList = view.findViewById(R.id.rvProfileLiked);
 
             // Initialize the fortunes
             Fortunes = new ArrayList<>();
@@ -191,6 +194,15 @@ public class ProfileList extends Fragment {
 
                 // Setup the recycler view if it isn't setup
                 if (rvProfileList.getAdapter() == null) {
+
+                    // If the list is empty, show some text stating that
+                    if (objects.size() == 0) {
+                        tvNoFortunes.setVisibility(View.VISIBLE);
+                        return;
+                    }
+                    else {
+                        tvNoFortunes.setVisibility(View.INVISIBLE);
+                    }
 
                     // When the fortunes have been loaded, setup the recycler view -->
                     // Bind the adapter to the recycler view

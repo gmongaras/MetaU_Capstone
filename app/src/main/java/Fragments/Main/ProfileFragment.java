@@ -261,6 +261,7 @@ public class ProfileFragment extends Fragment {
         tlProfile.addTab(tlProfile.newTab().setText("Fortune List"));
         tlProfile.addTab(tlProfile.newTab().setText("Text Search"));
         tlProfile.addTab(tlProfile.newTab().setText("Location Search"));
+        tlProfile.addTab(tlProfile.newTab().setText("Liked List"));
         tlProfile.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
