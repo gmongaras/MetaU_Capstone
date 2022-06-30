@@ -40,9 +40,6 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
     // Fragment manager for the home fragment
     FragmentManager fragmentManager;
 
-    // User mode
-    int mode;
-
     Context context;
 
     public FriendsSearchAdapter(List<ParseUser> users, Context context, FragmentManager fragmentManager) {
@@ -70,7 +67,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         holder.bind(friend);
 
         // Default mode is 2
-        mode = 2;
+        holder.mode = 2;
 
         // Get the mode of the current user. Is it a friend (1) or another user (2)?
         ParseRelation<ParseUser> friends = ParseUser.getCurrentUser().getRelation("friends");
@@ -82,13 +79,11 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
                 // If the objects are empty, the user is not a friend, so the mode is 2.
                 if (objects.size() == 0) {
-                    mode = 2;
+                    holder.mode = 2;
                 }
                 else {
-                    mode = 1;
+                    holder.mode = 1;
                 }
-
-                // Set the click listener with the proper mode
             }
         });
 
@@ -101,7 +96,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
                 // Create the fragment with paramters
                 ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                ProfileFragment fragmentProfile = ProfileFragment.newInstance(friend, mode);
+                ProfileFragment fragmentProfile = ProfileFragment.newInstance(friend, holder.mode);
 
                 // Change the fragment
                 ft.replace(R.id.flContainer, fragmentProfile);
@@ -131,6 +126,9 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
         // Is the user friending someone?
         boolean friending;
+
+        // User mode
+        public int mode;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

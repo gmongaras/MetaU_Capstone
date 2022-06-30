@@ -40,14 +40,17 @@ import com.example.metau_capstone.Profile.ProfileCollectionAdapter;
 import com.example.metau_capstone.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import Fragments.Friends.FriendsSearchFragment;
 import Fragments.Profile.SettingsFragment;
@@ -209,8 +212,12 @@ public class ProfileFragment extends Fragment {
                     showUserMenu(v);
                 }
                 // If the mode is 1, show the friend menu
-                else {
+                else if (mode == 1) {
                     showFriendMenu(v);
+                }
+                // If the mode is 2, show the other user menu
+                else {
+                    showOtherUserMenu(v);
                 }
 
             }
@@ -360,45 +367,64 @@ public class ProfileFragment extends Fragment {
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // Get the current user
-                                    ParseUser curUser = ParseUser.getCurrentUser();
+                                    unfriend();
 
-                                    // Remove the friend from the current user's friend list
-                                    ParseRelation<ParseUser> friends = curUser.getRelation("friends");
-                                    friends.remove(user);
-                                    curUser.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e != null) {
-                                                Log.e(TAG, "Unable to unfriend user", e);
-                                                Toast.makeText(requireContext(), "Unable to unfriend user", Toast.LENGTH_SHORT).show();
-                                                return;
-                                            }
+                                    // Go back to the friends fragment
+                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                                    ft.replace(R.id.flContainer, new FriendsFragment());
+                                    ft.commit();
 
-                                            // Send a request to remove the friend from the
-                                            // other user's friend's list
-                                            Friend_queue queue = new Friend_queue();
-                                            queue.setUser(user);
-                                            queue.setFriend(curUser);
-                                            queue.setMode("remove");
-                                            queue.saveInBackground(new SaveCallback() {
-                                                @Override
-                                                public void done(ParseException e) {
-                                                    if (e != null) {
-                                                        Log.e(TAG, "Unable to send remove request to queue", e);
-                                                    }
-                                                    else {
-                                                        Toast.makeText(requireActivity(), "User unfriended", Toast.LENGTH_SHORT).show();
-                                                    }
+                                }
+                            })
 
-                                                    // Go back to the friends fragment
-                                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-                                                    ft.replace(R.id.flContainer, new FriendsFragment());
-                                                    ft.commit();
-                                                }
-                                            });
-                                        }
-                                    });
+                            // If the user clicks no, do nothing
+                            .setNegativeButton("No", null)
+                            .show();
+
+                    return true;
+                }
+
+                // If the item is block, block the friend
+                if (item.getItemId() == 2) {
+                    blockFriend();
+
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
+
+
+
+    private void showOtherUserMenu(View v) {
+        // Show the popup menu
+        PopupMenu popup = new PopupMenu(requireContext(), v);
+        MenuInflater inflater = popup.getMenuInflater();
+        popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));
+        inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
+        popup.show();
+
+        // Add an on click listener for the menu items
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // If the item is block, block the user
+                if (item.getItemId() == 1) {
+                    // Show a prompt to confirm if the user wants to block the other user
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle("Block this user?")
+                            .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "?")
+
+                            // If the user clicks yes, block the user
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    // Block the user
+                                    block();
+
                                 }
                             })
 
@@ -410,6 +436,113 @@ public class ProfileFragment extends Fragment {
                 }
 
                 return false;
+            };
+
+
+        });
+    }
+
+
+
+    // Unfriend a friend
+    private void unfriend() {
+        // Get the current user
+        ParseUser curUser = ParseUser.getCurrentUser();
+
+        // Remove the friend from the current user's friend list
+        ParseRelation<ParseUser> friends = curUser.getRelation("friends");
+        friends.remove(user);
+        curUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Unable to unfriend user", e);
+                    Toast.makeText(requireContext(), "Unable to unfriend user", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Send a request to remove the friend from the
+                // other user's friend's list
+                Friend_queue queue = new Friend_queue();
+                queue.setUser(user);
+                queue.setFriend(curUser);
+                queue.setMode("remove");
+                queue.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Unable to send remove request to queue", e);
+                        }
+                        else {
+                            Toast.makeText(requireActivity(), "User unfriended", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+
+    // Block a friend
+    private void blockFriend() {
+        // Show a prompt to confirm if the user wants to block a friend
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Block this user?")
+                .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "?\nBlocking will also unfriend them.")
+
+                // If the user clicks yes, block this friend
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // Unfriend the user
+                        unfriend();
+
+                        // Block the user
+                        block();
+
+                    }
+                })
+
+                // If the user clicks no, do nothing
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+
+
+    // Block a user
+    private void block() {
+        // Get the relational blocked user data
+        ParseRelation<ParseUser> rel = ParseUser.getCurrentUser().getRelation("Blocked");
+
+        // Add the other to the blocked list
+        rel.add(user);
+
+        // Save the new blocked user
+        ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(requireContext(), "User blocked", Toast.LENGTH_SHORT).show();
+
+                    // Go back to the friend fragment
+
+                    // Setup the fragment switch
+                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                    // Go back to the friends fragment
+                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+
+                    // Add back the friends fragment
+                    ft.replace(R.id.flContainer, friendsFragment);
+                    ft.commit();
+                }
+                else {
+                    Toast.makeText(requireContext(), "Unable to block user", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
