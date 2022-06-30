@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.MapHelper;
 import com.example.metau_capstone.R;
@@ -24,9 +26,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -57,9 +65,18 @@ public class ProfileDetailFragment extends Fragment {
     // Used to work with the map
     MapHelper mapHelper;
 
+    // ID of the fortune
+    String objectId;
+
     // The user to load the map for
     private static final String ARG_USER = "user";
     private ParseUser user;
+
+    // Is liking happening?
+    boolean liking;
+
+    // Has the fortune been liked?
+    boolean liked;
 
     // Used to load date information
     dateFormatter df = new dateFormatter();
@@ -99,6 +116,12 @@ public class ProfileDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Liking is not happening
+        liking = false;
+
+        // Get the fortune ID
+        objectId = fortune.getObjectId();
 
         // Should the user have map access?
         boolean access = true;
@@ -169,21 +192,94 @@ public class ProfileDetailFragment extends Fragment {
             }
         }
 
-        // Add an onClick listener to the
-
-        // If the mode is not 0, remove the like button
-        if (mode != 0) {
-            ivLike.setVisibility(View.INVISIBLE);
-        }
-        // If the mode is 0, set an on click listener to the like button
-        else {
-            ivLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ;
+        // Get the user's liked fortunes
+        liking = true;
+        ParseRelation<Fortune> likedRel = ParseUser.getCurrentUser().getRelation("liked");
+        ParseQuery<Fortune> query = likedRel.getQuery();
+        query.whereEqualTo("objectId", objectId);
+        query.findInBackground(new FindCallback<Fortune>() {
+            @Override
+            public void done(List<Fortune> objects, ParseException e) {
+                // If the objects returned is 0, the fortune is not liked
+                if (objects.size() == 0) {
+                    liked = false;
                 }
-            });
-        }
+                else {
+                    liked = true;
+                }
+
+                // Change the drawable based on the liked state
+                if (liked) {
+                    Glide.with(view.getContext())
+                            .load(R.drawable.like_filled)
+                            .circleCrop()
+                            .into(ivLike);
+                }
+                else {
+                    Glide.with(view.getContext())
+                            .load(R.drawable.like)
+                            .circleCrop()
+                            .into(ivLike);
+                }
+
+
+                // Add an onClick listener to the like button
+                ivLike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Avoid spamming
+                        if (liking == true) {
+                            return;
+                        }
+                        liking = true;
+
+                        // Get the relation to like/unlike the fortune
+                        ParseRelation<Fortune> rel = ParseUser.getCurrentUser().getRelation("liked");
+
+                        // If the fortune is liked, unlike it
+                        if (liked) {
+                            rel.remove(fortune);
+                        }
+                        else {
+                            rel.add(fortune);
+                        }
+
+                        // Save the new relation
+                        ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                // If an error happened, notify the user and don't change
+                                // the image
+                                if (e != null) {
+                                    Log.e(TAG, "Unable to like/unlike fortune", e);
+                                    Toast.makeText(requireContext(), "Unable to like/unlike fortune", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                // Change the image of the like button
+                                if (liked) {
+                                    Glide.with(view.getContext())
+                                            .load(R.drawable.like)
+                                            .circleCrop()
+                                            .into(ivLike);
+                                }
+                                else {
+                                    Glide.with(view.getContext())
+                                            .load(R.drawable.like_filled)
+                                            .circleCrop()
+                                            .into(ivLike);
+                                }
+
+                                // Liking is no longer happening
+                                liking = false;
+                            }
+                        });
+                    }
+                });
+
+                liking = false;
+            }
+        });
 
         // Handle clicks on the share button
         ivShare.setOnClickListener(new View.OnClickListener() {

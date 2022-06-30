@@ -34,12 +34,6 @@ import java.util.List;
  */
 public class ProfileLikedFragment extends Fragment {
 
-    // Number to skip when loading more posts
-    private int skipVal;
-
-    // Constant number to load each time we want to load more posts
-    private static final int loadRate = 20;
-
     private static final String TAG = "ProfileLikedFragment";
 
     // Elements in the views
@@ -138,7 +132,6 @@ public class ProfileLikedFragment extends Fragment {
 
         // Load the fortunes if the user has access to do so
         if (load == true) {
-            skipVal = 0;
 
             // Get the elements
             rvProfileLiked = view.findViewById(R.id.rvProfileLiked);
@@ -197,22 +190,11 @@ public class ProfileLikedFragment extends Fragment {
                     // Configure the Recycler View: Layout Manager
                     layoutManager = new LinearLayoutManager(getContext());
                     rvProfileLiked.setLayoutManager(layoutManager);
-
-                    // Used for infinite scrolling
-                    rvProfileLiked.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-                        @Override
-                        public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                            queryLiked();
-                        }
-                    });
                 }
                 else {
                     // Notify the recycler view adapter of a change in data
                     adapter.notifyDataSetChanged();
                 }
-
-                // Increase the skip value
-                skipVal+=1;
             }
         });
 
