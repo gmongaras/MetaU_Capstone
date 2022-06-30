@@ -47,6 +47,7 @@
             android:id="@+id/tlProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             app:tabSelectedTextColor="@color/purple_500"
             app:tabTextColor="@color/black" />
 

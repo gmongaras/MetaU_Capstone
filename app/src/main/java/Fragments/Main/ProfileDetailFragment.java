@@ -206,13 +206,7 @@ public class ProfileDetailFragment extends Fragment {
 
                 // Go back to the Profile fragment
                 ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                ProfileFragment profileFragment;
-                if (Objects.equals(user.getObjectId(), ParseUser.getCurrentUser().getObjectId())) {
-                     profileFragment = ProfileFragment.newInstance(user, 0);
-                }
-                else {
-                    profileFragment = ProfileFragment.newInstance(user, 1);
-                }
+                ProfileFragment profileFragment = ProfileFragment.newInstance(user, mode);
 
                 // Add back the profile fragment
                 ft.replace(R.id.flContainer, profileFragment);
