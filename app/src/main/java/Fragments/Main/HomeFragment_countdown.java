@@ -1,6 +1,5 @@
-package Fragments;
+package Fragments.Main;
 
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -28,10 +26,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-
-import android.location.Location;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -196,7 +191,13 @@ public class HomeFragment_countdown extends Fragment {
     // Go to the home fortune fragment so the user can open a new fortune.
     private void goToFortune() {
         // Start the fragment transition
-        FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft;
+        try {
+            ft = requireActivity().getSupportFragmentManager().beginTransaction();
+        }
+        catch (Exception e) {
+            return;
+        }
 
         // Create the fragment with paramters
         ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);

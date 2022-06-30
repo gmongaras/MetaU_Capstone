@@ -1,12 +1,10 @@
-package Fragments;
+package Fragments.Main;
 
 import android.Manifest;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
@@ -20,27 +18,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.metau_capstone.Fortune;
-import com.example.metau_capstone.MainActivity;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.WakefulReceiver;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseInstallation;
-import com.parse.ParsePush;
-import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -58,10 +45,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -284,8 +269,17 @@ public class HomeFragment_fortune extends Fragment {
                                 Log.i(TAG, "Fortune successfully saved to fortune list");
 
                                 // When the user opens the fortune, create a push notification timer
-                                WakefulReceiver wr = new WakefulReceiver();
-                                wr.setAlarm(requireContext());
+                                // if the user wants to have notifications
+                                ParseUser user = null;
+                                try {
+                                    user = ParseUser.getCurrentUser().fetch();
+                                } catch (ParseException ex) {
+                                    ex.printStackTrace();
+                                }
+                                if (user != null && user.getBoolean("pushNotifications") == true) {
+                                    WakefulReceiver wr = new WakefulReceiver();
+                                    wr.setAlarm(requireContext());
+                                }
                             }
                         }
                     });

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="Fragments.HomeFragment_countdown">
+    tools:context="Fragments.Main.HomeFragment_countdown">
 
     <TextView
         android:id="@+id/tvCountdown"

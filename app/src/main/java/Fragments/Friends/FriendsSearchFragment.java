@@ -1,4 +1,4 @@
-package Fragments;
+package Fragments.Friends;
 
 import android.os.Bundle;
 
@@ -6,14 +6,12 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -22,9 +20,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
-import com.example.metau_capstone.Fortune;
-import com.example.metau_capstone.FriendsSearchAdapter;
-import com.example.metau_capstone.MainActivity;
+import com.example.metau_capstone.Friends.FriendsSearchAdapter;
 import com.example.metau_capstone.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -33,7 +29,8 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import Fragments.Main.FriendsFragment;
 
 /**
  * A simple {@link Fragment} subclass.

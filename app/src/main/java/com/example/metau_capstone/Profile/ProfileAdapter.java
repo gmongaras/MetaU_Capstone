@@ -1,4 +1,4 @@
-package com.example.metau_capstone;
+package com.example.metau_capstone.Profile;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,19 +7,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.metau_capstone.Fortune;
+import com.example.metau_capstone.R;
+import com.example.metau_capstone.dateFormatter;
 import com.parse.ParseUser;
 
-import java.util.Date;
 import java.util.List;
 
-import Fragments.HomeFragment_countdown;
-import Fragments.ProfileDetailFragment;
-import Fragments.ProfileFragment;
+import Fragments.Main.ProfileDetailFragment;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
 
@@ -34,15 +33,19 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     // User to load the profile for
     ParseUser user;
 
+    // The user mode
+    int mode;
+
     // Used to convert the date
     dateFormatter df = new dateFormatter();
 
     // Constructor to create the adapter with context and a list
-    public ProfileAdapter(List<Fortune> fortunes, ParseUser user, Context context, FragmentManager manager) {
+    public ProfileAdapter(List<Fortune> fortunes, ParseUser user, Context context, FragmentManager manager, int mode) {
         this.fortunes = fortunes;
         this.user = user;
         this.context = context;
         fragmentManager = manager;
+        this.mode = mode;
     }
 
     @NonNull
@@ -72,7 +75,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
                 // Create the fragment with paramters
                 ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune, user);
+                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune, user, mode);
 
                 // Change the fragment
                 ft.replace(R.id.flContainer, fragmentProfileDetail);

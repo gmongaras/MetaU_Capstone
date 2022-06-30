@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Fragments.ProfileSearchText"
+    tools:context="Fragments.Profile.ProfileSearchText"
     >
 
 
@@ -44,7 +44,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/svProfileSearchText" />
+        app:layout_constraintTop_toTopOf="@+id/svProfileSearchText" />
 
     <TextView
         android:id="@+id/tvSearchTextPrompt"
@@ -56,7 +56,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/rvProfileSearchText"
-        app:layout_constraintTop_toBottomOf="@+id/svProfileSearchText" />
+        app:layout_constraintTop_toTopOf="@+id/svProfileSearchText" />
 
     <ProgressBar
         android:id="@+id/pbProfileSearchText"
@@ -67,5 +67,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/svProfileSearchText" />
+        app:layout_constraintTop_toTopOf="@+id/svProfileSearchText" />
+
+    <TextView
+        android:id="@+id/tvNoAccessText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="You do not have access\nto this user's fortunes"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

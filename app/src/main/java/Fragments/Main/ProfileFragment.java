@@ -1,10 +1,11 @@
-package Fragments;
+package Fragments.Main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,19 +19,24 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.provider.MediaStore;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.metau_capstone.Friend_queue;
+import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.LoginActivity;
-import com.example.metau_capstone.ProfileCollectionAdapter;
+import com.example.metau_capstone.Profile.ProfileCollectionAdapter;
 import com.example.metau_capstone.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -42,6 +48,9 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import Fragments.Friends.FriendsSearchFragment;
+import Fragments.Profile.SettingsFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,8 +64,7 @@ public class ProfileFragment extends Fragment {
     // Elements in the view
     ImageView ivProfileImage;
     TextView tvUsername;
-    Button btnLogout;
-    Button btnUnfriend;
+    ImageView ivOptions;
 
     // View Pager stuff
     TabLayout tlProfile;
@@ -70,6 +78,7 @@ public class ProfileFragment extends Fragment {
     // What mode should the profile be put in?
     // 0 - Current user
     // 1 - Friend
+    // 2 - Other user
     private static final String ARG_MODE = "mode";
     private int mode;
 
@@ -110,8 +119,7 @@ public class ProfileFragment extends Fragment {
         // Get the elements
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         tvUsername = view.findViewById(R.id.tvUsername);
-        btnLogout = view.findViewById(R.id.btnLogout);
-        btnUnfriend = view.findViewById(R.id.btnUnfriend);
+        ivOptions = view.findViewById(R.id.ivOptions);
 
         // If the user is null, default to the current user
         if (user == null) {
@@ -141,7 +149,7 @@ public class ProfileFragment extends Fragment {
 
 
         // Initialize the view pager
-        profileCollectionAdapter = new ProfileCollectionAdapter(ProfileFragment.this, user);
+        profileCollectionAdapter = new ProfileCollectionAdapter(ProfileFragment.this, user, mode);
         pagerProfile = view.findViewById(R.id.pagerProfile);
         pagerProfile.setAdapter(profileCollectionAdapter);
 
@@ -191,17 +199,157 @@ public class ProfileFragment extends Fragment {
             });
         }
 
-        // If the mode is 1, remove the logout button and change it with
-        // an unfriend button
-        if (mode == 1) {
-            btnLogout.setVisibility(View.INVISIBLE);
-            btnUnfriend.setVisibility(View.VISIBLE);
 
-            // Put an onClick listener onto the unfriend button to unfriend
-            // this user
-            btnUnfriend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        // Add an onClick listener to the options menu
+        ivOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // If the mode is 0, show the user menu
+                if (mode == 0) {
+                    showUserMenu(v);
+                }
+                // If the mode is 1, show the friend menu
+                else {
+                    showFriendMenu(v);
+                }
+
+            }
+        });
+
+
+        // Handle back button presses
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // If mode is 0, go back to the main page
+                if (mode == 0) {
+                    // Setup the fragment switch
+                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                    // Go back to the Profile fragment
+                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                    HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance();
+
+                    // Add back the profile fragment
+                    ft.replace(R.id.flContainer, homeFragment);
+                    ft.commit();
+
+                    ((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
+                    //((BottomNavigationView)getParentFragment().getView().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
+                }
+                // If mode is 1, go back to the friends page
+                else if (mode == 1) {
+                    // Setup the fragment switch
+                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                    // Go back to the Friends fragment
+                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+
+                    // Add back the Friends fragment
+                    ft.replace(R.id.flContainer, friendsFragment);
+                    ft.commit();
+                }
+                // If mode is 2, go back to the friends page
+                else {
+                    // Setup the fragment switch
+                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                    // Go back to the friends fragment
+                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+
+                    // Add back the friends fragment
+                    ft.replace(R.id.flContainer, friendsFragment);
+                    ft.commit();
+                }
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+    }
+
+
+
+    // Used for menu item with icons
+    private CharSequence menuIconWithText(Drawable r, String title) {
+
+        r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
+        SpannableString sb = new SpannableString("    " + title);
+        ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return sb;
+    }
+
+
+
+    private void showUserMenu(View v) {
+        // Show the popup menu
+        PopupMenu popup = new PopupMenu(requireContext(), v);
+        popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.settings), "Settings"));
+        popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.logout), "Logout"));
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_profile_options, popup.getMenu());
+        popup.show();
+
+        // Add an on click listener for the menu items
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // If the settings item is clicked, go to the users settings
+                if (item.getItemId() == 1) {
+                    // Setup the fragment switch
+                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                    // Go to the settings fragment
+                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                    SettingsFragment settingsFragment = SettingsFragment.newInstance();
+
+                    ft.replace(R.id.flContainer, settingsFragment);
+                    ft.commit();
+
+                    return true;
+                }
+
+                // If the item is logout, log the user out
+                if (item.getItemId() == 2) {
+                    // Log the user out
+                    Toast.makeText(v.getContext(), "Logging out..", Toast.LENGTH_SHORT).show();
+                    ParseUser.logOutInBackground();
+
+                    // Exit this fragment
+                    requireActivity().finishAffinity();
+
+                    // Go back to the main page
+                    Intent i = new Intent(v.getContext(), LoginActivity.class);
+                    startActivity(i);
+
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
+
+
+
+
+    private void showFriendMenu(View v) {
+        // Show the popup menu
+        PopupMenu popup = new PopupMenu(requireContext(), v);
+        MenuInflater inflater = popup.getMenuInflater();
+        popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.unfriend), "Unfriend"));
+        popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));
+        inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
+        popup.show();
+
+        // Add an on click listener for the menu items
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // If the item is unfriend, unfriend the user
+                if (item.getItemId() == 1) {
                     // Display an alert dialog to make the user confirm they
                     // want to unfriend that user
                     new AlertDialog.Builder(requireContext())
@@ -257,65 +405,13 @@ public class ProfileFragment extends Fragment {
                             // If the user clicks no, do nothing
                             .setNegativeButton("No", null)
                             .show();
+
+                    return true;
                 }
-            });
-        }
-        // If the mode is 0, Put an onClick listener onto the logout button
-        else {
-            btnLogout.setVisibility(View.VISIBLE);
-            btnLogout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Log the user out
-                    Toast.makeText(view.getContext(), "Logging out..", Toast.LENGTH_SHORT).show();
-                    ParseUser.logOutInBackground();
 
-                    // Exit this fragment
-                    requireActivity().finishAffinity();
-
-                    // Go back to the main page
-                    Intent i = new Intent(view.getContext(), LoginActivity.class);
-                    startActivity(i);
-                }
-            });
-        }
-
-        // Handle back button presses
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                // If mode is 0, go back to the main page
-                if (mode == 0) {
-                    // Setup the fragment switch
-                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
-
-                    // Go back to the Profile fragment
-                    ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-                    HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance();
-
-                    // Add back the profile fragment
-                    ft.replace(R.id.flContainer, homeFragment);
-                    ft.commit();
-
-                    ((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
-                    //((BottomNavigationView)getParentFragment().getView().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
-                }
-                // If mode is 1, go back to the friends page
-                else {
-                    // Setup the fragment switch
-                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
-
-                    // Go back to the Profile fragment
-                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
-
-                    // Add back the profile fragment
-                    ft.replace(R.id.flContainer, friendsFragment);
-                    ft.commit();
-                }
+                return false;
             }
-        };
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+        });
     }
 
 

@@ -1,4 +1,4 @@
-package Fragments;
+package Fragments.Main;
 
 import android.os.Bundle;
 
@@ -22,7 +22,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.parse.Parse;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
@@ -41,9 +40,15 @@ public class ProfileDetailFragment extends Fragment {
     private static final String ARG_FORTUNE = "fortune";
     private Fortune fortune;
 
+    // Mode in which the profile is in
+    private static final String ARG_INT = "mode";
+    private int mode;
+
     // Elements in the view
     TextView tvDate_detail;
     TextView tvFortune_detail;
+    TextView tvNoAccessMap;
+    Fragment profileMap;
 
     // Used to work with the map
     MapHelper mapHelper;
@@ -60,11 +65,12 @@ public class ProfileDetailFragment extends Fragment {
     }
 
     // When the fragment is created, get the fortune that was passed in
-    public static ProfileDetailFragment newInstance(Fortune fortune, ParseUser user) {
+    public static ProfileDetailFragment newInstance(Fortune fortune, ParseUser user, int mode) {
         ProfileDetailFragment fragment = new ProfileDetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_FORTUNE, fortune);
         args.putParcelable(ARG_USER, user);
+        args.putInt(ARG_INT, mode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,6 +81,7 @@ public class ProfileDetailFragment extends Fragment {
         if (getArguments() != null) {
             fortune = (Fortune) getArguments().get(ARG_FORTUNE);
             user = getArguments().getParcelable(ARG_USER);
+            mode = getArguments().getInt(ARG_INT);
         }
     }
 
@@ -89,36 +96,69 @@ public class ProfileDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Should the user have map access?
+        boolean access = true;
+
+        // If the mode is 1 (friend), check if the user has access
+        if (mode == 1) {
+            // If the user doesn't allow friends to see their map, set
+            // access to false
+            if (user.getBoolean("showMapFriends") == false) {
+                access = false;
+            }
+        }
+
+        // If the mode is 2 (other user), check if the user has access
+        if (mode == 2) {
+            // If the user doesn't allow other users to see their map, set
+            // access to false
+            if (user.getBoolean("showMapUsers") == false) {
+                access = false;
+            }
+        }
+
         // Get the elements in the view
         tvDate_detail = view.findViewById(R.id.tvDate_detail);
         tvFortune_detail = view.findViewById(R.id.tvFortune_detail);
+        profileMap = getChildFragmentManager().findFragmentById(R.id.profileMap);
 
         // Get the fortune information and store it
         tvDate_detail.setText(df.toMonthDayTime(fortune.getCreatedAt()));
         tvFortune_detail.setText(fortune.getMessage());
 
-        // Get the map information and load it
-        SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(@NonNull GoogleMap map) {
-                    // Create the map helper object
-                    mapHelper = new MapHelper(map, mapFragment, getContext());
+        // If the user doesn't have access to the fortunes, display a message
+        // and hide the map
+        if (access == false) {
+            tvNoAccessMap = view.findViewById(R.id.tvNoAccessMap);
+            tvNoAccessMap.setVisibility(View.VISIBLE);
+            profileMap.getView().setVisibility(View.INVISIBLE);
+        }
 
-                    // Load the map using the helper
-                    mapHelper.loadMap(user, null, false);
+        // If the user has access, load the map
+        else {
+            // Get the map information and load it
+            SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.profileMap));
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(@NonNull GoogleMap map) {
+                        // Create the map helper object
+                        mapHelper = new MapHelper(map, mapFragment, getContext());
 
-                    // Go to the spot on the map
-                    ParseGeoPoint loc = fortune.getLocation();
-                    if (loc != null) {
-                        LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
-                        mapHelper.goToLatLng(latLng, 10);
+                        // Load the map using the helper
+                        mapHelper.loadMap(user, null, false);
+
+                        // Go to the spot on the map
+                        ParseGeoPoint loc = fortune.getLocation();
+                        if (loc != null) {
+                            LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
+                            mapHelper.goToLatLng(latLng, 10);
+                        }
                     }
-                }
-            });
-        } else {
-            Log.e(TAG, "Error - Map Fragment was null!!");
+                });
+            } else {
+                Log.e(TAG, "Error - Map Fragment was null!!");
+            }
         }
 
         // Handle back button presses so the user doesn't go to the wrong

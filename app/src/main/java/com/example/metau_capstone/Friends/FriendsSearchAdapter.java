@@ -1,21 +1,22 @@
-package com.example.metau_capstone;
+package com.example.metau_capstone.Friends;
 
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.metau_capstone.Fortune;
+import com.example.metau_capstone.R;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -28,7 +29,7 @@ import com.parse.SaveCallback;
 import java.util.List;
 import java.util.Objects;
 
-import Fragments.FriendsFragment;
+import Fragments.Main.ProfileFragment;
 
 public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdapter.ViewHolder> {
     private static final String TAG = "FriendsSearchAdapter";
@@ -38,6 +39,9 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
     // Fragment manager for the home fragment
     FragmentManager fragmentManager;
+
+    // User mode
+    int mode;
 
     Context context;
 
@@ -65,20 +69,43 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         // Bind the post to the view holder
         holder.bind(friend);
 
+        // Default mode is 2
+        mode = 2;
+
+        // Get the mode of the current user. Is it a friend (1) or another user (2)?
+        ParseRelation<ParseUser> friends = ParseUser.getCurrentUser().getRelation("friends");
+        ParseQuery<ParseUser> q = friends.getQuery();
+        q.whereEqualTo("objectId", friend.getObjectId());
+        q.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+
+                // If the objects are empty, the user is not a friend, so the mode is 2.
+                if (objects.size() == 0) {
+                    mode = 2;
+                }
+                else {
+                    mode = 1;
+                }
+
+                // Set the click listener with the proper mode
+            }
+        });
+
         // Put an onClick listener on the view to go into the detailed view
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                // Setup the fragment switch
-//                FragmentTransaction ft = fragmentManager.beginTransaction();
-//
-//                // Create the fragment with paramters
-//                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune);
-//
-//                // Change the fragment
-//                ft.replace(R.id.flContainer, fragmentProfileDetail);
-//                ft.commit();
-                return;
+                // Setup the fragment switch
+                FragmentTransaction ft = fragmentManager.beginTransaction();
+
+                // Create the fragment with paramters
+                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                ProfileFragment fragmentProfile = ProfileFragment.newInstance(friend, mode);
+
+                // Change the fragment
+                ft.replace(R.id.flContainer, fragmentProfile);
+                ft.commit();
             }
         });
     }
@@ -97,6 +124,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         Button btnRemoveRequest;
         Button btnAlreadyFriends;
         Button btnHaveARequest;
+        Button btnNotAcceptingFriends;
 
         // The current user
         ParseUser curUser;
@@ -115,6 +143,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             btnRemoveRequest = itemView.findViewById(R.id.btnRemoveRequest);
             btnAlreadyFriends = itemView.findViewById(R.id.btnAlreadyFriends);
             btnHaveARequest = itemView.findViewById(R.id.btnHaveARequest);
+            btnNotAcceptingFriends = itemView.findViewById(R.id.btnNotAcceptingFriends);
             friending = false;
 
             // Get the current user
@@ -128,6 +157,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             btnAlreadyFriends.setVisibility(View.INVISIBLE);
             btnHaveARequest.setVisibility(View.INVISIBLE);
             btnSendRequest.setVisibility(View.INVISIBLE);
+            btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
 
             // Set the username
             tvFriendUsername_search.setText(friend.getUsername());
@@ -158,6 +188,8 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                 }
             });
 
+
+
             // Get all the user's friends and check if the given friend is
             // in their list to show the correct display
             ParseRelation<ParseUser> users = curUser.getRelation("friends");
@@ -173,6 +205,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                             btnRemoveRequest.setVisibility(View.INVISIBLE);
                             btnSendRequest.setVisibility(View.INVISIBLE);
                             btnHaveARequest.setVisibility(View.INVISIBLE);
+                            btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
                             btnAlreadyFriends.setVisibility(View.VISIBLE);
                             return;
                         }
@@ -191,6 +224,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                                 btnRemoveRequest.setVisibility(View.INVISIBLE);
                                 btnAlreadyFriends.setVisibility(View.INVISIBLE);
                                 btnSendRequest.setVisibility(View.INVISIBLE);
+                                btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
                                 btnHaveARequest.setVisibility(View.VISIBLE);
                                 return;
                             }
@@ -211,13 +245,28 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                                         btnAlreadyFriends.setVisibility(View.INVISIBLE);
                                         btnHaveARequest.setVisibility(View.INVISIBLE);
                                         btnSendRequest.setVisibility(View.INVISIBLE);
+                                        btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
                                         btnRemoveRequest.setVisibility(View.VISIBLE);
                                         return;
                                     }
 
+                                    // If the user is not accepting requests, show
+                                    // the proper button
+                                    if (friend.getBoolean("friendable") == false) {
+                                        btnAlreadyFriends.setVisibility(View.INVISIBLE);
+                                        btnHaveARequest.setVisibility(View.INVISIBLE);
+                                        btnSendRequest.setVisibility(View.INVISIBLE);
+                                        btnRemoveRequest.setVisibility(View.INVISIBLE);
+                                        btnNotAcceptingFriends.setVisibility(View.VISIBLE);
+                                        return;
+                                    }
+
+                                    // If the user has no special properties, show the
+                                    // send request button
                                     btnRemoveRequest.setVisibility(View.INVISIBLE);
                                     btnAlreadyFriends.setVisibility(View.INVISIBLE);
                                     btnHaveARequest.setVisibility(View.INVISIBLE);
+                                    btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
                                     btnSendRequest.setVisibility(View.VISIBLE);
                                 }
                             });
@@ -320,6 +369,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                                     else {
                                         Log.i(TAG, "Removed request from queue");
                                         btnRemoveRequest.setVisibility(View.INVISIBLE);
+                                        btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
                                         btnSendRequest.setVisibility(View.VISIBLE);
                                     }
                                     friending = false;

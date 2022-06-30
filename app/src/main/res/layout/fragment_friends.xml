@@ -7,7 +7,7 @@
     android:layout_gravity="center_horizontal"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="Fragments.FriendsFragment">
+    tools:context="Fragments.Main.FriendsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"

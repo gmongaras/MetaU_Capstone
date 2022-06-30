@@ -1,4 +1,4 @@
-package com.example.metau_capstone;
+package com.example.metau_capstone.Friends;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;

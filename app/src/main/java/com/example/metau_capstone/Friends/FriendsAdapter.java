@@ -1,8 +1,7 @@
-package com.example.metau_capstone;
+package com.example.metau_capstone.Friends;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +13,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.metau_capstone.Fortune;
+import com.example.metau_capstone.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -23,9 +24,7 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-import Fragments.FriendsFragment;
-import Fragments.ProfileDetailFragment;
-import Fragments.ProfileFragment;
+import Fragments.Main.ProfileFragment;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 

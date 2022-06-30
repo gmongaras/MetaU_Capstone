@@ -1,4 +1,4 @@
-package Fragments;
+package Fragments.Profile;
 
 import android.os.Bundle;
 
@@ -12,10 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Fortune;
-import com.example.metau_capstone.ProfileAdapter;
+import com.example.metau_capstone.Profile.ProfileAdapter;
 import com.example.metau_capstone.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -42,10 +43,15 @@ public class ProfileList extends Fragment {
 
     // Elements in the views
     RecyclerView rvProfileList;
+    TextView tvNoAccess;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
     ProfileAdapter adapter;
+
+    // Mode in which the profile is in
+    private static final String ARG_INT = "mode";
+    private int mode;
 
     // List of fortunes for the recycler view
     List<Fortune> Fortunes;
@@ -58,10 +64,11 @@ public class ProfileList extends Fragment {
         // Required empty public constructor
     }
 
-    public static ProfileList newInstance(ParseUser user) {
+    public static ProfileList newInstance(ParseUser user, int mode) {
         ProfileList fragment = new ProfileList();
         Bundle args = new Bundle();
         args.putParcelable(ARG_USER, user);
+        args.putInt(ARG_INT, mode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,6 +78,7 @@ public class ProfileList extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = getArguments().getParcelable(ARG_USER);
+            mode = getArguments().getInt(ARG_INT);
         }
     }
 
@@ -85,16 +93,45 @@ public class ProfileList extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        skipVal = 0;
+        // Should the fortunes be loaded
+        boolean load = true;
 
-        // Get the elements
-        rvProfileList = view.findViewById(R.id.rvProfileList);
+        // If the mode is 1 (friend), check if the user has access
+        if (mode == 1) {
+            // If the user doesn't allow friends to see fortunes, set
+            // load to false
+            if (user.getBoolean("showFortunesFriends") == false) {
+                load = false;
+            }
+        }
+        
+        // If the mode is 2 (other user), check if the user has access
+        if (mode == 2) {
+            // If the user doesn't allow other users to see fortunes, set
+            // load to false
+            if (user.getBoolean("showFortunesUsers") == false) {
+                load = false;
+            }
+        }
 
-        // Initialize the fortunes
-        Fortunes = new ArrayList<>();
+        // Load the fortunes if the user has access to do so
+        if (load == true) {
+            skipVal = 0;
 
-        // Load in the fortunes
-        queryFortunes();
+            // Get the elements
+            rvProfileList = view.findViewById(R.id.rvProfileList);
+
+            // Initialize the fortunes
+            Fortunes = new ArrayList<>();
+
+            // Load in the fortunes
+            queryFortunes();
+        }
+        // If the user doesn't have access to the fortunes, display a message
+        else {
+            tvNoAccess = view.findViewById(R.id.tvNoAccess);
+            tvNoAccess.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -137,7 +174,7 @@ public class ProfileList extends Fragment {
 
                     // When the fortunes have been loaded, setup the recycler view -->
                     // Bind the adapter to the recycler view
-                    adapter = new ProfileAdapter(Fortunes, user, getContext(), requireActivity().getSupportFragmentManager());
+                    adapter = new ProfileAdapter(Fortunes, user, getContext(), requireActivity().getSupportFragmentManager(), mode);
                     rvProfileList.setAdapter(adapter);
 
                     // Configure the Recycler View: Layout Manager
