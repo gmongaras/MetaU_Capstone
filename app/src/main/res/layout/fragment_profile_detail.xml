@@ -80,4 +80,15 @@
         app:layout_constraintStart_toStartOf="@+id/tvFortune_detail"
         app:layout_constraintTop_toBottomOf="@+id/tvFortune_detail" />
 
+    <TextView
+        android:id="@+id/tvLikeCt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/ivLike"
+        app:layout_constraintEnd_toStartOf="@+id/ivLike"
+        app:layout_constraintTop_toTopOf="@+id/ivLike"
+        tools:text="0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

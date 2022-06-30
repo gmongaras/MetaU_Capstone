@@ -61,6 +61,7 @@ public class ProfileDetailFragment extends Fragment {
     Fragment profileMap;
     ImageView ivLike;
     ImageView ivShare;
+    TextView tvLikeCt;
 
     // Used to work with the map
     MapHelper mapHelper;
@@ -150,6 +151,7 @@ public class ProfileDetailFragment extends Fragment {
         profileMap = getChildFragmentManager().findFragmentById(R.id.profileMap);
         ivLike = view.findViewById(R.id.ivLike);
         ivShare = view.findViewById(R.id.ivShare);
+        tvLikeCt = view.findViewById(R.id.tvLikeCt);
 
         // Get the fortune information and store it
         tvDate_detail.setText(df.toMonthDayTime(fortune.getCreatedAt()));
@@ -223,6 +225,10 @@ public class ProfileDetailFragment extends Fragment {
                 }
 
 
+                // Set the number of likes for the fortune
+                tvLikeCt.setText(String.valueOf(fortune.getInt("like_ct")));
+
+
                 // Add an onClick listener to the like button
                 ivLike.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -253,25 +259,60 @@ public class ProfileDetailFragment extends Fragment {
                                 if (e != null) {
                                     Log.e(TAG, "Unable to like/unlike fortune", e);
                                     Toast.makeText(requireContext(), "Unable to like/unlike fortune", Toast.LENGTH_SHORT).show();
+
+                                    // Liking is no longer happening
+                                    liking = false;
+
                                     return;
                                 }
 
-                                // Change the image of the like button
+                                // If an error didn't happen, increase the like count
+                                int ct = Integer.parseInt(tvLikeCt.getText().toString());
                                 if (liked) {
-                                    Glide.with(view.getContext())
-                                            .load(R.drawable.like)
-                                            .circleCrop()
-                                            .into(ivLike);
+                                    ct -= 1;
+                                    fortune.put("like_ct", ct);
                                 }
                                 else {
-                                    Glide.with(view.getContext())
-                                            .load(R.drawable.like_filled)
-                                            .circleCrop()
-                                            .into(ivLike);
+                                    ct += 1;
+                                    fortune.put("like_ct", ct);
                                 }
 
-                                // Liking is no longer happening
-                                liking = false;
+                                // Save the like count
+                                int finalCt = ct;
+                                fortune.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        // If an error occured, don't change the like count
+                                        if (e != null) {
+                                            Log.e(TAG, "Unable to change like count", e);
+                                            Toast.makeText(requireContext(), "Unable to change like count", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        // Change the image of the like button
+                                        if (liked) {
+                                            Glide.with(view.getContext())
+                                                    .load(R.drawable.like)
+                                                    .circleCrop()
+                                                    .into(ivLike);
+                                        }
+                                        else {
+                                            Glide.with(view.getContext())
+                                                    .load(R.drawable.like_filled)
+                                                    .circleCrop()
+                                                    .into(ivLike);
+                                        }
+
+
+                                        // Change the like count
+                                        tvLikeCt.setText(String.valueOf(finalCt));
+
+                                        // Change the liked state
+                                        liked = !liked;
+
+                                        // Liking is no longer happening
+                                        liking = false;
+                                    }
+                                });
                             }
                         });
                     }

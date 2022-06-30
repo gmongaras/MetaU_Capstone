@@ -244,6 +244,7 @@ public class HomeFragment_fortune extends Fragment {
         }
         newFortune.setMessage(fortune);
         newFortune.setUser(ParseUser.getCurrentUser());
+        newFortune.put("like_ct", 0);
 
         // Send the fortune to the database
         newFortune.saveInBackground(new SaveCallback() {
