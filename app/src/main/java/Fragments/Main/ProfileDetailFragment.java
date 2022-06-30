@@ -1,5 +1,6 @@
 package Fragments.Main;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.metau_capstone.Fortune;
@@ -49,6 +51,8 @@ public class ProfileDetailFragment extends Fragment {
     TextView tvFortune_detail;
     TextView tvNoAccessMap;
     Fragment profileMap;
+    ImageView ivLike;
+    ImageView ivShare;
 
     // Used to work with the map
     MapHelper mapHelper;
@@ -121,6 +125,8 @@ public class ProfileDetailFragment extends Fragment {
         tvDate_detail = view.findViewById(R.id.tvDate_detail);
         tvFortune_detail = view.findViewById(R.id.tvFortune_detail);
         profileMap = getChildFragmentManager().findFragmentById(R.id.profileMap);
+        ivLike = view.findViewById(R.id.ivLike);
+        ivShare = view.findViewById(R.id.ivShare);
 
         // Get the fortune information and store it
         tvDate_detail.setText(df.toMonthDayTime(fortune.getCreatedAt()));
@@ -161,6 +167,35 @@ public class ProfileDetailFragment extends Fragment {
             }
         }
 
+        // Handle clicks on the share button
+        ivShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String whoTxt = "";
+                // If the mode is 0, use the text "I got"
+                if (mode == 0) {
+                    whoTxt = "I got";
+                }
+                // If the mode is 1, use the text "a friend got"
+                else if (mode == 1) {
+                    whoTxt = "a friend got";
+                }
+                // If the mode is 2, use the text "someone got"
+                else if (mode == 2) {
+                    whoTxt = "someone got";
+                }
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.setType("text/plain");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Check ou this fortune " + whoTxt + " from a Fortune Cookie app:\n" + tvFortune_detail.getText());
+
+                sendIntent.putExtra(Intent.EXTRA_TITLE, "Check out this fortune " + whoTxt);
+
+                // Show the Sharesheet
+                startActivity(Intent.createChooser(sendIntent, null));
+            }
+        });
+
         // Handle back button presses so the user doesn't go to the wrong
         // page after they logged in and pressed the back button.
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -171,13 +206,7 @@ public class ProfileDetailFragment extends Fragment {
 
                 // Go back to the Profile fragment
                 ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                ProfileFragment profileFragment;
-                if (Objects.equals(user.getObjectId(), ParseUser.getCurrentUser().getObjectId())) {
-                     profileFragment = ProfileFragment.newInstance(user, 0);
-                }
-                else {
-                    profileFragment = ProfileFragment.newInstance(user, 1);
-                }
+                ProfileFragment profileFragment = ProfileFragment.newInstance(user, mode);
 
                 // Add back the profile fragment
                 ft.replace(R.id.flContainer, profileFragment);
