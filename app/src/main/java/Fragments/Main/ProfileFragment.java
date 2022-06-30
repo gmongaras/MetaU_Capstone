@@ -147,7 +147,7 @@ public class ProfileFragment extends Fragment {
 
 
         // Initialize the view pager
-        profileCollectionAdapter = new ProfileCollectionAdapter(ProfileFragment.this, user);
+        profileCollectionAdapter = new ProfileCollectionAdapter(ProfileFragment.this, user, mode);
         pagerProfile = view.findViewById(R.id.pagerProfile);
         pagerProfile.setAdapter(profileCollectionAdapter);
 

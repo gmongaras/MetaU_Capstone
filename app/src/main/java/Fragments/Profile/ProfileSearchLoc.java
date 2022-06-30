@@ -54,10 +54,15 @@ public class ProfileSearchLoc extends Fragment {
     TextView tvNoResultsLoc;
     TextView tvSearchLocPrompt;
     ProgressBar pbProfileSearchLoc;
+    TextView tvNoAccessLoc;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
     ProfileAdapter adapter;
+
+    // Mode in which the profile is in
+    private static final String ARG_INT = "mode";
+    private int mode;
 
     // List of fortunes for the recycler view
     List<Fortune> Fortunes;
@@ -77,10 +82,11 @@ public class ProfileSearchLoc extends Fragment {
         // Required empty public constructor
     }
 
-    public static ProfileSearchLoc newInstance(ParseUser user) {
+    public static ProfileSearchLoc newInstance(ParseUser user, int mode) {
         ProfileSearchLoc fragment = new ProfileSearchLoc();
         Bundle args = new Bundle();
         args.putParcelable(ARG_USER, user);
+        args.putInt(ARG_INT, mode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -90,6 +96,7 @@ public class ProfileSearchLoc extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = getArguments().getParcelable(ARG_USER);
+            mode = getArguments().getInt(ARG_INT);
         }
     }
 
@@ -103,6 +110,38 @@ public class ProfileSearchLoc extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Get the search text prompt
+        tvSearchLocPrompt = view.findViewById(R.id.tvSearchLocPrompt);
+
+        // Should the user have search access?
+        boolean access = true;
+
+        // If the mode is 1 (friend), check if the user has access
+        if (mode == 1) {
+            // If the user doesn't allow friends to see fortunes, set
+            // access to false
+            if (user.getBoolean("showFortunesFriends") == false) {
+                access = false;
+            }
+        }
+
+        // If the mode is 2 (other user), check if the user has access
+        if (mode == 2) {
+            // If the user doesn't allow other users to see fortunes, set
+            // access to false
+            if (user.getBoolean("showFortunesUsers") == false) {
+                access = false;
+            }
+        }
+
+        // If the user doesn't have access to the fortunes, display a message
+        if (access == false) {
+            tvNoAccessLoc = view.findViewById(R.id.tvNoAccessLoc);
+            tvNoAccessLoc.setVisibility(View.VISIBLE);
+            tvSearchLocPrompt.setVisibility(View.INVISIBLE);
+            return;
+        }
 
         skipVal = 0;
 

@@ -18,7 +18,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" >
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
         android:id="@+id/tvNoResultsLoc"
@@ -91,5 +93,18 @@
             android:hint="Distance (mi)"
             android:inputType="numberDecimal" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvNoAccessLoc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="You do not have access\nto this user's fortunes"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rvProfileSearchLoc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
