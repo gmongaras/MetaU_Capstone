@@ -1,6 +1,8 @@
 package Fragments.Profile;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -29,15 +31,25 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.metau_capstone.BootReceiver;
+import com.example.metau_capstone.Friends.Friend_queue;
+import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import Fragments.Main.HomeFragment_countdown;
@@ -239,6 +251,97 @@ public class SettingsFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+
+        // When the delete account button is clicked display a prompt to delete
+        // the users account
+        btnDeleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Delete account?")
+                        .setMessage("Are you sure you want to delete your account? All data will be lost.")
+
+
+                        // Positive message meaning the user is absolutely sure
+                        // they want to delete their account
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteAccount();
+                            }
+                        })
+
+                        // Negative message meaning the user doesn't want to delete their
+                        // account
+                        .setNegativeButton("No", null)
+                        .show();
+            }
+        });
+    }
+
+
+    // Delete teh user's account and delete all their
+    // friends
+    private void deleteAccount() {
+        // Ensure no spam activity
+        if (changing == true) {
+            return;
+        }
+        
+        // Set the state as changing
+        changing = true;
+        
+        // Get the user to delete
+        ParseUser user = ParseUser.getCurrentUser();
+
+        // Find all requests in the public queue that pertain to this user
+        ParseQuery<Friend_queue> query_user = new ParseQuery<Friend_queue>(Friend_queue.class);
+        ParseQuery<Friend_queue> query_friend = new ParseQuery<Friend_queue>(Friend_queue.class);
+        query_user.whereEqualTo("user", user);
+        query_friend.whereEqualTo("friend", user);
+        ParseQuery<Friend_queue> query = ParseQuery.or(Arrays.asList(query_user, query_friend));
+        query.findInBackground(new FindCallback<Friend_queue>() {
+            @Override
+            public void done(List<Friend_queue> requests, ParseException e) {
+                // Iterate through all requests and delete
+                for (Friend_queue request : requests) {
+                    try {
+                        request.delete();
+                        request.saveInBackground();
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                // When all the data has been deleted, delete the account
+                user.deleteInBackground(new DeleteCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        // If the user had an issue deleting their account, display a
+                        // message
+                        if (e != null) {
+                            Log.e(TAG, "Unable to delete user", e);
+                            Toast.makeText(requireContext(), "Unable to delete account", Toast.LENGTH_SHORT).show();
+                            changing = false;
+                            return;
+                        }
+
+                        // When the user account has been deleted, log the
+                        // user out
+                        ParseUser.logOutInBackground();
+
+                        // Show a success message
+                        Toast.makeText(requireContext(), "Account deleted", Toast.LENGTH_SHORT).show();
+
+                        // Switch to the login activity
+                        Intent i = new Intent(requireContext(), LoginActivity.class);
+                        requireActivity().startActivity(i);
+                    }
+                });
+            }
+        });
+
+
     }
 
 

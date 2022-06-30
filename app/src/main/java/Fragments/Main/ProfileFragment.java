@@ -49,6 +49,7 @@ import com.parse.SaveCallback;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import Fragments.Friends.FriendsSearchFragment;
 import Fragments.Profile.SettingsFragment;
 
 /**
@@ -226,7 +227,7 @@ public class ProfileFragment extends Fragment {
                     FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
                     // Go back to the Profile fragment
-                    ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
                     HomeFragment_countdown homeFragment = HomeFragment_countdown.newInstance();
 
                     // Add back the profile fragment
@@ -237,15 +238,28 @@ public class ProfileFragment extends Fragment {
                     //((BottomNavigationView)getParentFragment().getView().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
                 }
                 // If mode is 1, go back to the friends page
+                else if (mode == 1) {
+                    // Setup the fragment switch
+                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                    // Go back to the Friends fragment
+                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+
+                    // Add back the Friends fragment
+                    ft.replace(R.id.flContainer, friendsFragment);
+                    ft.commit();
+                }
+                // If mode is 2, go back to the friends page
                 else {
                     // Setup the fragment switch
                     FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
-                    // Go back to the Profile fragment
+                    // Go back to the friends fragment
                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
                     FriendsFragment friendsFragment = FriendsFragment.newInstance();
 
-                    // Add back the profile fragment
+                    // Add back the friends fragment
                     ft.replace(R.id.flContainer, friendsFragment);
                     ft.commit();
                 }
