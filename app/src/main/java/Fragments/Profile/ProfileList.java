@@ -44,6 +44,8 @@ public class ProfileList extends Fragment {
     // Elements in the views
     RecyclerView rvProfileList;
     TextView tvNoAccess;
+    TextView tvBlocked1;
+    TextView tvBlocked2;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -106,12 +108,28 @@ public class ProfileList extends Fragment {
         }
         
         // If the mode is 2 (other user), check if the user has access
-        if (mode == 2) {
+        else if (mode == 2) {
             // If the user doesn't allow other users to see fortunes, set
             // load to false
             if (user.getBoolean("showFortunesUsers") == false) {
                 load = false;
             }
+        }
+
+        // If the mode is 3 (this user blocked by logged in user), the
+        // logged in user cannot access the other users info
+        else if (mode == 3) {
+            load = false;
+            tvBlocked1 = view.findViewById(R.id.tvBlocked1);
+            tvBlocked1.setVisibility(View.VISIBLE);
+        }
+
+        // If the mode is 4 (logged in user block by other user), the
+        // logged in user cannot access the other users info
+        else if (mode == 4) {
+            load = false;
+            tvBlocked2 = view.findViewById(R.id.tvBlocked2);
+            tvBlocked2.setVisibility(View.VISIBLE);
         }
 
         // Load the fortunes if the user has access to do so
@@ -129,8 +147,10 @@ public class ProfileList extends Fragment {
         }
         // If the user doesn't have access to the fortunes, display a message
         else {
-            tvNoAccess = view.findViewById(R.id.tvNoAccess);
-            tvNoAccess.setVisibility(View.VISIBLE);
+            if (mode != 3 && mode != 4) {
+                tvNoAccess = view.findViewById(R.id.tvNoAccess);
+                tvNoAccess.setVisibility(View.VISIBLE);
+            }
         }
     }
 

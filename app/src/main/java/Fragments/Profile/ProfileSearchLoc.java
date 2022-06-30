@@ -55,6 +55,8 @@ public class ProfileSearchLoc extends Fragment {
     TextView tvSearchLocPrompt;
     ProgressBar pbProfileSearchLoc;
     TextView tvNoAccessLoc;
+    TextView tvBlocked1_loc;
+    TextView tvBlocked2_loc;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -133,6 +135,24 @@ public class ProfileSearchLoc extends Fragment {
             if (user.getBoolean("showFortunesUsers") == false) {
                 access = false;
             }
+        }
+
+        // If the mode is 3 (this user blocked by logged in user), the
+        // logged in user cannot access the other users info
+        else if (mode == 3) {
+            tvSearchLocPrompt.setVisibility(View.INVISIBLE);
+            tvBlocked1_loc = view.findViewById(R.id.tvBlocked1_loc);
+            tvBlocked1_loc.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        // If the mode is 4 (logged in user block by other user), the
+        // logged in user cannot access the other users info
+        else if (mode == 4) {
+            tvSearchLocPrompt.setVisibility(View.INVISIBLE);
+            tvBlocked2_loc = view.findViewById(R.id.tvBlocked2_loc);
+            tvBlocked2_loc.setVisibility(View.VISIBLE);
+            return;
         }
 
         // If the user doesn't have access to the fortunes, display a message

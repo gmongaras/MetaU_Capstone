@@ -82,6 +82,8 @@ public class ProfileFragment extends Fragment {
     // 0 - Current user
     // 1 - Friend
     // 2 - Other user
+    // 3 - Other user blocked by logged in user
+    // 4 - Logged in user blocked by other user
     private static final String ARG_MODE = "mode";
     private int mode;
 
@@ -151,38 +153,48 @@ public class ProfileFragment extends Fragment {
 
 
 
-        // Initialize the view pager
-        profileCollectionAdapter = new ProfileCollectionAdapter(ProfileFragment.this, user, mode);
-        pagerProfile = view.findViewById(R.id.pagerProfile);
-        pagerProfile.setAdapter(profileCollectionAdapter);
-
-        // Initialize the tab layout on top of the pager
-        tlProfile = view.findViewById(R.id.tlProfile);
-        tlProfile.addTab(tlProfile.newTab().setText("Fortune List"));
-        tlProfile.addTab(tlProfile.newTab().setText("Text Search"));
-        tlProfile.addTab(tlProfile.newTab().setText("Location Search"));
-        tlProfile.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                pagerProfile.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        pagerProfile.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                tlProfile.selectTab(tlProfile.getTabAt(position));
-            }
-        });
+        // If the mode is 0 or 1, load the profile information immediately
+        // as we know the user accessing the information is not blocked
+        if (mode == 0 || mode == 1) {
+            setupInfo(view);
+        }
+        // If the mode is 2, check if the user is blocked
+        else {
+            ParseRelation<ParseUser> rel = ParseUser.getCurrentUser().getRelation("Blocked");
+            ParseQuery<ParseUser> query = rel.getQuery();
+            query.whereEqualTo("objectId", user.getObjectId());
+            query.findInBackground(new FindCallback<ParseUser>() {
+                @Override
+                public void done(List<ParseUser> objects, ParseException e) {
+                    // If the number of objects is 0, the other user is
+                    // not blocked by this user
+                    if (objects.size() == 0) {
+                        // Check if the other user blocked the logged in user
+                        ParseRelation<ParseUser> rel = user.getRelation("Blocked");
+                        ParseQuery<ParseUser> query = rel.getQuery();
+                        query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+                        query.findInBackground(new FindCallback<ParseUser>() {
+                            @Override
+                            public void done(List<ParseUser> objects, ParseException e) {
+                                // If the number of objects is 0, then the logged in
+                                // user is not blocked by the other user
+                                if (objects.size() == 0) {
+                                    setupInfo(view);
+                                }
+                                else {
+                                    mode = 4;
+                                    setupInfo(view);
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        mode = 3;
+                        setupInfo(view);
+                    }
+                }
+            });
+        }
 
 
 
@@ -273,6 +285,44 @@ public class ProfileFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+    }
+
+
+
+    // Setup the information in the user menu
+    private void setupInfo(View view) {
+        // Initialize the view pager
+        profileCollectionAdapter = new ProfileCollectionAdapter(ProfileFragment.this, user, mode);
+        pagerProfile = view.findViewById(R.id.pagerProfile);
+        pagerProfile.setAdapter(profileCollectionAdapter);
+
+        // Initialize the tab layout on top of the pager
+        tlProfile = view.findViewById(R.id.tlProfile);
+        tlProfile.addTab(tlProfile.newTab().setText("Fortune List"));
+        tlProfile.addTab(tlProfile.newTab().setText("Text Search"));
+        tlProfile.addTab(tlProfile.newTab().setText("Location Search"));
+        tlProfile.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                pagerProfile.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        pagerProfile.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                tlProfile.selectTab(tlProfile.getTabAt(position));
+            }
+        });
     }
 
 

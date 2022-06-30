@@ -53,6 +53,8 @@ public class ProfileSearchText extends Fragment {
     TextView tvSearchTextPrompt;
     ProgressBar pbProfileSearchText;
     TextView tvNoAccessText;
+    TextView tvBlocked1_text;
+    TextView tvBlocked2_text;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -124,12 +126,30 @@ public class ProfileSearchText extends Fragment {
         }
 
         // If the mode is 2 (other user), check if the user has access
-        if (mode == 2) {
+        else if (mode == 2) {
             // If the user doesn't allow other users to see fortunes, set
             // access to false
             if (user.getBoolean("showFortunesUsers") == false) {
                 access = false;
             }
+        }
+
+        // If the mode is 3 (this user blocked by logged in user), the
+        // logged in user cannot access the other users info
+        else if (mode == 3) {
+            tvSearchTextPrompt.setVisibility(View.INVISIBLE);
+            tvBlocked1_text = view.findViewById(R.id.tvBlocked1_text);
+            tvBlocked1_text.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        // If the mode is 4 (logged in user block by other user), the
+        // logged in user cannot access the other users info
+        else if (mode == 4) {
+            tvSearchTextPrompt.setVisibility(View.INVISIBLE);
+            tvBlocked2_text = view.findViewById(R.id.tvBlocked2_text);
+            tvBlocked2_text.setVisibility(View.VISIBLE);
+            return;
         }
 
         // If the user doesn't have access to the fortunes, display a message
