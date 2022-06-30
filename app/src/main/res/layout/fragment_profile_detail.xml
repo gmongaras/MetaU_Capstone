@@ -8,7 +8,7 @@
     tools:context="Fragments.Main.ProfileDetailFragment">
 
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/profileMap"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="200dp"
@@ -28,7 +28,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map"
+        app:layout_constraintTop_toBottomOf="@+id/profileMap"
         tools:text="This is a date" />
 
     <TextView
@@ -43,5 +43,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDate_detail"
         tools:text="This is a fortune" />
+
+    <TextView
+        android:id="@+id/tvNoAccessMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="You do not have access\nto this user's map data"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/profileMap"
+        app:layout_constraintEnd_toEndOf="@+id/profileMap"
+        app:layout_constraintStart_toStartOf="@+id/profileMap"
+        app:layout_constraintTop_toTopOf="@+id/profileMap" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,15 +33,19 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     // User to load the profile for
     ParseUser user;
 
+    // The user mode
+    int mode;
+
     // Used to convert the date
     dateFormatter df = new dateFormatter();
 
     // Constructor to create the adapter with context and a list
-    public ProfileAdapter(List<Fortune> fortunes, ParseUser user, Context context, FragmentManager manager) {
+    public ProfileAdapter(List<Fortune> fortunes, ParseUser user, Context context, FragmentManager manager, int mode) {
         this.fortunes = fortunes;
         this.user = user;
         this.context = context;
         fragmentManager = manager;
+        this.mode = mode;
     }
 
     @NonNull
@@ -71,7 +75,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
                 // Create the fragment with paramters
                 ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune, user);
+                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune, user, mode);
 
                 // Change the fragment
                 ft.replace(R.id.flContainer, fragmentProfileDetail);
