@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +29,8 @@ import com.parse.SaveCallback;
 import java.util.List;
 import java.util.Objects;
 
+import Fragments.Main.ProfileFragment;
+
 public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdapter.ViewHolder> {
     private static final String TAG = "FriendsSearchAdapter";
 
@@ -36,6 +39,9 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
     // Fragment manager for the home fragment
     FragmentManager fragmentManager;
+
+    // User mode
+    int mode;
 
     Context context;
 
@@ -63,20 +69,43 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         // Bind the post to the view holder
         holder.bind(friend);
 
+        // Default mode is 2
+        mode = 2;
+
+        // Get the mode of the current user. Is it a friend (1) or another user (2)?
+        ParseRelation<ParseUser> friends = ParseUser.getCurrentUser().getRelation("friends");
+        ParseQuery<ParseUser> q = friends.getQuery();
+        q.whereEqualTo("objectId", friend.getObjectId());
+        q.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+
+                // If the objects are empty, the user is not a friend, so the mode is 2.
+                if (objects.size() == 0) {
+                    mode = 2;
+                }
+                else {
+                    mode = 1;
+                }
+
+                // Set the click listener with the proper mode
+            }
+        });
+
         // Put an onClick listener on the view to go into the detailed view
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                // Setup the fragment switch
-//                FragmentTransaction ft = fragmentManager.beginTransaction();
-//
-//                // Create the fragment with paramters
-//                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune);
-//
-//                // Change the fragment
-//                ft.replace(R.id.flContainer, fragmentProfileDetail);
-//                ft.commit();
-                return;
+                // Setup the fragment switch
+                FragmentTransaction ft = fragmentManager.beginTransaction();
+
+                // Create the fragment with paramters
+                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                ProfileFragment fragmentProfile = ProfileFragment.newInstance(friend, mode);
+
+                // Change the fragment
+                ft.replace(R.id.flContainer, fragmentProfile);
+                ft.commit();
             }
         });
     }

@@ -77,6 +77,7 @@ public class ProfileFragment extends Fragment {
     // What mode should the profile be put in?
     // 0 - Current user
     // 1 - Friend
+    // 2 - Other user
     private static final String ARG_MODE = "mode";
     private int mode;
 
