@@ -89,9 +89,6 @@ public class FriendsSearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            //queryText = getArguments().getString(ARG_QUERY_TEXT);
-        }
     }
 
     @Override
@@ -201,17 +198,6 @@ public class FriendsSearchFragment extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 pbFriends.setVisibility(View.INVISIBLE);
-
-                // Setup the fragment switch
-//                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
-//
-//                // Go back to the Friends fragment
-//                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-//                FriendsListFragment listFragment = FriendsListFragment.newInstance("a", "b");
-//
-//                // Add back the friends fragment
-//                ft.replace(R.id.fragmentFriends, listFragment);
-//                ft.commit();
 
                 // Change the fragment to the list fragment
                 try {

@@ -153,48 +153,8 @@ public class ProfileFragment extends Fragment {
 
 
 
-        // If the mode is 0 or 1, load the profile information immediately
-        // as we know the user accessing the information is not blocked
-        if (mode == 0 || mode == 1) {
-            setupInfo(view);
-        }
-        // If the mode is 2, check if the user is blocked
-        else {
-            ParseRelation<ParseUser> rel = ParseUser.getCurrentUser().getRelation("Blocked");
-            ParseQuery<ParseUser> query = rel.getQuery();
-            query.whereEqualTo("objectId", user.getObjectId());
-            query.findInBackground(new FindCallback<ParseUser>() {
-                @Override
-                public void done(List<ParseUser> objects, ParseException e) {
-                    // If the number of objects is 0, the other user is
-                    // not blocked by this user
-                    if (objects.size() == 0) {
-                        // Check if the other user blocked the logged in user
-                        ParseRelation<ParseUser> rel = user.getRelation("Blocked");
-                        ParseQuery<ParseUser> query = rel.getQuery();
-                        query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-                        query.findInBackground(new FindCallback<ParseUser>() {
-                            @Override
-                            public void done(List<ParseUser> objects, ParseException e) {
-                                // If the number of objects is 0, then the logged in
-                                // user is not blocked by the other user
-                                if (objects.size() == 0) {
-                                    setupInfo(view);
-                                }
-                                else {
-                                    mode = 4;
-                                    setupInfo(view);
-                                }
-                            }
-                        });
-                    }
-                    else {
-                        mode = 3;
-                        setupInfo(view);
-                    }
-                }
-            });
-        }
+        // Setup the user info
+        setupInfo(view);
 
 
 
