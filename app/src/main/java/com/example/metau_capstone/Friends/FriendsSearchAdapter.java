@@ -40,9 +40,6 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
     // Fragment manager for the home fragment
     FragmentManager fragmentManager;
 
-    // User mode
-    int mode;
-
     Context context;
 
     public FriendsSearchAdapter(List<ParseUser> users, Context context, FragmentManager fragmentManager) {
@@ -70,7 +67,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         holder.bind(friend);
 
         // Default mode is 2
-        mode = 2;
+        holder.mode = 2;
 
         // Get the mode of the current user. Is it a friend (1) or another user (2)?
         ParseRelation<ParseUser> friends = ParseUser.getCurrentUser().getRelation("friends");
@@ -82,13 +79,45 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
                 // If the objects are empty, the user is not a friend, so the mode is 2.
                 if (objects.size() == 0) {
-                    mode = 2;
+                    ParseRelation<ParseUser> rel = ParseUser.getCurrentUser().getRelation("Blocked");
+                    ParseQuery<ParseUser> query = rel.getQuery();
+                    query.whereEqualTo("objectId", friend.getObjectId());
+                    query.findInBackground(new FindCallback<ParseUser>() {
+                        @Override
+                        public void done(List<ParseUser> objects, ParseException e) {
+                            // If the number of objects is 0, the other user is
+                            // not blocked by this user
+                            if (objects.size() == 0) {
+                                // Check if the other user blocked the logged in user
+                                ParseRelation<ParseUser> rel = friend.getRelation("Blocked");
+                                ParseQuery<ParseUser> query = rel.getQuery();
+                                query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+                                query.findInBackground(new FindCallback<ParseUser>() {
+                                    @Override
+                                    public void done(List<ParseUser> objects, ParseException e) {
+                                        // If the number of objects is 0, then the logged in
+                                        // user is not blocked by the other user and is
+                                        // not a friend of the other users
+                                        if (objects.size() == 0) {
+                                            holder.mode = 2;
+                                        }
+                                        else {
+                                            holder.mode = 4;
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                holder.mode = 3;
+                            }
+                        }
+                    });
+
+
                 }
                 else {
-                    mode = 1;
+                    holder.mode = 1;
                 }
-
-                // Set the click listener with the proper mode
             }
         });
 
@@ -101,7 +130,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
                 // Create the fragment with paramters
                 ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                ProfileFragment fragmentProfile = ProfileFragment.newInstance(friend, mode);
+                ProfileFragment fragmentProfile = ProfileFragment.newInstance(friend, holder.mode);
 
                 // Change the fragment
                 ft.replace(R.id.flContainer, fragmentProfile);
@@ -125,12 +154,17 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         Button btnAlreadyFriends;
         Button btnHaveARequest;
         Button btnNotAcceptingFriends;
+        Button btnBlocked;
+        Button btnBlockedBy;
 
         // The current user
         ParseUser curUser;
 
         // Is the user friending someone?
         boolean friending;
+
+        // User mode
+        public int mode;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -144,6 +178,8 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             btnAlreadyFriends = itemView.findViewById(R.id.btnAlreadyFriends);
             btnHaveARequest = itemView.findViewById(R.id.btnHaveARequest);
             btnNotAcceptingFriends = itemView.findViewById(R.id.btnNotAcceptingFriends);
+            btnBlocked = itemView.findViewById(R.id.btnBlocked);
+            btnBlockedBy = itemView.findViewById(R.id.btnBlockedBy);
             friending = false;
 
             // Get the current user
@@ -158,6 +194,8 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             btnHaveARequest.setVisibility(View.INVISIBLE);
             btnSendRequest.setVisibility(View.INVISIBLE);
             btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
+            btnBlockedBy.setVisibility(View.INVISIBLE);
+            btnBlocked.setVisibility(View.INVISIBLE);
 
             // Set the username
             tvFriendUsername_search.setText(friend.getUsername());
@@ -206,72 +244,126 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                             btnSendRequest.setVisibility(View.INVISIBLE);
                             btnHaveARequest.setVisibility(View.INVISIBLE);
                             btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
+                            btnBlockedBy.setVisibility(View.INVISIBLE);
+                            btnBlocked.setVisibility(View.INVISIBLE);
                             btnAlreadyFriends.setVisibility(View.VISIBLE);
                             return;
                         }
                     }
 
-                    // If the other user is not in the friends list, check if
-                    // the user is in the requests list
-                    ParseRelation<ParseUser> requests = curUser.getRelation("friend_requests");
-                    ParseQuery<ParseUser> requests_query = requests.getQuery();
-                    requests_query.whereEqualTo("objectId", friend.getObjectId());
-                    requests_query.findInBackground(new FindCallback<ParseUser>() {
+                    ParseRelation<ParseUser> rel = ParseUser.getCurrentUser().getRelation("Blocked");
+                    ParseQuery<ParseUser> query = rel.getQuery();
+                    query.whereEqualTo("objectId", friend.getObjectId());
+                    query.findInBackground(new FindCallback<ParseUser>() {
                         @Override
                         public void done(List<ParseUser> objects, ParseException e) {
-                            // If the list is not empty, then there is a request
-                            if (objects.size() > 0) {
+                            // If the number of objects is 0, the other user is
+                            // not blocked by this user
+                            if (objects.size() == 0) {
+                                // Check if the other user blocked the logged in user
+                                ParseRelation<ParseUser> rel = friend.getRelation("Blocked");
+                                ParseQuery<ParseUser> query = rel.getQuery();
+                                query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+                                query.findInBackground(new FindCallback<ParseUser>() {
+                                    @Override
+                                    public void done(List<ParseUser> objects, ParseException e) {
+                                        // If the number of objects is 0, then the logged in
+                                        // user is not blocked by the other user and is
+                                        // not a friend of the other users
+                                        if (objects.size() == 0) {
+                                            // If the other user is not in the friends list and not blocked,
+                                            // check if the user is in the requests list
+                                            ParseRelation<ParseUser> requests = curUser.getRelation("friend_requests");
+                                            ParseQuery<ParseUser> requests_query = requests.getQuery();
+                                            requests_query.whereEqualTo("objectId", friend.getObjectId());
+                                            requests_query.findInBackground(new FindCallback<ParseUser>() {
+                                                @Override
+                                                public void done(List<ParseUser> objects, ParseException e) {
+                                                    // If the list is not empty, then there is a request
+                                                    if (objects.size() > 0) {
+                                                        btnRemoveRequest.setVisibility(View.INVISIBLE);
+                                                        btnAlreadyFriends.setVisibility(View.INVISIBLE);
+                                                        btnSendRequest.setVisibility(View.INVISIBLE);
+                                                        btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
+                                                        btnBlockedBy.setVisibility(View.INVISIBLE);
+                                                        btnBlocked.setVisibility(View.INVISIBLE);
+                                                        btnHaveARequest.setVisibility(View.VISIBLE);
+                                                        return;
+                                                    }
+
+                                                    // If the other user is not in the friend_requests list
+                                                    // or the friends list, check if they are in the
+                                                    // sent_requests list meaning a request was sent to
+                                                    // the other user
+                                                    ParseRelation<ParseUser> sent = curUser.getRelation("sent_requests");
+                                                    ParseQuery<ParseUser> sent_query = sent.getQuery();
+                                                    sent_query.whereEqualTo("objectId", friend.getObjectId());
+                                                    sent_query.findInBackground(new FindCallback<ParseUser>() {
+                                                        @Override
+                                                        public void done(List<ParseUser> objects, ParseException e) {
+                                                            // If an object exists, then the other user has a request
+                                                            // sent to them, so allow the user to remove that request
+                                                            if (objects.size() > 0) {
+                                                                btnAlreadyFriends.setVisibility(View.INVISIBLE);
+                                                                btnHaveARequest.setVisibility(View.INVISIBLE);
+                                                                btnSendRequest.setVisibility(View.INVISIBLE);
+                                                                btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
+                                                                btnBlockedBy.setVisibility(View.INVISIBLE);
+                                                                btnBlocked.setVisibility(View.INVISIBLE);
+                                                                btnRemoveRequest.setVisibility(View.VISIBLE);
+                                                                return;
+                                                            }
+
+                                                            // If the user is not accepting requests, show
+                                                            // the proper button
+                                                            if (friend.getBoolean("friendable") == false) {
+                                                                btnAlreadyFriends.setVisibility(View.INVISIBLE);
+                                                                btnHaveARequest.setVisibility(View.INVISIBLE);
+                                                                btnSendRequest.setVisibility(View.INVISIBLE);
+                                                                btnRemoveRequest.setVisibility(View.INVISIBLE);
+                                                                btnBlockedBy.setVisibility(View.INVISIBLE);
+                                                                btnBlocked.setVisibility(View.INVISIBLE);
+                                                                btnNotAcceptingFriends.setVisibility(View.VISIBLE);
+                                                                return;
+                                                            }
+
+                                                            // If the user has no special properties, show the
+                                                            // send request button
+                                                            btnRemoveRequest.setVisibility(View.INVISIBLE);
+                                                            btnAlreadyFriends.setVisibility(View.INVISIBLE);
+                                                            btnHaveARequest.setVisibility(View.INVISIBLE);
+                                                            btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
+                                                            btnBlockedBy.setVisibility(View.INVISIBLE);
+                                                            btnBlocked.setVisibility(View.INVISIBLE);
+                                                            btnSendRequest.setVisibility(View.VISIBLE);
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            btnRemoveRequest.setVisibility(View.INVISIBLE);
+                                            btnAlreadyFriends.setVisibility(View.INVISIBLE);
+                                            btnHaveARequest.setVisibility(View.INVISIBLE);
+                                            btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
+                                            btnBlocked.setVisibility(View.INVISIBLE);
+                                            btnBlockedBy.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+                                });
+                            }
+                            else {
                                 btnRemoveRequest.setVisibility(View.INVISIBLE);
                                 btnAlreadyFriends.setVisibility(View.INVISIBLE);
-                                btnSendRequest.setVisibility(View.INVISIBLE);
+                                btnHaveARequest.setVisibility(View.INVISIBLE);
                                 btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
-                                btnHaveARequest.setVisibility(View.VISIBLE);
-                                return;
+                                btnBlockedBy.setVisibility(View.INVISIBLE);
+                                btnBlocked.setVisibility(View.VISIBLE);
                             }
-
-                            // If the other user is not in the friend_requests list
-                            // or the friends list, check if they are in the
-                            // sent_requests list meaning a request was sent to
-                            // the other user
-                            ParseRelation<ParseUser> sent = curUser.getRelation("sent_requests");
-                            ParseQuery<ParseUser> sent_query = sent.getQuery();
-                            sent_query.whereEqualTo("objectId", friend.getObjectId());
-                            sent_query.findInBackground(new FindCallback<ParseUser>() {
-                                @Override
-                                public void done(List<ParseUser> objects, ParseException e) {
-                                    // If an object exists, then the other user has a request
-                                    // sent to them, so allow the user to remove that request
-                                    if (objects.size() > 0) {
-                                        btnAlreadyFriends.setVisibility(View.INVISIBLE);
-                                        btnHaveARequest.setVisibility(View.INVISIBLE);
-                                        btnSendRequest.setVisibility(View.INVISIBLE);
-                                        btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
-                                        btnRemoveRequest.setVisibility(View.VISIBLE);
-                                        return;
-                                    }
-
-                                    // If the user is not accepting requests, show
-                                    // the proper button
-                                    if (friend.getBoolean("friendable") == false) {
-                                        btnAlreadyFriends.setVisibility(View.INVISIBLE);
-                                        btnHaveARequest.setVisibility(View.INVISIBLE);
-                                        btnSendRequest.setVisibility(View.INVISIBLE);
-                                        btnRemoveRequest.setVisibility(View.INVISIBLE);
-                                        btnNotAcceptingFriends.setVisibility(View.VISIBLE);
-                                        return;
-                                    }
-
-                                    // If the user has no special properties, show the
-                                    // send request button
-                                    btnRemoveRequest.setVisibility(View.INVISIBLE);
-                                    btnAlreadyFriends.setVisibility(View.INVISIBLE);
-                                    btnHaveARequest.setVisibility(View.INVISIBLE);
-                                    btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
-                                    btnSendRequest.setVisibility(View.VISIBLE);
-                                }
-                            });
                         }
                     });
+
+
                 }
             });
 
