@@ -399,46 +399,100 @@ public class ProfileFragment extends Fragment {
 
 
     private void showOtherUserMenu(View v) {
-        // Show the popup menu
-        PopupMenu popup = new PopupMenu(requireContext(), v);
-        MenuInflater inflater = popup.getMenuInflater();
-        popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));
-        inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
-        popup.show();
-
-        // Add an on click listener for the menu items
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        // Is the user blocked?
+        ParseRelation<ParseUser> rel = ParseUser.getCurrentUser().getRelation("Blocked");
+        ParseQuery<ParseUser> query = rel.getQuery();
+        query.whereEqualTo("objectId", user.getObjectId());
+        query.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                // If the item is block, block the user
-                if (item.getItemId() == 1) {
-                    // Show a prompt to confirm if the user wants to block the other user
-                    new AlertDialog.Builder(requireContext())
-                            .setTitle("Block this user?")
-                            .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "?")
-
-                            // If the user clicks yes, block the user
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    // Block the user
-                                    block();
-
-                                }
-                            })
-
-                            // If the user clicks no, do nothing
-                            .setNegativeButton("No", null)
-                            .show();
-
-                    return true;
+            public void done(List<ParseUser> objects, ParseException e) {
+                // If the objects list has an item in it, the other user is blocked,
+                // otherwise the other user is not blocked
+                boolean blocked = false;
+                if (objects.size() != 0) {
+                    blocked = true;
                 }
 
-                return false;
-            };
+
+                // Show the popup menu
+                PopupMenu popup = new PopupMenu(requireContext(), v);
+                MenuInflater inflater = popup.getMenuInflater();
+                if (blocked == false) {
+                    popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));
+                }
+                else {
+                    popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Unblock"));
+                }
+                inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
+                popup.show();
+
+                // Add an on click listener for the menu items
+                boolean finalBlocked = blocked;
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // Is the user blocked?
+                        if (finalBlocked) {
+                            // If the item is unblock, unblock the user
+                            if (item.getItemId() == 1) {
+                                // Show a prompt to confirm if the user wants to unblock the other user
+                                new AlertDialog.Builder(requireContext())
+                                        .setTitle("Unblock this user?")
+                                        .setMessage("Are you sure you want to unblock " + tvUsername.getText().toString() + "?")
+
+                                        // If the user clicks yes, unblock the user
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                // unblock the user
+                                                unblock();
+
+                                            }
+                                        })
+
+                                        // If the user clicks no, do nothing
+                                        .setNegativeButton("No", null)
+                                        .show();
+
+                                return true;
+                            }
+
+                            return false;
+                        }
+                        else {
+                            // If the item is block, block the user
+                            if (item.getItemId() == 1) {
+                                // Show a prompt to confirm if the user wants to block the other user
+                                new AlertDialog.Builder(requireContext())
+                                        .setTitle("Block this user?")
+                                        .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "?")
+
+                                        // If the user clicks yes, block the user
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                // Block the user
+                                                block();
+
+                                            }
+                                        })
+
+                                        // If the user clicks no, do nothing
+                                        .setNegativeButton("No", null)
+                                        .show();
+
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    }
 
 
+                });
+            }
         });
     }
 
@@ -542,6 +596,43 @@ public class ProfileFragment extends Fragment {
                 }
                 else {
                     Toast.makeText(requireContext(), "Unable to block user", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
+
+    // unblock a user
+    private void unblock() {
+        // Get the relational blocked user data
+        ParseRelation<ParseUser> rel = ParseUser.getCurrentUser().getRelation("Blocked");
+
+        // Remove the other user from the list
+        rel.remove(user);
+
+        // Save the new blocked list
+        ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(requireContext(), "User unblocked", Toast.LENGTH_SHORT).show();
+
+                    // Go back to the friend fragment
+
+                    // Setup the fragment switch
+                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                    // Go back to the friends fragment
+                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+
+                    // Add back the friends fragment
+                    ft.replace(R.id.flContainer, friendsFragment);
+                    ft.commit();
+                }
+                else {
+                    Toast.makeText(requireContext(), "Unable to unblock user", Toast.LENGTH_SHORT).show();
                 }
             }
         });
