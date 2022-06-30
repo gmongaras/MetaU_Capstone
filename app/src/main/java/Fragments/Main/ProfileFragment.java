@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.Profile.ProfileCollectionAdapter;
@@ -51,6 +52,7 @@ import com.parse.SaveCallback;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import Fragments.Friends.FriendsSearchFragment;
 import Fragments.Profile.SettingsFragment;
@@ -477,7 +479,7 @@ public class ProfileFragment extends Fragment {
                                 // Show a prompt to confirm if the user wants to block the other user
                                 new AlertDialog.Builder(requireContext())
                                         .setTitle("Block this user?")
-                                        .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "?")
+                                        .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "?\nBlocking will remove all liked fortunes between both users.")
 
                                         // If the user clicks yes, block the user
                                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -554,7 +556,7 @@ public class ProfileFragment extends Fragment {
         // Show a prompt to confirm if the user wants to block a friend
         new AlertDialog.Builder(requireContext())
                 .setTitle("Block this user?")
-                .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "?\nBlocking will also unfriend them.")
+                .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "?\nBlocking will also unfriend them and remove all liked fortunes between you two.")
 
                 // If the user clicks yes, block this friend
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -585,25 +587,85 @@ public class ProfileFragment extends Fragment {
         // Add the other to the blocked list
         rel.add(user);
 
+        // Get the current user
+        ParseUser curUser = ParseUser.getCurrentUser();
+
         // Save the new blocked user
         ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(requireContext(), "User blocked", Toast.LENGTH_SHORT).show();
+                    // Remove all liked fortunes from the logged in user -->
 
-                    // Go back to the friend fragment
+                    // Query for all liked fortunes
+                    ParseRelation<Fortune> rel = curUser.getRelation("liked");
+                    ParseQuery<Fortune> query = rel.getQuery();
+                    query.findInBackground(new FindCallback<Fortune>() {
+                        @Override
+                        public void done(List<Fortune> liked, ParseException e) {
+                            // Iterate over all fortunes and remove the ones
+                            // that belong to the other user
+                            for (Fortune f : liked) {
+                                if (Objects.equals(f.getUser().getObjectId(), user.getObjectId())) {
+                                    // Remove the fortune
+                                    rel.remove(f);
 
-                    // Setup the fragment switch
-                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+                                    // Update the like count
+                                    f.put("like_ct", f.getInt("like_ct")-1);
+                                    f.saveInBackground();
+                                }
+                            }
+                            // Save the new relation
+                            curUser.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    // When the logged in user's liked fortunes have been updated,
+                                    // update the other user
 
-                    // Go back to the friends fragment
-                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+                                    // Query for all liked fortunes
+                                    ParseRelation<Fortune> rel = user.getRelation("liked");
+                                    ParseQuery<Fortune> query = rel.getQuery();
+                                    query.findInBackground(new FindCallback<Fortune>() {
+                                        @Override
+                                        public void done(List<Fortune> fortunes, ParseException e) {
+                                            // Iterate over all fortunes and remove the ones
+                                            // that belong to the logged in user
+                                            for (Fortune f : liked) {
+                                                if (Objects.equals(f.getUser().getObjectId(), curUser.getObjectId())) {
+                                                    rel.remove(f);
 
-                    // Add back the friends fragment
-                    ft.replace(R.id.flContainer, friendsFragment);
-                    ft.commit();
+                                                    // Update the like count
+                                                    f.put("like_ct", f.getInt("like_ct")-1);
+                                                    f.saveInBackground();
+                                                }
+                                            }
+
+                                            // Save the updated relation
+                                            user.saveInBackground(new SaveCallback() {
+                                                @Override
+                                                public void done(ParseException e) {
+                                                    // When the users have been updated,
+                                                    // notify the user
+                                                    Toast.makeText(requireContext(), "User blocked", Toast.LENGTH_SHORT).show();
+
+                                                    // Setup the fragment switch
+                                                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+                                                    // Go back to the friends fragment
+                                                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                                                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+
+                                                    // Add back the friends fragment
+                                                    ft.replace(R.id.flContainer, friendsFragment);
+                                                    ft.commit();
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
                 }
                 else {
                     Toast.makeText(requireContext(), "Unable to block user", Toast.LENGTH_SHORT).show();
