@@ -21,6 +21,7 @@ import com.example.metau_capstone.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -28,25 +29,19 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProfileList#newInstance} factory method to
+ * Use the {@link ProfileLikedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileList extends Fragment {
+public class ProfileLikedFragment extends Fragment {
 
-    // Number to skip when loading more posts
-    private int skipVal;
-
-    // Constant number to load each time we want to load more posts
-    private static final int loadRate = 20;
-
-    private static final String TAG = "ProfileList";
+    private static final String TAG = "ProfileLikedFragment";
 
     // Elements in the views
-    RecyclerView rvProfileList;
-    TextView tvNoAccess;
-    TextView tvBlocked1;
-    TextView tvBlocked2;
-    TextView tvNoFortunes;
+    RecyclerView rvProfileLiked;
+    TextView tvNoAccess_liked;
+    TextView tvBlockedLiked1;
+    TextView tvBlockedLiked2;
+    TextView tvNoLiked;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -63,12 +58,12 @@ public class ProfileList extends Fragment {
     private static final String ARG_USER = "user";
     private ParseUser user;
 
-    public ProfileList() {
+    public ProfileLikedFragment() {
         // Required empty public constructor
     }
 
-    public static ProfileList newInstance(ParseUser user, int mode) {
-        ProfileList fragment = new ProfileList();
+    public static ProfileLikedFragment newInstance(ParseUser user, int mode) {
+        ProfileLikedFragment fragment = new ProfileLikedFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_USER, user);
         args.putInt(ARG_INT, mode);
@@ -89,14 +84,14 @@ public class ProfileList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_list, container, false);
+        return inflater.inflate(R.layout.fragment_profile_liked, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tvNoFortunes = view.findViewById(R.id.tvNoFortunes);
+        tvNoLiked = view.findViewById(R.id.tvNoLiked);
 
         // Should the fortunes be loaded
         boolean load = true;
@@ -109,7 +104,7 @@ public class ProfileList extends Fragment {
                 load = false;
             }
         }
-        
+
         // If the mode is 2 (other user), check if the user has access
         else if (mode == 2) {
             // If the user doesn't allow other users to see fortunes, set
@@ -123,69 +118,53 @@ public class ProfileList extends Fragment {
         // logged in user cannot access the other users info
         else if (mode == 3) {
             load = false;
-            tvBlocked1 = view.findViewById(R.id.tvBlocked1);
-            tvBlocked1.setVisibility(View.VISIBLE);
+            tvBlockedLiked1 = view.findViewById(R.id.tvBlockedLiked2);
+            tvBlockedLiked1.setVisibility(View.VISIBLE);
         }
 
         // If the mode is 4 (logged in user block by other user), the
         // logged in user cannot access the other users info
         else if (mode == 4) {
             load = false;
-            tvBlocked2 = view.findViewById(R.id.tvBlocked2);
-            tvBlocked2.setVisibility(View.VISIBLE);
+            tvBlockedLiked2 = view.findViewById(R.id.tvBlockedLiked2);
+            tvBlockedLiked2.setVisibility(View.VISIBLE);
         }
 
         // Load the fortunes if the user has access to do so
         if (load == true) {
-            skipVal = 0;
 
             // Get the elements
-            rvProfileList = view.findViewById(R.id.rvProfileLiked);
+            rvProfileLiked = view.findViewById(R.id.rvProfileLiked);
 
             // Initialize the fortunes
             Fortunes = new ArrayList<>();
 
-            // Load in the fortunes
-            queryFortunes();
+            // Load in the liked fortunes
+            queryLiked();
         }
         // If the user doesn't have access to the fortunes, display a message
         else {
             if (mode != 3 && mode != 4) {
-                tvNoAccess = view.findViewById(R.id.tvNoAccess);
-                tvNoAccess.setVisibility(View.VISIBLE);
+                tvNoAccess_liked = view.findViewById(R.id.tvNoAccess_liked);
+                tvNoAccess_liked.setVisibility(View.VISIBLE);
             }
         }
     }
 
 
-
     // Get fortunes the user owns
-    private void queryFortunes() {
-        // Specify which class to query
-        ParseQuery<Fortune> query = ParseQuery.getQuery(Fortune.class);
+    private void queryLiked() {
+        // Get the liked relation and the query for it
+        ParseRelation<Fortune> rel = user.getRelation("liked");
+        ParseQuery<Fortune> query = rel.getQuery();
 
-        // Include data from the user table
-        query.include(Fortune.KEY_USER);
-
-        // Get only this user's fortunes
-        query.whereEqualTo("user", user);
-
-        // Have the newest fortunes on top
-        query.orderByDescending(Fortune.KEY_TIME_CREATED);
-
-        // Skip some fortunes that have already been loaded
-        query.setSkip(skipVal*loadRate);
-
-        // Set the limit to loadRate
-        query.setLimit(loadRate);
-
-        // Find all the fortunes the user owns
+        // Query for all liked fortunes
         query.findInBackground(new FindCallback<Fortune>() {
             @Override
             public void done(List<Fortune> objects, ParseException e) {
                 // If an error occurred, log an error
                 if (e != null) {
-                    Log.e(TAG, "Issue retrieving all posts", e);
+                    Log.e(TAG, "Issue retrieving all fortunes", e);
                     return;
                 }
 
@@ -193,47 +172,31 @@ public class ProfileList extends Fragment {
                 Fortunes.addAll(objects);
 
                 // Setup the recycler view if it isn't setup
-                if (rvProfileList.getAdapter() == null) {
+                if (rvProfileLiked.getAdapter() == null) {
 
                     // If the list is empty, show some text stating that
                     if (objects.size() == 0) {
-                        tvNoFortunes.setVisibility(View.VISIBLE);
-                        return;
+                        tvNoLiked.setVisibility(View.VISIBLE);
                     }
                     else {
-                        tvNoFortunes.setVisibility(View.INVISIBLE);
+                        tvNoLiked.setVisibility(View.INVISIBLE);
                     }
 
                     // When the fortunes have been loaded, setup the recycler view -->
                     // Bind the adapter to the recycler view
-                    try {
-                        adapter = new ProfileAdapter(Fortunes, user, getContext(), requireActivity().getSupportFragmentManager(), mode);
-                    }
-                    catch (Exception e2) {
-                        return;
-                    }
-                    rvProfileList.setAdapter(adapter);
+                    adapter = new ProfileAdapter(Fortunes, user, getContext(), requireActivity().getSupportFragmentManager(), mode);
+                    rvProfileLiked.setAdapter(adapter);
 
                     // Configure the Recycler View: Layout Manager
                     layoutManager = new LinearLayoutManager(getContext());
-                    rvProfileList.setLayoutManager(layoutManager);
-
-                    // Used for infinite scrolling
-                    rvProfileList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-                        @Override
-                        public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                            queryFortunes();
-                        }
-                    });
+                    rvProfileLiked.setLayoutManager(layoutManager);
                 }
                 else {
                     // Notify the recycler view adapter of a change in data
                     adapter.notifyDataSetChanged();
                 }
-
-                // Increase the skip value
-                skipVal+=1;
             }
         });
+
     }
 }

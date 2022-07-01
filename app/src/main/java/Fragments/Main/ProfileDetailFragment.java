@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.MapHelper;
 import com.example.metau_capstone.R;
@@ -24,9 +26,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -53,13 +61,23 @@ public class ProfileDetailFragment extends Fragment {
     Fragment profileMap;
     ImageView ivLike;
     ImageView ivShare;
+    TextView tvLikeCt;
 
     // Used to work with the map
     MapHelper mapHelper;
 
+    // ID of the fortune
+    String objectId;
+
     // The user to load the map for
     private static final String ARG_USER = "user";
     private ParseUser user;
+
+    // Is liking happening?
+    boolean liking;
+
+    // Has the fortune been liked?
+    boolean liked;
 
     // Used to load date information
     dateFormatter df = new dateFormatter();
@@ -100,6 +118,12 @@ public class ProfileDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Liking is not happening
+        liking = false;
+
+        // Get the fortune ID
+        objectId = fortune.getObjectId();
+
         // Should the user have map access?
         boolean access = true;
 
@@ -113,7 +137,7 @@ public class ProfileDetailFragment extends Fragment {
         }
 
         // If the mode is 2 (other user), check if the user has access
-        if (mode == 2) {
+        else if (mode == 2) {
             // If the user doesn't allow other users to see their map, set
             // access to false
             if (user.getBoolean("showMapUsers") == false) {
@@ -127,6 +151,7 @@ public class ProfileDetailFragment extends Fragment {
         profileMap = getChildFragmentManager().findFragmentById(R.id.profileMap);
         ivLike = view.findViewById(R.id.ivLike);
         ivShare = view.findViewById(R.id.ivShare);
+        tvLikeCt = view.findViewById(R.id.tvLikeCt);
 
         // Get the fortune information and store it
         tvDate_detail.setText(df.toMonthDayTime(fortune.getCreatedAt()));
@@ -138,6 +163,8 @@ public class ProfileDetailFragment extends Fragment {
             tvNoAccessMap = view.findViewById(R.id.tvNoAccessMap);
             tvNoAccessMap.setVisibility(View.VISIBLE);
             profileMap.getView().setVisibility(View.INVISIBLE);
+            ivLike.setVisibility(View.INVISIBLE);
+            ivShare.setVisibility(View.INVISIBLE);
         }
 
         // If the user has access, load the map
@@ -166,6 +193,134 @@ public class ProfileDetailFragment extends Fragment {
                 Log.e(TAG, "Error - Map Fragment was null!!");
             }
         }
+
+        // Get the user's liked fortunes
+        liking = true;
+        ParseRelation<Fortune> likedRel = ParseUser.getCurrentUser().getRelation("liked");
+        ParseQuery<Fortune> query = likedRel.getQuery();
+        query.whereEqualTo("objectId", objectId);
+        query.findInBackground(new FindCallback<Fortune>() {
+            @Override
+            public void done(List<Fortune> objects, ParseException e) {
+                // If the objects returned is 0, the fortune is not liked
+                if (objects.size() == 0) {
+                    liked = false;
+                }
+                else {
+                    liked = true;
+                }
+
+                // Change the drawable based on the liked state
+                if (liked) {
+                    Glide.with(view.getContext())
+                            .load(R.drawable.like_filled)
+                            .circleCrop()
+                            .into(ivLike);
+                }
+                else {
+                    Glide.with(view.getContext())
+                            .load(R.drawable.like)
+                            .circleCrop()
+                            .into(ivLike);
+                }
+
+
+                // Set the number of likes for the fortune
+                tvLikeCt.setText(String.valueOf(fortune.getInt("like_ct")));
+
+
+                // Add an onClick listener to the like button
+                ivLike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Avoid spamming
+                        if (liking == true) {
+                            return;
+                        }
+                        liking = true;
+
+                        // Get the relation to like/unlike the fortune
+                        ParseRelation<Fortune> rel = ParseUser.getCurrentUser().getRelation("liked");
+
+                        // If the fortune is liked, unlike it
+                        if (liked) {
+                            rel.remove(fortune);
+                        }
+                        else {
+                            rel.add(fortune);
+                        }
+
+                        // Save the new relation
+                        ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                // If an error happened, notify the user and don't change
+                                // the image
+                                if (e != null) {
+                                    Log.e(TAG, "Unable to like/unlike fortune", e);
+                                    Toast.makeText(requireContext(), "Unable to like/unlike fortune", Toast.LENGTH_SHORT).show();
+
+                                    // Liking is no longer happening
+                                    liking = false;
+
+                                    return;
+                                }
+
+                                // If an error didn't happen, increase the like count
+                                int ct = Integer.parseInt(tvLikeCt.getText().toString());
+                                if (liked) {
+                                    ct -= 1;
+                                    fortune.put("like_ct", ct);
+                                }
+                                else {
+                                    ct += 1;
+                                    fortune.put("like_ct", ct);
+                                }
+
+                                // Save the like count
+                                int finalCt = ct;
+                                fortune.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        // If an error occured, don't change the like count
+                                        if (e != null) {
+                                            Log.e(TAG, "Unable to change like count", e);
+                                            Toast.makeText(requireContext(), "Unable to change like count", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        // Change the image of the like button
+                                        if (liked) {
+                                            Glide.with(view.getContext())
+                                                    .load(R.drawable.like)
+                                                    .circleCrop()
+                                                    .into(ivLike);
+                                        }
+                                        else {
+                                            Glide.with(view.getContext())
+                                                    .load(R.drawable.like_filled)
+                                                    .circleCrop()
+                                                    .into(ivLike);
+                                        }
+
+
+                                        // Change the like count
+                                        tvLikeCt.setText(String.valueOf(finalCt));
+
+                                        // Change the liked state
+                                        liked = !liked;
+
+                                        // Liking is no longer happening
+                                        liking = false;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+                liking = false;
+            }
+        });
 
         // Handle clicks on the share button
         ivShare.setOnClickListener(new View.OnClickListener() {
