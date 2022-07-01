@@ -29,6 +29,7 @@ import com.parse.SaveCallback;
 import java.util.List;
 import java.util.Objects;
 
+import Fragments.Main.FriendsFragment;
 import Fragments.Main.ProfileFragment;
 
 public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdapter.ViewHolder> {

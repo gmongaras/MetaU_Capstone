@@ -1,5 +1,6 @@
 package Fragments.Main;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.metau_capstone.Friends.FriendCollectionAdapter;
 import com.example.metau_capstone.R;
 import com.google.android.material.tabs.TabLayout;
+import com.parse.ParseQuery;
 
 import Fragments.Friends.FriendsListFragment;
 import Fragments.Friends.FriendsRequestFragment;
@@ -38,22 +41,28 @@ public class FriendsFragment extends Fragment {
     // The current fragment in view
     int curFrag = -1;
 
-    // Position states for the touch gestures
-    int posX = 0;
-    int curPosX = 0;
-    boolean hasMoved = false;
+    // Page to load when initialized
+    private static final String ARG_PAGE = "page";
+    private int page;
 
     public FriendsFragment() {
         // Required empty public constructor
     }
 
-    public static FriendsFragment newInstance() {
-        return new FriendsFragment();
+    public static FriendsFragment newInstance(int page) {
+        FriendsFragment fragment = new FriendsFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_PAGE, page);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            page = getArguments().getInt(ARG_PAGE);
+        }
     }
 
     @Override
@@ -74,8 +83,6 @@ public class FriendsFragment extends Fragment {
         // Setup the page viewer
         setupViewer(view);
     }
-
-
 
     // Setup the information in the user menu
     private void setupViewer(View view) {
@@ -110,6 +117,9 @@ public class FriendsFragment extends Fragment {
                 tlFriends.selectTab(tlFriends.getTabAt(position));
             }
         });
+
+        // Set the default page
+        pagerFriends.setCurrentItem(page, false);
     }
 
 
@@ -117,9 +127,6 @@ public class FriendsFragment extends Fragment {
 
     // Handle fragment changes
     public void changeFrag(int fragVal) {
-        // Start the fragment transition
-        FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
-
         switch (fragVal) {
             // If the menu item clicked is Friends
             case 0:
@@ -154,6 +161,7 @@ public class FriendsFragment extends Fragment {
 
                 // Change the fragment
                 pagerFriends.setCurrentItem(2);
+                int i = 0;
 
                 break;
         }

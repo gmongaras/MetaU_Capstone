@@ -224,20 +224,20 @@ public class ProfileFragment extends Fragment {
 
                     // Go back to the Friends fragment
                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance(0);
 
                     // Add back the Friends fragment
                     ft.replace(R.id.flContainer, friendsFragment);
                     ft.commit();
                 }
-                // If mode is 2, go back to the friends page
+                // If mode is 2, go back to the friends search page
                 else {
                     // Setup the fragment switch
                     FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
                     // Go back to the friends fragment
                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance(2);
 
                     // Add back the friends fragment
                     ft.replace(R.id.flContainer, friendsFragment);
@@ -652,7 +652,7 @@ public class ProfileFragment extends Fragment {
 
                                                     // Go back to the friends fragment
                                                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                                                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+                                                    FriendsFragment friendsFragment = FriendsFragment.newInstance(0);
 
                                                     // Add back the friends fragment
                                                     ft.replace(R.id.flContainer, friendsFragment);
@@ -697,7 +697,7 @@ public class ProfileFragment extends Fragment {
 
                     // Go back to the friends fragment
                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance(0);
 
                     // Add back the friends fragment
                     ft.replace(R.id.flContainer, friendsFragment);
