@@ -54,7 +54,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import Fragments.Friends.FriendsSearchFragment;
 import Fragments.Profile.SettingsFragment;
 
 /**
@@ -255,7 +254,7 @@ public class ProfileFragment extends Fragment {
     private void setupInfo(View view) {
         // Initialize the view pager
         profileCollectionAdapter = new ProfileCollectionAdapter(ProfileFragment.this, user, mode);
-        pagerProfile = view.findViewById(R.id.pagerProfile);
+        pagerProfile = view.findViewById(R.id.pagerFriends);
         pagerProfile.setAdapter(profileCollectionAdapter);
 
         // Initialize the tab layout on top of the pager
