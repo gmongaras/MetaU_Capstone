@@ -25,6 +25,7 @@ import com.example.metau_capstone.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -144,6 +145,42 @@ public class FriendsSearchFragment extends Fragment {
                 querying = true;
 
                 queryUsers(queryText);
+            }
+        });
+
+        // Get queries for all relations for the current user
+        ParseRelation<ParseUser> friends_rel = user.getRelation("friends");
+        ParseQuery<ParseUser> friends_query = friends_rel.getQuery();
+        ParseRelation<ParseUser> requests_rel = user.getRelation("friend_requests");
+        ParseQuery<ParseUser> requests_query = requests_rel.getQuery();
+        ParseRelation<ParseUser> sent_rel = user.getRelation("sent_requests");
+        ParseQuery<ParseUser> sent_query = sent_rel.getQuery();
+        ParseRelation<ParseUser> blocked_rel = user.getRelation("Blocked");
+        ParseQuery<ParseUser> blocked_query = blocked_rel.getQuery();
+
+        // Load in this user's data so that it can be used by the adapter
+        friends_query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                adapter.setFriends(objects);
+            }
+        });
+        requests_query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                adapter.setRequests(objects);
+            }
+        });
+        sent_query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                adapter.setSent(objects);
+            }
+        });
+        blocked_query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                adapter.setBlocked(objects);
             }
         });
 
