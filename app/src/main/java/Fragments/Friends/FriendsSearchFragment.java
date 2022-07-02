@@ -200,14 +200,7 @@ public class FriendsSearchFragment extends Fragment {
                 pbFriends.setVisibility(View.INVISIBLE);
 
                 // Change the fragment to the list fragment
-                try {
-                    ((FriendsFragment) getParentFragmentManager().getFragments().get(0)).changeFrag(0);
-                }
-                catch (Exception e) {
-                    ((FriendsFragment) getParentFragmentManager().getFragments().get(1)).changeFrag(0);
-                }
-
-                //((BottomNavigationView)getActivity().findViewById(R.id.bottomNav)).setSelectedItemId(R.id.action_home);
+                ((FriendsFragment)getParentFragment()).changeFrag(0);
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);

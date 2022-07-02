@@ -11,4 +11,9 @@
         <item name="android:textColor">#00000000</item>
     </style>
 
+    <style name="PopupStyle" parent="Theme.MetaU_Capstone">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:itemBackground">@android:color/white</item>
+    </style>
+
 </resources>

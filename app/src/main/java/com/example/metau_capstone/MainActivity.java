@@ -64,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottomNav);
         flContainer = findViewById(R.id.flContainer);
 
+        try {
+            getSupportActionBar().hide();
+        }
+        catch (Exception e) {
+            Log.i(TAG, "No action bar to hide", e);
+        }
+
 
         // Allow clicks on the Bottom Navigation View
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -232,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Create the fragment with paramters
                 ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right);
-                FriendsFragment fragmentFriends = FriendsFragment.newInstance();
+                FriendsFragment fragmentFriends = FriendsFragment.newInstance(0);
 
                 curFrag = 3;
 

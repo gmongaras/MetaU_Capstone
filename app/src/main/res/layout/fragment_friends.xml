@@ -9,102 +9,31 @@
     android:orientation="vertical"
     tools:context="Fragments.Main.FriendsFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tlFriends"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabIconTint="@color/black"
+        app:tabIndicatorColor="@color/purple_500"
+        app:tabRippleColor="@color/light_grey"
+        app:tabSelectedTextColor="@color/purple_500"
+        app:tabTextColor="@color/black" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnFriends_F"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_margin="0dp"
-            android:backgroundTint="@color/white"
-            android:drawableTop="@drawable/friends_list"
-            android:text="Friends"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnRequests_F"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:rippleColor="@color/very_light_grey"
-            style="?android:attr/borderlessButtonStyle"
-            android:paddingStart="30dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="30dp"
-            android:paddingBottom="10dp"
-            android:background="@drawable/button"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnRequests_F"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:background="@drawable/button"
-            android:backgroundTint="@color/white"
-            android:drawableTop="@drawable/friend_request"
-            android:paddingStart="30dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="30dp"
-            android:paddingBottom="10dp"
-            android:text="Requests"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/btnFriends_F"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btnFriends_F"
-            app:layout_constraintVertical_bias="0.0"
-            app:rippleColor="@color/very_light_grey" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSearch_F"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:drawableTop="@drawable/search"
-            android:text="Search"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/btnRequests_F"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnRequests_F"
-            app:layout_constraintTop_toTopOf="@+id/btnRequests_F"
-            app:rippleColor="@color/very_light_grey"
-            style="?android:attr/borderlessButtonStyle"
-            android:paddingStart="30dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="30dp"
-            android:paddingBottom="10dp"
-            android:background="@drawable/button"/>
-
-        <View
-            android:id="@+id/colored_bar2"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/very_light_grey"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <FrameLayout
-        android:id="@+id/fragmentFriends"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pagerFriends"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/tlFriends">
 
-    </FrameLayout>
+    </androidx.viewpager2.widget.ViewPager2>
 
     <ProgressBar
         android:id="@+id/pbFriends"
@@ -112,9 +41,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/fragmentFriends"
+        app:layout_constraintBottom_toBottomOf="@+id/pagerFriends"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/fragmentFriends"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        app:layout_constraintStart_toStartOf="@+id/pagerFriends"
+        app:layout_constraintTop_toBottomOf="@+id/tlFriends" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

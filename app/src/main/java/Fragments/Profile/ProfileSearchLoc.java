@@ -13,7 +13,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -234,6 +236,42 @@ public class ProfileSearchLoc extends Fragment {
                 }
 
                 return false;
+            }
+        });
+
+
+        // Change the color of the edit texts when text is added and removed
+        svProfileSearchLat.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    ((EditText)v).setBackgroundTintList(getContext().getResources().getColorStateList(R.color.teal_200));
+                }
+                else {
+                    ((EditText)v).setBackgroundTintList(getContext().getResources().getColorStateList(R.color.light_grey));
+                }
+            }
+        });
+        svProfileSearchLng.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    ((EditText)v).setBackgroundTintList(getContext().getResources().getColorStateList(R.color.teal_200));
+                }
+                else {
+                    ((EditText)v).setBackgroundTintList(getContext().getResources().getColorStateList(R.color.light_grey));
+                }
+            }
+        });
+        svProfileSearchDist.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    ((EditText)v).setBackgroundTintList(getContext().getResources().getColorStateList(R.color.teal_200));
+                }
+                else {
+                    ((EditText)v).setBackgroundTintList(getContext().getResources().getColorStateList(R.color.light_grey));
+                }
             }
         });
 

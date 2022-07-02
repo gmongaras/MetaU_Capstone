@@ -1,6 +1,7 @@
 package Fragments.Main;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,7 +56,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import Fragments.Friends.FriendsSearchFragment;
 import Fragments.Profile.SettingsFragment;
 
 /**
@@ -225,20 +226,20 @@ public class ProfileFragment extends Fragment {
 
                     // Go back to the Friends fragment
                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance(0);
 
                     // Add back the Friends fragment
                     ft.replace(R.id.flContainer, friendsFragment);
                     ft.commit();
                 }
-                // If mode is 2, go back to the friends page
+                // If mode is 2, go back to the friends search page
                 else {
                     // Setup the fragment switch
                     FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
                     // Go back to the friends fragment
                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance(2);
 
                     // Add back the friends fragment
                     ft.replace(R.id.flContainer, friendsFragment);
@@ -255,7 +256,7 @@ public class ProfileFragment extends Fragment {
     private void setupInfo(View view) {
         // Initialize the view pager
         profileCollectionAdapter = new ProfileCollectionAdapter(ProfileFragment.this, user, mode);
-        pagerProfile = view.findViewById(R.id.pagerProfile);
+        pagerProfile = view.findViewById(R.id.pagerFriends);
         pagerProfile.setAdapter(profileCollectionAdapter);
 
         // Initialize the tab layout on top of the pager
@@ -305,7 +306,8 @@ public class ProfileFragment extends Fragment {
 
     private void showUserMenu(View v) {
         // Show the popup menu
-        PopupMenu popup = new PopupMenu(requireContext(), v);
+        Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
+        PopupMenu popup = new PopupMenu(wrapper, v);
         popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.settings), "Settings"));
         popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.logout), "Logout"));
         MenuInflater inflater = popup.getMenuInflater();
@@ -357,7 +359,8 @@ public class ProfileFragment extends Fragment {
 
     private void showFriendMenu(View v) {
         // Show the popup menu
-        PopupMenu popup = new PopupMenu(requireContext(), v);
+        Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
+        PopupMenu popup = new PopupMenu(wrapper, v);
         MenuInflater inflater = popup.getMenuInflater();
         popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.unfriend), "Unfriend"));
         popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));
@@ -428,7 +431,8 @@ public class ProfileFragment extends Fragment {
 
 
                 // Show the popup menu
-                PopupMenu popup = new PopupMenu(requireContext(), v);
+                Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
+                PopupMenu popup = new PopupMenu(wrapper, v);
                 MenuInflater inflater = popup.getMenuInflater();
                 if (blocked == false) {
                     popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));
@@ -653,7 +657,7 @@ public class ProfileFragment extends Fragment {
 
                                                     // Go back to the friends fragment
                                                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                                                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+                                                    FriendsFragment friendsFragment = FriendsFragment.newInstance(0);
 
                                                     // Add back the friends fragment
                                                     ft.replace(R.id.flContainer, friendsFragment);
@@ -698,7 +702,7 @@ public class ProfileFragment extends Fragment {
 
                     // Go back to the friends fragment
                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                    FriendsFragment friendsFragment = FriendsFragment.newInstance();
+                    FriendsFragment friendsFragment = FriendsFragment.newInstance(0);
 
                     // Add back the friends fragment
                     ft.replace(R.id.flContainer, friendsFragment);

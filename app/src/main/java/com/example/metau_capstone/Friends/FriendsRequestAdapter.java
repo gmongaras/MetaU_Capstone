@@ -65,23 +65,6 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
         // Bind the post to the view holder
         holder.bind(request);
-
-        // Put an onClick listener on the view to go into the detailed view
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                // Setup the fragment switch
-//                FragmentTransaction ft = fragmentManager.beginTransaction();
-//
-//                // Create the fragment with paramters
-//                ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune);
-//
-//                // Change the fragment
-//                ft.replace(R.id.flContainer, fragmentProfileDetail);
-//                ft.commit();
-                return;
-            }
-        });
     }
 
     @Override
