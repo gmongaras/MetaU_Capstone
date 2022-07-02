@@ -171,13 +171,6 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         ImageView ivFriend_search;
         TextView tvFriendUsername_search;
         TextView tvFriendFortuneCt_search;
-        Button btnSendRequest;
-        Button btnRemoveRequest;
-        Button btnAlreadyFriends;
-        Button btnHaveARequest;
-        Button btnNotAcceptingFriends;
-        Button btnBlocked;
-        Button btnBlockedBy;
         Button btnState;
 
         // The current user
@@ -203,13 +196,6 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             ivFriend_search = itemView.findViewById(R.id.ivFriend_search);
             tvFriendUsername_search = itemView.findViewById(R.id.tvFriendUsername_search);
             tvFriendFortuneCt_search = itemView.findViewById(R.id.tvFriendFortuneCt_search);
-            btnSendRequest = itemView.findViewById(R.id.btnSendRequest);
-            btnRemoveRequest = itemView.findViewById(R.id.btnRemoveRequest);
-            btnAlreadyFriends = itemView.findViewById(R.id.btnAlreadyFriends);
-            btnHaveARequest = itemView.findViewById(R.id.btnHaveARequest);
-            btnNotAcceptingFriends = itemView.findViewById(R.id.btnNotAcceptingFriends);
-            btnBlocked = itemView.findViewById(R.id.btnBlocked);
-            btnBlockedBy = itemView.findViewById(R.id.btnBlockedBy);
             btnState = itemView.findViewById(R.id.btnState);
             friending = false;
 
@@ -222,13 +208,6 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             displayed = false;
 
             // Make all buttons invisible to start
-            btnRemoveRequest.setVisibility(View.INVISIBLE);
-            btnAlreadyFriends.setVisibility(View.INVISIBLE);
-            btnHaveARequest.setVisibility(View.INVISIBLE);
-            btnSendRequest.setVisibility(View.INVISIBLE);
-            btnNotAcceptingFriends.setVisibility(View.INVISIBLE);
-            btnBlockedBy.setVisibility(View.INVISIBLE);
-            btnBlocked.setVisibility(View.INVISIBLE);
             btnState.setVisibility(View.INVISIBLE);
 
             // Set the username

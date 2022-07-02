@@ -163,8 +163,6 @@ public class ProfileDetailFragment extends Fragment {
             tvNoAccessMap = view.findViewById(R.id.tvNoAccessMap);
             tvNoAccessMap.setVisibility(View.VISIBLE);
             profileMap.getView().setVisibility(View.INVISIBLE);
-            ivLike.setVisibility(View.INVISIBLE);
-            ivShare.setVisibility(View.INVISIBLE);
         }
 
         // If the user has access, load the map

@@ -60,20 +60,6 @@
         tools:text="10" />
 
     <Button
-        android:id="@+id/btnSendRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="@color/black"
-        android:text="Send Friend Request"
-        android:textColor="@color/white"
-        android:textSize="10sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <Button
         android:id="@+id/btnState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,89 +72,5 @@
         app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         tools:text="This is a button" />
-
-    <Button
-        android:id="@+id/btnRemoveRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="@color/darker_red"
-        android:text="Remove Friend Request"
-        android:textColor="@color/white"
-        android:textSize="10sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <Button
-        android:id="@+id/btnAlreadyFriends"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="@color/light_grey"
-        android:text="Already Friends!"
-        android:textColor="@color/white"
-        android:textSize="10sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <Button
-        android:id="@+id/btnHaveARequest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="@color/light_grey"
-        android:text="Currently have a request"
-        android:textColor="@color/white"
-        android:textSize="10sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <Button
-        android:id="@+id/btnNotAcceptingFriends"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="@color/light_grey"
-        android:text="User not currently\naccepting friend requests"
-        android:textColor="@color/white"
-        android:textSize="10sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <Button
-        android:id="@+id/btnBlocked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="@color/darker_red"
-        android:text="You blocked this user"
-        android:textColor="@color/white"
-        android:textSize="10sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <Button
-        android:id="@+id/btnBlockedBy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="@color/darker_red"
-        android:text="This user has blocked you"
-        android:textColor="@color/white"
-        android:textSize="10sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
