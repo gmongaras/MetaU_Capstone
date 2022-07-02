@@ -9,7 +9,7 @@
     >
 
 
-    <SearchView
+    <android.widget.SearchView
         android:id="@+id/svProfileSearchText"
         android:layout_width="0dp"
         android:layout_height="50dp"

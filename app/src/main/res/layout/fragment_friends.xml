@@ -17,8 +17,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:tabIconTint="@color/black"
+        app:tabIndicatorColor="@color/purple_500"
+        app:tabRippleColor="@color/light_grey"
         app:tabSelectedTextColor="@color/purple_500"
-        app:tabTextColor="@color/black"/>
+        app:tabTextColor="@color/black" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pagerFriends"

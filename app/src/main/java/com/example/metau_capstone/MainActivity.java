@@ -64,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottomNav);
         flContainer = findViewById(R.id.flContainer);
 
+        try {
+            getSupportActionBar().hide();
+        }
+        catch (Exception e) {
+            Log.i(TAG, "No action bar to hide", e);
+        }
+
 
         // Allow clicks on the Bottom Navigation View
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

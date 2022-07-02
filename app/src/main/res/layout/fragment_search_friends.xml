@@ -8,13 +8,14 @@
     android:orientation="vertical"
     tools:context="Fragments.Friends.FriendsSearchFragment">
 
-    <SearchView
+    <android.widget.SearchView
         android:id="@+id/svProfileSearchText"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
+        android:backgroundTint="@color/teal_200"
         android:closeIcon="@drawable/close"
         android:goIcon="@drawable/go_icon"
         android:inputType="text"
@@ -63,6 +64,7 @@
         android:layout_marginEnd="100dp"
         android:gravity="center_horizontal"
         android:text="Click on the search bar above to search for friends!"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

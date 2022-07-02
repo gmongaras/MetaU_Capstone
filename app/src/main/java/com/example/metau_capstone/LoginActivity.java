@@ -39,6 +39,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        try {
+            getSupportActionBar().hide();
+        }
+        catch (Exception e) {
+            Log.i(TAG, "No action bar to hide", e);
+        }
+
         // If the user is already logged in, go straight to the main activity
         if (ParseUser.getCurrentUser() != null) {
             goMainActivity();

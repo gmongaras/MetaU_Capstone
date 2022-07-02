@@ -1,6 +1,7 @@
 package Fragments.Main;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -98,12 +99,13 @@ public class FriendsFragment extends Fragment {
         tlFriends.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                tab.getIcon().setTint(requireContext().getColor(R.color.purple_500));
                 pagerFriends.setCurrentItem(tab.getPosition());
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                tab.getIcon().setTint(requireContext().getColor(R.color.black));
             }
 
             @Override

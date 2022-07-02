@@ -1,6 +1,7 @@
 package Fragments.Main;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -304,7 +306,8 @@ public class ProfileFragment extends Fragment {
 
     private void showUserMenu(View v) {
         // Show the popup menu
-        PopupMenu popup = new PopupMenu(requireContext(), v);
+        Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
+        PopupMenu popup = new PopupMenu(wrapper, v);
         popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.settings), "Settings"));
         popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.logout), "Logout"));
         MenuInflater inflater = popup.getMenuInflater();
@@ -356,7 +359,8 @@ public class ProfileFragment extends Fragment {
 
     private void showFriendMenu(View v) {
         // Show the popup menu
-        PopupMenu popup = new PopupMenu(requireContext(), v);
+        Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
+        PopupMenu popup = new PopupMenu(wrapper, v);
         MenuInflater inflater = popup.getMenuInflater();
         popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.unfriend), "Unfriend"));
         popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));
@@ -427,7 +431,8 @@ public class ProfileFragment extends Fragment {
 
 
                 // Show the popup menu
-                PopupMenu popup = new PopupMenu(requireContext(), v);
+                Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
+                PopupMenu popup = new PopupMenu(wrapper, v);
                 MenuInflater inflater = popup.getMenuInflater();
                 if (blocked == false) {
                     popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));

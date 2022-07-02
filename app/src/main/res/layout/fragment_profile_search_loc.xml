@@ -73,27 +73,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/light_grey"
             android:ems="10"
             android:hint="Latitude"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textColor="@color/black"
+            android:textColorHint="@color/light_grey" />
 
         <EditText
             android:id="@+id/svProfileSearchLng"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/light_grey"
             android:ems="10"
             android:hint="Longitude"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textColor="@color/black"
+            android:textColorHint="@color/light_grey" />
 
         <EditText
             android:id="@+id/svProfileSearchDist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/light_grey"
             android:ems="10"
             android:hint="Distance (mi)"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textColor="@color/black"
+            android:textColorHint="@color/light_grey" />
     </LinearLayout>
 
     <TextView
