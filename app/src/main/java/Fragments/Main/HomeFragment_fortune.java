@@ -297,7 +297,7 @@ public class HomeFragment_fortune extends Fragment {
         // Create a random array of floats
         Random rand = new Random();
         float[] arr = new float[(int)(Size[0]*Size[1])];
-        for (int i = 0; i < Size[0]; i++) {
+        for (int i = 0; i < Size[0]*Size[1]; i++) {
             arr[i] = rand.nextFloat();
         }
 

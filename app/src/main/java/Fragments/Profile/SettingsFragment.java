@@ -129,6 +129,7 @@ public class SettingsFragment extends Fragment {
             user = ParseUser.getCurrentUser().fetch();
         } catch (ParseException e) {
             e.printStackTrace();
+            user = ParseUser.getCurrentUser();
         }
 
         // Store the user image
