@@ -62,6 +62,7 @@ public class ProfileDetailFragment extends Fragment {
     ImageView ivLike;
     ImageView ivShare;
     TextView tvLikeCt;
+    ImageView ivBack;
 
     // Used to work with the map
     MapHelper mapHelper;
@@ -152,6 +153,7 @@ public class ProfileDetailFragment extends Fragment {
         ivLike = view.findViewById(R.id.ivLike);
         ivShare = view.findViewById(R.id.ivShare);
         tvLikeCt = view.findViewById(R.id.tvLikeCt);
+        ivBack = view.findViewById(R.id.ivBack);
 
         // Get the fortune information and store it
         tvDate_detail.setText(df.toMonthDayTime(fortune.getCreatedAt()));
@@ -349,23 +351,39 @@ public class ProfileDetailFragment extends Fragment {
             }
         });
 
+        // Handle back button presses
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleBackPress();
+                v.setClickable(false);
+            }
+        });
+
         // Handle back button presses so the user doesn't go to the wrong
         // page after they logged in and pressed the back button.
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                // Setup the fragment switch
-                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
-
-                // Go back to the Profile fragment
-                ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                ProfileFragment profileFragment = ProfileFragment.newInstance(user, mode);
-
-                // Add back the profile fragment
-                ft.replace(R.id.flContainer, profileFragment);
-                ft.commit();
+                handleBackPress();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+    }
+
+
+
+    // Handle back button presses
+    private void handleBackPress() {
+        // Setup the fragment switch
+        FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+        // Go back to the Profile fragment
+        ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+        ProfileFragment profileFragment = ProfileFragment.newInstance(user, mode);
+
+        // Add back the profile fragment
+        ft.replace(R.id.flContainer, profileFragment);
+        ft.commit();
     }
 }
