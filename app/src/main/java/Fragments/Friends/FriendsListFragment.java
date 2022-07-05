@@ -98,6 +98,7 @@ public class FriendsListFragment extends Fragment {
         user = ParseUser.getCurrentUser();
 
         // Initialize the friends list
+        skipVal = 0;
         Friends = new ArrayList<>();
 
         // Get the friends

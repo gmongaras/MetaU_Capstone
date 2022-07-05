@@ -545,7 +545,11 @@ public class ProfileFragment extends Fragment {
                             Log.e(TAG, "Unable to send remove request to queue", e);
                         }
                         else {
-                            Toast.makeText(requireActivity(), "User unfriended", Toast.LENGTH_SHORT).show();
+                            try {
+                                Toast.makeText(requireActivity(), "User unfriended", Toast.LENGTH_SHORT).show();
+                            } catch (Exception e2) {
+                                Log.e(TAG, "Page unloaded before unfriending", e);
+                            }
                         }
                     }
                 });

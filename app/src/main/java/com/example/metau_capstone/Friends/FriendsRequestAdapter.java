@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +28,9 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 import java.util.Objects;
+
+import Fragments.Friends.FriendsListFragment;
+import Fragments.Main.FriendsFragment;
 
 public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAdapter.ViewHolder> {
     private static final String TAG = "FriendsRequestAdapter";
@@ -159,6 +163,25 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
                     // Remove the user from the requests
                     removeRequest(curUser, friend, "accept");
+
+                    // Find the friends fragment
+                    FragmentManager FriendsFragManager = null;
+                    for (Fragment frag : fragmentManager.getFragments()) {
+                        if (frag.getClass() == FriendsFragment.class) {
+                            FriendsFragManager = ((FriendsFragment) frag).getChildFragmentManager();
+                            break;
+                        }
+                    }
+
+                    // Find the list fragment and unload it
+                    for (Fragment frag : FriendsFragManager.getFragments()) {
+                        if (frag.getClass() == FriendsListFragment.class) {
+                            FriendsFragManager.beginTransaction().remove(frag).commit();
+                            break;
+                        }
+                    }
+
+
                 }
             });
 

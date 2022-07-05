@@ -2,6 +2,7 @@ package Fragments.Main;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -94,18 +95,25 @@ public class FriendsFragment extends Fragment {
 
         // Initialize the tab layout on top of the pager
         tlFriends.addTab(tlFriends.newTab().setText("Friends").setIcon(R.drawable.friends_list));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            tlFriends.getTabAt(0).getIcon().setTint(requireContext().getColor(R.color.purple_500));
+        }
         tlFriends.addTab(tlFriends.newTab().setText("Requests").setIcon(R.drawable.friend_request));
         tlFriends.addTab(tlFriends.newTab().setText("Search").setIcon(R.drawable.search));
         tlFriends.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                tab.getIcon().setTint(requireContext().getColor(R.color.purple_500));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    tab.getIcon().setTint(requireContext().getColor(R.color.purple_500));
+                }
                 pagerFriends.setCurrentItem(tab.getPosition());
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                tab.getIcon().setTint(requireContext().getColor(R.color.black));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    tab.getIcon().setTint(requireContext().getColor(R.color.black));
+                }
             }
 
             @Override
