@@ -168,9 +168,13 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
                     FragmentManager FriendsFragManager = null;
                     for (Fragment frag : fragmentManager.getFragments()) {
                         if (frag.getClass() == FriendsFragment.class) {
-                            FriendsFragManager = ((FriendsFragment) frag).getChildFragmentManager();
+                            FriendsFragManager = frag.getChildFragmentManager();
                             break;
                         }
+                    }
+
+                    if (FriendsFragManager == null) {
+                        return;
                     }
 
                     // Find the list fragment and unload it

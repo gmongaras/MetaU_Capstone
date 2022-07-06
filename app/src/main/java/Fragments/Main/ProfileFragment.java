@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -56,6 +57,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+import Fragments.Friends.FriendsListFragment;
 import Fragments.Profile.SettingsFragment;
 
 /**
@@ -387,7 +389,7 @@ public class ProfileFragment extends Fragment {
 
                                     // Go back to the friends fragment
                                     FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-                                    ft.replace(R.id.flContainer, new FriendsFragment());
+                                    ft.replace(R.id.flContainer, FriendsFragment.newInstance(0));
                                     ft.commit();
 
                                 }
@@ -402,7 +404,29 @@ public class ProfileFragment extends Fragment {
 
                 // If the item is block, block the friend
                 if (item.getItemId() == 2) {
-                    blockFriend();
+                    // Display an alert dialog to make the user confirm they
+                    // want to block the other user
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle("Unfriend")
+                            .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "? Blocking will also unfriend the other user and will remove all liked fortunes between both users")
+
+                            // If the user clicks yes, block this friend
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    blockFriend();
+
+                                    // Go back to the friends fragment
+                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                                    ft.replace(R.id.flContainer, FriendsFragment.newInstance(0));
+                                    ft.commit();
+
+                                }
+                            })
+
+                            // If the user clicks no, do nothing
+                            .setNegativeButton("No", null)
+                            .show();
 
                     return true;
                 }

@@ -69,11 +69,6 @@ public class FriendsSearchFragment extends Fragment {
     // True if users are being queried, false otherwise
     boolean querying = false;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_QUERY_TEXT = "queryText";
-
-    // TODO: Rename and change types of parameters
     private String queryText;
 
     public FriendsSearchFragment() {
