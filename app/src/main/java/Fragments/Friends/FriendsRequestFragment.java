@@ -149,6 +149,7 @@ public class FriendsRequestFragment extends Fragment {
         ParseUser curUser = ParseUser.getCurrentUser();
         ParseQuery<Friend_queue> q = new ParseQuery<Friend_queue>(Friend_queue.class);
         q.whereEqualTo("user", curUser);
+        q.orderByAscending("createdAt");
         q.findInBackground(new FindCallback<Friend_queue>() {
             @Override
             public void done(List<Friend_queue> new_friends, ParseException e) {

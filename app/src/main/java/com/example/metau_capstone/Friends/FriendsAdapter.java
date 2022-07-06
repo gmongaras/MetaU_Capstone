@@ -29,7 +29,7 @@ import Fragments.Main.ProfileFragment;
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
     // List in the recycler view
-    List<ParseUser> friends;
+    public List<ParseUser> friends;
 
     // Fragment manager for the home fragment
     FragmentManager fragmentManager;
