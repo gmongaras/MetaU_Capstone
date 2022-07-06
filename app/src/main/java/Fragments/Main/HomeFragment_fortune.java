@@ -129,7 +129,7 @@ public class HomeFragment_fortune extends Fragment {
 
         // Load in the dictionary
         try {
-            vocab = loadVocab(assetFilePath(view.getContext(), "vocab.csv"));
+            vocab = loadVocab(assetFilePath(view.getContext(), "vocab2.csv"));
         } catch (IOException e) {
             Log.e(TAG, "Unable to load file", e);
         }
@@ -195,6 +195,7 @@ public class HomeFragment_fortune extends Fragment {
                         // Change the displayed text
                         tvTextPrompt.setText(R.string.promptAfter);
                         tvFortuneText.setText(text.toString());
+                        avCookie.setClickable(false);
                     }
 
                     @Override
@@ -303,7 +304,7 @@ public class HomeFragment_fortune extends Fragment {
     public Tensor generateTensor(long[] Size) {
         // Create a random array of floats
         Random rand = new Random();
-        float[] arr = new float[(int)(Size[0])];
+        double[] arr = new double[(int)(Size[0])];
         for (int i = 0; i < Size[0]; i++) {
             arr[i] = rand.nextFloat();
         }
