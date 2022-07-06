@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,16 +18,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
+import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.Friends.FriendsRequestAdapter;
+import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import Fragments.Main.FriendsFragment;
 
@@ -51,6 +56,7 @@ public class FriendsRequestFragment extends Fragment {
     ProgressBar pbFriends;
 
     // Recycler view stuff
+    private SwipeRefreshLayout swipeContainer;
     LinearLayoutManager layoutManager;
     FriendsRequestAdapter adapter;
 
@@ -59,10 +65,6 @@ public class FriendsRequestFragment extends Fragment {
 
     // Current user logged in
     ParseUser user;
-    // Position states for the touch gestures
-    int posX = 0;
-    int curPosX = 0;
-    boolean hasMoved = false;
 
 
     public FriendsRequestFragment() {
@@ -94,6 +96,7 @@ public class FriendsRequestFragment extends Fragment {
         rvFriendRequests = view.findViewById(R.id.rvFriendRequests);
         tvNoRequests = view.findViewById(R.id.tvNoRequests);
         pbFriends = requireActivity().findViewById(R.id.pbFriends);
+        swipeContainer = view.findViewById(R.id.srlRequests);
 
 
 
@@ -117,10 +120,114 @@ public class FriendsRequestFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+
+
+        // Handle swipe reloads
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Clear out all old requests
+                Requests = new ArrayList<>();
+                skipVal = 0;
+                adapter.requests = new ArrayList<>();
+
+                // Get all new requests
+                updateRequests();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
+
+    // Update the user's requests (and friends while we're at it)
+    public void updateRequests() {
+        ParseUser curUser = ParseUser.getCurrentUser();
+        ParseQuery<Friend_queue> q = new ParseQuery<Friend_queue>(Friend_queue.class);
+        q.whereEqualTo("user", curUser);
+        q.findInBackground(new FindCallback<Friend_queue>() {
+            @Override
+            public void done(List<Friend_queue> new_friends, ParseException e) {
+                // If there are no new friends, skip this function
+                if (new_friends == null || new_friends.size() == 0) {
+                    // When the new users are saved, load them in
+                    getRequests();
+                    return;
+                }
+
+                // Get the relation and add or remove all friends to it
+                ParseRelation<ParseUser> friends = curUser.getRelation("friends");
+                ParseRelation<ParseUser> requests = curUser.getRelation("friend_requests");
+                ParseRelation<ParseUser> sent_requests = curUser.getRelation("sent_requests");
+                for (Friend_queue f : new_friends) {
+                    if (Objects.equals(f.getMode(), "add")) {
+                        friends.add(f.getFriend());
+                    }
+                    else if (Objects.equals(f.getMode(), "request")) {
+                        requests.add(f.getFriend());
+                    }
+                    else if (Objects.equals(f.getMode(), "accept")) {
+                        sent_requests.remove(f.getFriend());
+                    }
+                    else if (Objects.equals(f.getMode(), "rejected")) {
+                        sent_requests.remove(f.getFriend());
+                    }
+                    else if (Objects.equals(f.getMode(), "remove")) {
+                        friends.remove(f.getFriend());
+                    }
+                    else if (Objects.equals(f.getMode(), "remove_request")) {
+                        requests.remove(f.getFriend());
+                    }
+                    f.deleteInBackground();
+                }
+
+                // If any users were updated, update the friends list
+                // as well.
+                for (Fragment frag : getParentFragmentManager().getFragments()) {
+                    if (frag.getClass() == FriendsListFragment.class) {
+                        getParentFragmentManager().beginTransaction().remove(frag).commit();
+                        break;
+                    }
+                }
+
+                // Save the new friends to the user
+                curUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Could not save new friends", e);
+                        }
+                        else {
+                            Log.i(TAG, "Saved new friends");
+                        }
+
+                        // When the new users are saved, load them in
+                        getRequests();
+                    }
+                });
+
+                // Save the new friends
+//                curUser.add("friends", c);
+//                curUser.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(ParseException e) {
+//                        if (e != null) {
+//                            Log.e(TAG, "Error saving new friends", e);
+//                        }
+//                    }
+//                });
+            }
+        });
     }
 
 
     private void getRequests() {
+        swipeContainer.setRefreshing(false);
+
         // Get the query to query the requests
         ParseRelation<ParseUser> requests = user.getRelation("friend_requests");
         ParseQuery<ParseUser> query = requests.getQuery();
@@ -139,13 +246,6 @@ public class FriendsRequestFragment extends Fragment {
                 // Check if there was an exception
                 if (e != null) {
                     Log.e(TAG, "Unable to load requests", e);
-                    return;
-                }
-
-                // If the user has no friends, display a message and don't setup the
-                // recycler view
-                if (requests.size() == 0 && Requests.size() == 0) {
-                    tvNoRequests.setVisibility(View.VISIBLE);
                     return;
                 }
 
@@ -176,7 +276,17 @@ public class FriendsRequestFragment extends Fragment {
                 }
                 else {
                     // Notify the recycler view adapter of a change in data
+                    adapter.requests = Requests;
                     adapter.notifyDataSetChanged();
+                }
+
+                // If the user has no friends, display a message
+                if (requests.size() == 0 && Requests.size() == 0) {
+                    tvNoRequests.setVisibility(View.VISIBLE);
+                    return;
+                }
+                else {
+                    tvNoRequests.setVisibility(View.INVISIBLE);
                 }
 
                 // Increase the skip value

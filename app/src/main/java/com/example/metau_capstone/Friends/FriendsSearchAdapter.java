@@ -254,7 +254,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
                     friending = true;
 
-                    // Find request in set_requests and remove it
+                    // Find request in sent_requests and remove it
                     ParseRelation<ParseUser> sent_requests = curUser.getRelation("sent_requests");
                     sent_requests.remove(friend);
                     curUser.saveInBackground(new SaveCallback() {
@@ -275,8 +275,30 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                         @Override
                         public void done(List<Friend_queue> objects, ParseException e) {
                             if (objects.size() == 0 || e != null) {
-                                Log.e(TAG, "Unable to remove request from queue", e);
-                                friending = false;
+                                // If the request is not in the queue, the other user must
+                                // have it, so send a request to remove it
+
+                                // Create the new request
+                                Friend_queue item = new Friend_queue();
+                                item.setFriend(ParseUser.getCurrentUser());
+                                item.setMode("remove_request");
+                                item.setUser(friend);
+
+                                // Save the request
+                                item.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if (e != null) {
+                                            Log.e(TAG, "Unable to save remove request to queue", e);
+                                        }
+                                        else {
+                                            displayButton("Send Friend Request", R.color.black, "send");
+                                        }
+
+                                        friending = false;
+                                    }
+                                });
+
                                 return;
                             }
 

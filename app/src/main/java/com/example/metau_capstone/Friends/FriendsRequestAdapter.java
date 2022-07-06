@@ -36,7 +36,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
     private static final String TAG = "FriendsRequestAdapter";
 
     // List in the recycler view
-    List<ParseUser> requests;
+    public List<ParseUser> requests;
 
     // Fragment manager for the home fragment
     FragmentManager fragmentManager;

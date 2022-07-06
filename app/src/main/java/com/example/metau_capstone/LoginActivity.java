@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     // Add or removes all friends in the queue
-    private void addFriends() {
+    public void addFriends() {
         ParseUser curUser = ParseUser.getCurrentUser();
         ParseQuery<Friend_queue> q = new ParseQuery<Friend_queue>(Friend_queue.class);
         q.whereEqualTo("user", curUser);
@@ -160,6 +160,9 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     else if (Objects.equals(f.getMode(), "remove")) {
                         friends.remove(f.getFriend());
+                    }
+                    else if (Objects.equals(f.getMode(), "remove_request")) {
+                        requests.remove(f.getFriend());
                     }
                     f.deleteInBackground();
                 }
