@@ -121,8 +121,7 @@ public class HomeFragment_fortune extends Fragment {
 
         // Load the model
         try {
-            //module = Module.load(assetFilePath(this, "model3.ptl"));
-            module = LiteModuleLoader.load(assetFilePath(view.getContext(), "model7.ptl"));
+            module = LiteModuleLoader.load(assetFilePath(view.getContext(), "model8.ptl"));
         } catch (IOException e) {
             Log.e(TAG, "Unable to load model", e);
             return;
@@ -162,8 +161,7 @@ public class HomeFragment_fortune extends Fragment {
 
                         // Preparing trash input tensor
                         int sequence_length = 64;
-                        int embedding_size = 20;
-                        long[] shape = new long[]{sequence_length, embedding_size};
+                        long[] shape = new long[]{sequence_length};
                         inputTensor = generateTensor(shape);
 
                         // Get the output
@@ -172,6 +170,15 @@ public class HomeFragment_fortune extends Fragment {
                         // Get the output sequence
                         StringBuilder text = new StringBuilder();
                         for (long score : scores) {
+                            // If a <START>, <PAD>, or <UNKNOWN> token is seen,
+                            // skip it
+                            if (score == 0 || score == 1 || score == 3) {
+                                continue;
+                            }
+                            // When an <END> token is reached, stop loading in the text
+                            if (score == 2) {
+                                break;
+                            }
                             text.append(vocab.get((int) score)).append(" ");
                         }
 
@@ -296,8 +303,8 @@ public class HomeFragment_fortune extends Fragment {
     public Tensor generateTensor(long[] Size) {
         // Create a random array of floats
         Random rand = new Random();
-        float[] arr = new float[(int)(Size[0]*Size[1])];
-        for (int i = 0; i < Size[0]*Size[1]; i++) {
+        float[] arr = new float[(int)(Size[0])];
+        for (int i = 0; i < Size[0]; i++) {
             arr[i] = rand.nextFloat();
         }
 
