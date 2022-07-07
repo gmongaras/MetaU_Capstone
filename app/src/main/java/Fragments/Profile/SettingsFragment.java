@@ -67,6 +67,7 @@ public class SettingsFragment extends Fragment {
     SwitchCompat swShowFortunesUsers;
     SwitchCompat swShowMapFriends;
     SwitchCompat swShowMapUsers;
+    SwitchCompat swGenerateMode;
     SwitchCompat swPushNotif;
     Button btnLocPerm;
     Button btnDeleteAccount;
@@ -84,6 +85,7 @@ public class SettingsFragment extends Fragment {
             R.id.swShowFortunesUsers, "showFortunesUsers",
             R.id.swShowMapFriends, "showMapFriends",
             R.id.swShowMapUsers, "showMapUsers",
+            R.id.swGenerateMode, "useAI",
             R.id.swPushNotif, "pushNotifications"
     );
 
@@ -118,6 +120,7 @@ public class SettingsFragment extends Fragment {
         swShowFortunesUsers = view.findViewById(R.id.swShowFortunesUsers);
         swShowMapFriends = view.findViewById(R.id.swShowMapFriends);
         swShowMapUsers = view.findViewById(R.id.swShowMapUsers);
+        swGenerateMode = view.findViewById(R.id.swGenerateMode);
         swPushNotif = view.findViewById(R.id.swPushNotif);
         btnLocPerm = view.findViewById(R.id.btnLocPerm);
         btnDeleteAccount = view.findViewById(R.id.btnDeleteAccount);
@@ -154,6 +157,7 @@ public class SettingsFragment extends Fragment {
         initializeState(swShowFortunesUsers);
         initializeState(swShowMapFriends);
         initializeState(swShowMapUsers);
+        initializeState(swGenerateMode);
         initializeState(swPushNotif);
 
         // Put on click listeners on all switches
@@ -185,6 +189,12 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 handleClick(swShowMapUsers);
+            }
+        });
+        swGenerateMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleClick(swGenerateMode);
             }
         });
         swPushNotif.setOnClickListener(new View.OnClickListener() {

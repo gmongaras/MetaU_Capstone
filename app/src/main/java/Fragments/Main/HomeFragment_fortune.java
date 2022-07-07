@@ -41,13 +41,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -148,8 +152,26 @@ public class HomeFragment_fortune extends Fragment {
                     return;
                 }
 
+                // Get the mode in which the user wants a fortune
+                boolean mode = ParseUser.getCurrentUser().getBoolean("useAI");
+
+                // If the mode is false, load in the database of fortunes
+                List<String> fortunes = null;
+                if (mode == false) {
+                    // Try to get the data
+                    try {
+                        fortunes = readByJavaClassic(assetFilePath(requireContext(), "real_fortunes.txt"));
+                    }
+                    // If an error occurred, default to using the AI
+                    catch (IOException e) {
+                        mode = true;
+                    }
+                }
+
                 // Play the animation
                 avCookie.playAnimation();
+                boolean finalMode = mode;
+                List<String> finalFortunes = fortunes;
                 avCookie.addAnimatorListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -159,31 +181,52 @@ public class HomeFragment_fortune extends Fragment {
                     public void onAnimationEnd(Animator animation) {
                         // When the animation is over, get the fortune
 
-                        // Preparing trash input tensor
-                        int sequence_length = 64;
-                        long[] shape = new long[]{sequence_length};
-                        inputTensor = generateTensor(shape);
+                        String fortune;
 
-                        // Get the output
-                        long[] scores = module.forward(IValue.from(inputTensor)).toTensor().getDataAsLongArray();
+                        // If the mode is true, get the fortune from the ai
+                        if (finalMode == true) {
 
-                        // Get the output sequence
-                        StringBuilder text = new StringBuilder();
-                        for (long score : scores) {
-                            // If a <START>, <PAD>, or <UNKNOWN> token is seen,
-                            // skip it
-                            if (score == 0 || score == 1 || score == 3) {
-                                continue;
+                            // Preparing trash input tensor
+                            int sequence_length = 64;
+                            long[] shape = new long[]{sequence_length};
+                            inputTensor = generateTensor(shape);
+
+                            // Get the output
+                            long[] scores = module.forward(IValue.from(inputTensor)).toTensor().getDataAsLongArray();
+
+                            // Get the output sequence
+                            StringBuilder text = new StringBuilder();
+                            for (long score : scores) {
+                                // If a <START>, <PAD>, or <UNKNOWN> token is seen,
+                                // skip it
+                                if (score == 0 || score == 1 || score == 3) {
+                                    continue;
+                                }
+                                // When an <END> token is reached, stop loading in the text
+                                if (score == 2) {
+                                    break;
+                                }
+                                text.append(vocab.get((int) score)).append(" ");
                             }
-                            // When an <END> token is reached, stop loading in the text
-                            if (score == 2) {
-                                break;
-                            }
-                            text.append(vocab.get((int) score)).append(" ");
+
+                            // Save the fortune
+                            fortune = text.toString();
+
+                        }
+
+                        // If the mode is false, get a fortune from a
+                        // list of fortunes
+                        else {
+                            // Get a random number in the range of the number
+                            // of loaded fortunes
+                            int i = ThreadLocalRandom.current().nextInt(0, finalFortunes.size() + 1);
+
+                            // Get the fortune and save it
+                            fortune = finalFortunes.get(i);
                         }
 
                         // Save the fortune to the database
-                        saveFortune(text.toString());
+                        saveFortune(fortune);
 
                         // Make the fortune invisible and the text visible
                         avCookie.setAnimation(fadeOut);
@@ -194,7 +237,7 @@ public class HomeFragment_fortune extends Fragment {
 
                         // Change the displayed text
                         tvTextPrompt.setText(R.string.promptAfter);
-                        tvFortuneText.setText(text.toString());
+                        tvFortuneText.setText(fortune);
                         avCookie.setClickable(false);
                     }
 
@@ -212,6 +255,33 @@ public class HomeFragment_fortune extends Fragment {
 
             }
         });
+    }
+
+
+    // Read in a given filename
+    private static List<String> readByJavaClassic(String fileName) throws IOException {
+
+        List<String> result = new ArrayList<>();
+        BufferedReader br = null;
+
+        try {
+
+            br = new BufferedReader(new FileReader(fileName));
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                result.add(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                br.close();
+            }
+        }
+
+        return result;
     }
 
 
