@@ -73,6 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("showMapFriends", true);
                     user.put("showMapUsers", false);
                     user.put("pushNotifications", true);
+                    user.put("useAI", true);
                     user.put("friendable", true);
 
                     // Sign the user up

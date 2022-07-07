@@ -176,9 +176,19 @@
                 android:id="@+id/swPushNotif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:text="Allow push notifications"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/swGenerateMode"
+                app:layout_constraintTop_toBottomOf="@+id/swGenerateMode" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swGenerateMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:text="Generate fortunes using AI?"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
