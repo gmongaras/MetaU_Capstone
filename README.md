@@ -50,6 +50,10 @@ There are a lot of views in this project, and I will go over each one below.
 - [Profile - Logged in user](#profile---logged-in-user)
 - [Profile Menu - Logged in user](#profile-menu---logged-in-user)
 - [Friends](#friends)
+- [Profile - Friend/Other User](#profile-menu---friendother-user)
+- [Profile Menu - Friend/Other User](#profile-menu---friendother-user)
+- [Settings](#settings)
+- [Fortune Detailed View](#fortune-detailed-view)
 
 ### Login Page
 - <b>Description:</b> When the user firsts starts up the app, the user is greeted with a login page to log the user into the app. 
@@ -58,6 +62,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   1. The user is able to enter a username and password.
   2. A Login button allows the user to login to their account if the username exists and the password is correct. Upon login, the user is taken to their [homepage](#homepage---fortune)
   3. If the user doesn't have an account, the user can [register](#register-page) on a different page
+  4. Pressing the back button exits the app
 
 ### Register Page
 - <b>Description:</b> If the user wants to make a new account, they can do so by entering a new username and a new password.
@@ -65,6 +70,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   1. The user is able to enter a username which will be used as that user's account username.
   2. The user can enter a password and reenter that password to create a new password for their new account.
   3. If the passwords match and the username is not already taken, a new user is created with the specified username as their new username and the specified password as their new password. The user is then logged into their account and sent to their [homepage](#homepage---fortune)
+  4. Pressing the back button takes the user back to the login page
 
 ### Main Menu
 - <b>Description:</b> The main menu allows the user to access 4 different views:
@@ -111,7 +117,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        1. The date the user received each fortune is shown
        2. A text snippet of each fortune is shown
        3. A heart for each fortune is either red, if the used has liked the fortune, or black, if the user has not liked the fortune.
-       4. Single tapping on a fortune will go into the [detailed view](#) of that fortune.
+       4. Single tapping on a fortune will go into the [detailed view](#fortune-detailed-view) of that fortune.
        5. Double tapping on a fortue will like or unlike it and will add or unadd the fortune to the user's liked list.
   2. <b>Text Search:<b> Allows the user to search for any fortunes they own by text.
      - <b>Features:</b>
@@ -137,7 +143,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        1. The name of each friend is shown
        2. The profile picture of each friend is shown
        3. The number of fortunes of each friend is shown
-       4. Clicking on a friend takes the user to the [friend's profile](#)
+       4. Clicking on a friend takes the user to the [friend's profile](#profile---friendother-user)
   2. <b>Friend Requests:</b> The friends request list shows all the user's who have sent a friend request to the current user
      - <b>Features:</b>
        1. The name of each user who sent a request is shown
@@ -151,7 +157,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        2. Each displayed user has the name of the user shown.
        3. Each displayed user has the profile picture of the user shown.
        4. Each displayed user has the number of fortunes of that user shown.
-       5. If the user is friends with the other user, clicking on the user will take the logged in user to their [friend's profile](#). If the user is not friends with the other user, clicking on the user will take the logged in user to the [other user's profile](#).
+       5. If the user is friends with the other user, clicking on the user will take the logged in user to their [friend's profile](#profile---friendother-user). If the user is not friends with the other user, clicking on the user will take the logged in user to the [other user's profile](#profile---friendother-user).
        6. A button is shown for each displayed user with the following possibilities:
           - If the current user is friends with the other user, "Already friends" is displayed without any clickable fuunctionality.
           - If the current user blocked the other user, "You blocked this user" is displayed without clickable functionality.
@@ -163,6 +169,42 @@ The user account is used to keep track of the user's fortunes, friends, etc.
 - <b>Speical Features:</b>
   - Swiping left or right takes the user to the view to the left or right of the current view.
   - Clicking on a menu item takes the user to that view.
+
+### Profile - Friend/Other User
+- <b>Description:</b> The friend or other user profile shows the user's current fortunes and has [a menu](#profile-menu---friendother-user) allowing the current user more access to other user's fortunes. Each part of the menu is described in more detail below.
+- <b>Features:</b>
+  1. The user has access to [a menu](#profile-menu---friendother-user) containing the other user's fortunes, allowing them to search through that user's fortunes fortunes, like the other user's fortunes, and view the other user's liked fortunes.
+  3. In the top right of the view, there is a menu:
+     - For friends, this menu has a block and unfriend option. Blocking removes all liked fortunes between the current user and the friended user and also unfriends the two users on both ends. Unfriending only unfriends both users on both ends.
+     - For other users, this menu only has a block option. Blocking removes all liked fortunes between the current user and the other user.
+
+### Profile Menu - Friend/Other User
+- <b>Description:</b> The other user's profile page has a menu with 4 views, allowing the current user to view the other user's fortunes or search through the other user's fortunes.
+  - If the other user does not allow the current user (whether they are a friend or not a friend) to view their fortunes, none of the view will show up and error text will be displayed.
+  1. <b>Fortune List:</b> The fortune list view lists the fortunes the other user owns.
+     - <b>Features:</b>
+       1. The date the other user received each fortune is shown
+       2. A text snippet of each fortune is shown
+       3. A heart for each fortune is either red, if the current used has liked the fortune, or black, if the current user has not liked the fortune.
+       4. Single tapping on a fortune will go into the [detailed view](#fortune-detailed-view) of that fortune.
+       5. Double tapping on a fortue will cause the current user to like or unlike it and will add or unadd the fortune to the current user's liked list.
+  2. <b>Text Search:<b> Allows the current user to search for any fortunes the other user owns by text.
+     - <b>Features:</b>
+       1. The current user can enter some text in the search bar and press enter or search to search through all the other user's fortunes for the given text they entered.
+       2. Upon searching, if fortunes were found, they will be displayed. If no fortunes were found, error text will be displayed.
+       - This view also contains all features from the fortune list.
+  3. <b>Location Search:</b> Allows the current user to search for any fortunes the other user owns by latitude and longitude within a given mile radius.
+     - <b>Features:</b>
+       1. The current user can enter latitude and logitude values which describes the location they want to search the other user's fortunes for. Additionally, the user can add a mile value which is the radius the user wants to query fortunes within.
+       2. Upon searching, if fortunes were found withing the given radius at the given latitude and logitude values, they will be displayed. If no fortunes were found within that radius, error text will be shown.
+       - This view also contains all features from the fortune list.
+  4. <b>Liked List:</b> Allows the user to view any fortunes the other user has liked, whether that's from the other user's own fortune list or another user's fortune list.
+     - <b>Features</b>
+       - This view contains all features from the fortune list.
+- <b>Special Features:</b>
+  - Swiping left or right will take the current user to the page next to the current page.
+  - Clicking on a menu item will take the user to that page
+  - Clicking the back button will take the user back the the [Friends](#friends) page.
    
 ### Settings
 - <b>Description:</b> Allows the user to change their profile picture, privacy settings, application settings, and delete their account.
@@ -180,3 +222,14 @@ The user account is used to keep track of the user's fortunes, friends, etc.
      - If the user has not given the app location permission, the user can do so by clicking the "Give permission" button. If the user already gave location permission, this button does nothing.
   4. The user can delete their account which unfriends the user from all other users and removes fortunes from this user. This deleting is permanent and the user has no way of getting their account back.
   5. Pressing the back button sends the user back to their [profile](#profile---logged-in-user)
+
+### Fortune Detailed View
+- <b>Description:</b> When a fortune is clicked from either the current user's profile, a friend's profile, or a different user's profile, they are taken to this view which shows the user more details on the selected fortune.
+- <b>Features:</b>
+  1. A map is shown which shows all fortunes and their location for the user this fortune belongs to. If this fortune has a location, the map is zoomed in on that location. If the user this fortune belongs to has the map turned off for the current user, the map is not shown.
+  2. The time the fortune was received at is shown below the map.
+  3. The entire fortune is shown below the time.
+  4. The number of likes is shown below the fortune.
+  5. A like button is shown next to the number of likes which allows the current user to like or unlike this fortune.
+  6. A share button is shown next to the like button allowing the user to share this fortune to other apps.
+  7. Pressing the back button takes the user back to the profile they were examining before going into the detail view.
