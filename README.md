@@ -49,6 +49,7 @@ There are a lot of views in this project, and I will go over each one below.
 - [Map](#map)
 - [Profile - Logged in user](#profile---logged-in-user)
 - [Profile Menu - Logged in user](#profile-menu---logged-in-user)
+- [Friends](#friends)
 
 ### Login Page
 - <b>Description:</b> When the user firsts starts up the app, the user is greeted with a login page to log the user into the app. 
@@ -70,10 +71,11 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   1. [Map](#map) - The user's map showing where they received each fortune.
   2. [Home](#homepage---countdown) - The user's homepage to open a new fortune cookie or view the time left until a new fortune is availble.
   3. [Profile](#profile---logged-in-user) - The user's profile in which they can view their fortunes, search through their fortunes, change their settings, or logout.
-  4. [Friends](#) - The user's friends page which shows the user's current friends, shows the user's friends requests, and allows the user to search for new friends.
+  4. [Friends](#friends) - The user's friends page which shows the user's current friends, shows the user's friends requests, and allows the user to search for new friends.
 - <b>Special Features:</b>
   - The user can swipe left or right to change to the view to the left or right of the current view.
   - Clicking on a menu item will take the user to that page.
+  - Pressing back on the homepage exits the app while pressing back on any other page goes back to the main page.
 
 ### Homepage - Countdown
 - <b>Description:</b> If the user is accessing the app within 23 hours after opening their last fortune, the user will see see a timer counting down until they can open their next fortune cookie.
@@ -100,7 +102,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
 - <b>Features:</b>
   1. The user has access to [a menu](#profile-menu---logged-in-user) containing their fortunes, allowing them to search for different fortunes, like fortunes, and view their liked fortunes.
   2. If the user clicks on their profile picture, a window pops up, allowing the user to change their profile picture with one on their current device.
-  3. In the top right of the view, there is a settings menu, allowing the user to change their [settings](#) or logout of their account, which takes them to the [login page](#login-page)
+  3. In the top right of the view, there is a settings menu, allowing the user to change their [settings](#settings) or logout of their account, which takes them to the [login page](#login-page)
 
 ### Profile Menu - Logged in user
 - <b>Description:</b> The logged in user's profile page has a menu with 4 views, allowing them to view their fortunes or search for fortunes.
@@ -161,3 +163,20 @@ The user account is used to keep track of the user's fortunes, friends, etc.
 - <b>Speical Features:</b>
   - Swiping left or right takes the user to the view to the left or right of the current view.
   - Clicking on a menu item takes the user to that view.
+   
+### Settings
+- <b>Description:</b> Allows the user to change their profile picture, privacy settings, application settings, and delete their account.
+- <b>Features:</b>
+  1. Clicking on the user's profile picture pops up a window allowing the user to upload an image from their device to change their profile picture.
+  2. The user can change their privacy/user settings:
+     - User's can set whether they are allowing other users to friend them. Turning this off does not allow any other users to make new friend requests to the current user.
+     - User's can set whether they are allowing friends to see their fortunes or not. Setting this off hides all fortunes when <b>friends</b> are viewing the current user's profile. This setting does not effect other users.
+     - User's can set whether they are allowing other users to see their fortune or not. Setting this off hides all fortunes when <b>other users</b> are viewing the current user's profile. This setting does not effect friends.
+     - User's can set whether they are allowing friends to see their map or not. Setting this off hides the map when <b>friends</b> go into the detailed view of one of the current user's fortunes. Note that if friends cannot view the current user's fortunes, this setting does not matter. This setting does not effect other users.
+     - User's can set whether they are allowing other users to see their map or not. Setting this off hides the map when <b>other users</b> go into the detailed view of one of the current user's fortunes. Note that if other users cannot view the current user's fortunes, this setting does not matter. This setting does not effect friends.
+  3. The user can change setting involving the app:
+     - The user can choose whether they want an AI to generate fortunes or if they want to pull from real fortunes when receiving a new fortune. Turning this switch on has the AI generate fortunes while turning this switch off pulls from a list of real fortunes.
+     - The user can choose whether they want push notifications from the app. If this switch is on, the user will receive a push notification 23 hours after opening a fortune cookie, but if the switch is off, the user will not receive this notification.
+     - If the user has not given the app location permission, the user can do so by clicking the "Give permission" button. If the user already gave location permission, this button does nothing.
+  4. The user can delete their account which unfriends the user from all other users and removes fortunes from this user. This deleting is permanent and the user has no way of getting their account back.
+  5. Pressing the back button sends the user back to their [profile](#profile---logged-in-user)
