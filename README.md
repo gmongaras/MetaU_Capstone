@@ -26,10 +26,99 @@ I used this project to learn more about integrating PyTorch models into the app,
 
 
 # Project Requirements
+The project requires Android 21 or above to run and uses the following packages:
+- org.pytorchpytorch_android_lite: 1.12
+- com.squareup.okhttp3:logging-interceptor: 4.7.2
+- com.github.bumptech.glide:glide: 4.12.0
+- com.github.bumptech.glide:compiler: 4.12.0
+- com.google.android.gms:play-services-maps: 18.0.2
+- com.google.android.gms:play-services-location: 20.0.0
+- androidx.appcompat:appcompat: 1.4.2
+- com.github.parse-community.Parse-SDK-Android:parse: 3.0.1
+- com.github.parse-community.Parse-SDK-Android:fcm: 3.0.1
+- com.airbnb.android:lottie: 3.0.1
+- androidx.swiperefreshlayout:swiperefreshlayout: 1.1.0
+
+Additionally, the following permissions are used:
+- ACCESS_NETWORK_STATE
+- INTERNET
+- ACCESS_FINE_LOCATION
+- ACCESS_COARSE_LOCATION
+- ACCESS_BACKGROUND_LOCATION
+- SCHEDULE_EXACT_ALARM
+
+The following APIs are used:
 
 
 
 # Cloning The Project
+The following section will describe how to clone the project and set it up to begin making it your own!
+
+Note: I am using Android Studio version: 2021.2.1 Patch 1 (chipmunk(
+
+1. [Install android studio](https://developer.android.com/studio/?gclsrc=aw.ds&gclid=Cj0KCQjwzqSWBhDPARIsAK38LY-dqK0iXiXQnG7ZU9Ccw3crlRkECsOyKavCRl_0pQ7Z9HKs6qyunngaAtWhEALw_wcB) on your device
+2. Clone this project from Github with the following command `git clone https://github.com/gmongaras/MetaU_Capstone.git`
+3. Open the cloned project in android studio with `MetaU_Capstone` as the root directory for the project.
+4. In `MetaU_Capstone/app/src/main/res/values/`, add a new file named `secrets.xml`.
+5. Within `secrets.xml`, paste the following code in the file: 
+```
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="google_maps_api_key">Your maps API key</string>
+
+    <string name="back4app_server_url">https://parseapi.back4app.com</string>
+    <string name="back4app_client_key">Your Parse API key</string>
+    <string name="back4app_app_id">Your Parse app id</string>
+
+</resources>
+```
+6. Go to [the following link](https://developers.google.com/maps), create a new project, and replace "Your maps API key" in `secrets.xml` with your google maps API key.
+7. Go to [the following link](https://www.back4app.com/) (or any other parse database), create a new project, replace "Your Parse API key" in `secrets.xml` with your Parse API key, and replace "Your Parse app id" in `secrets.xml` with your Parse app id.
+8. Build the app, and the app should successfully build.
+9. Setup the Parse database with the following classes and attributes:
+
+<b>User</b>
+- objectId [String]
+- ACL [ACL]
+- updatedAt [Date]
+- createdAt [Date]
+- authData [Object][Required]
+- username [String][Required]
+- password [String][Required]
+- fortunes [Relation<Fortune>]
+- friends [Relation<User>]
+- profilePic [File]
+- friend_requests [Relation<User>]
+- sent_requests [Relation<User>]
+- showFortunesFriends [Boolean]
+- showFortunesUsers [Boolean]
+- showMapFriends [Boolean]
+- showMapUsers [Boolean]
+- pushNotifications [Boolean]
+- friendable [Boolean]
+- useAI [Boolean]
+- Blocked [Relation<User>]
+- liked [Relation<Fortune>]
+
+<b>Fortune</b>
+- objectId [String]
+- updatedAt [Date]
+- createdAt [Date]
+- ACL [ACL]
+- user [Pointer<User>][Required]
+- message [String][Required]
+- location [GeoPoint]
+- like_ct [Number]
+
+<b>Friend_queue</b>
+- objectId [String]
+- updatedAt [Date]
+- createdAt [Date]
+- ACL [ACL]
+- user [Pointer<User>]
+- friend [Pointer<User>]
+- mode [String]
 
 
 
