@@ -1,134 +1,61 @@
-# NAME
+# Overview
+- [Project Description](#project-description)
+- [Project Requirements](#project-requirements)
+   - [Java Packages](#)
+   - [APIs used](#)
+- [Cloning The Project](#cloning-the-project)
+- [Executing The Project](#executing-the-project)
+- [View Descriptions](#view-descriptions)
+  - [Login View](#)
 
-## Table of Contents
-1. [Overview](#Overview)
-2. [Product Spec](#Product-Spec)
-3. [Wireframes](#Wireframes)
-4. [Schema](#Schema)
 
-## Overview
-### Description
-Users are able to get a fortune cookie a day through this app. They can then share the fortune and the fortune will be sved toa list of fortunes. Additionally, they will be able to view a map of fortunes they received and when they received it.
+# Project Description
+This is my final project for Meta University! The goal is to code an Android app of our choice that fulfills several 
+requirements such as using an API and using a database.
 
-### App Evaluation
-- **Category:** Social
-- **Mobile:** This app will be developed for mobile
-- **Story:** Gives fortunes to a user once a day.
-- **Market:** Any individual could choose to use this app as something to do for fun for a few minuites a day and be able to view the places they visited in the past as the app marks where they got each fortune.
-- **Habit:** This app could be used daily or whenever the user wants to use it depending on how consistent the user wants fortunes.
-- **Scope:** First, I will start by making a basic app that is able to give fortunes. Then, I will have the fortune save to a history list. Then I will make this list sharable and have the list save the location of each fortune. Finally, I may add a friend system and some type of reward system.
+Additionally, I am working on this project to learn more about Android!
 
-## Product Spec
-### 1. User Stories (Required and Optional)
+This app gives a fortune a day from a virtual fortune cookie. The fortune can then be shared with other users and a 
+the user can see a map of where they received each fortune.
 
-**Required Must-have Stories**
+There are two modes in which the user can chose to receive a fortune, either through an AI or through a list of real fortunes. 
+The AI comes from antoher project I am working on which should be able to generate fortunes given a matrix of random noise. The 
+AI project [can be found here](https://github.com/gmongaras/PyTorch_TextGen).
 
-* Home page that either allows the user to open a new fortune cookie, or shows the time left until a new cookie can be opened.
-* A side menu that takes you to a list of past fortune cookies. This will be a recycler view
-* A detailed view in the list of fortunes that allows the user to share it to Twitter or Facebook or share a link to it.
-* Have a map that keeps track of the location that someone openned each fortune and then have it show up on a map. Maybe add stats as well to the map.
+I used this project to learn more about integrating PyTorch models into the app, which [I wrote an article about](https://gmongaras.medium.com/integrating-custom-pytorch-models-into-an-android-app-a2cdfce14fe8).
 
-**Optional Nice-to-have Stories**
 
-* Add a point system to stylize the interface.
-* Daily login system to get more points
-* Have friends and be able to see their list of fortunes
-* Push Notification to open daily fortune
+# Project Requirements
 
-### 2. Screen Archetypes
 
-* Register/Login - User signs in or logs into their account
-    * Upon first visit this is what the user will see or when the user is not logged in.
-* Home
-    * Upon opening the app, the user can either open a new fortune, or if they have already done so, the interface changes to a countdown timer.
-* Profile/Past Fortunes
-    * A list of part fortunes is shown in this menu.
-* Profile/Past Fortune - Detailed view
-    * When a part of the recycler view is clicked, a detailed view is opened and the user can share their fortune and see where on the map the fortune was opened.
-* Map
-    * This map shows the location on a map in which each fortune was opened
-* Friends
-    * Shows a list of the user's friends
-* Friends - Detailed View
-    * Upon clicking on a friend, the user can see the friend's fortunes and their map.
 
-### 3. Navigation
+# Cloning The Project
 
-** Bottom Navigation
-* Map
-* Home
-* Profile/Past Fortunes
-* Friends
 
-** Flow Navigation** (Screen to Screen)
-* Forced Log-in -> Home page upon login/registration
-* Profile -> Profile detailed view upon fortune click
-* Profile Detail View -> Map, upon map click in detailed view
-* Friends -> Friend detailed view upon friend click
 
-## Wireframes
-<img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Wireframe.jpg" width=800><br>
+# Executing The Project
 
-## Schema 
-### Models
-#### Post
 
-   | Property      | Type     | Description |
-   | ------------- | -------- | ------------|
-   | objectId      | String   | unique id for the user post (default field) |
-   | author        | Pointer to User| image author |
-   | image         | File     | image that user posts |
-   | caption       | String   | image caption by author |
-   | commentsCount | Number   | number of comments that has been posted to an image |
-   | likesCount    | Number   | number of likes for the post |
-   | createdAt     | DateTime | date when post is created (default field) |
-   | updatedAt     | DateTime | date when post is last updated (default field) |
-### Networking
-#### List of network requests by screen
-   - Home Feed Screen
-      - (Read/GET) Query all posts where user is author
-         ```swift
-         let query = PFQuery(className:"Post")
-         query.whereKey("author", equalTo: currentUser)
-         query.order(byDescending: "createdAt")
-         query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) in
-            if let error = error { 
-               print(error.localizedDescription)
-            } else if let posts = posts {
-               print("Successfully retrieved \(posts.count) posts.")
-           // TODO: Do something with posts...
-            }
-         }
-         ```
-      - (Create/POST) Create a new like on a post
-      - (Delete) Delete existing like
-      - (Create/POST) Create a new comment on a post
-      - (Delete) Delete existing comment
-   - Create Post Screen
-      - (Create/POST) Create a new post object
-   - Profile Screen
-      - (Read/GET) Query logged in user object
-      - (Update/PUT) Update user profile image
-#### [OPTIONAL:] Existing API Endpoints
-##### An API Of Ice And Fire
-- Base URL - [http://www.anapioficeandfire.com/api](http://www.anapioficeandfire.com/api)
 
-   HTTP Verb | Endpoint | Description
-   ----------|----------|------------
-    `GET`    | /characters | get all characters
-    `GET`    | /characters/?name=name | return specific character by name
-    `GET`    | /houses   | get all houses
-    `GET`    | /houses/?name=name | return specific house by name
+# View Descriptions
+There are a lot of views in this project, and I will go over each one below.
 
-##### Game of Thrones API
-- Base URL - [https://api.got.show/api](https://api.got.show/api)
+## View Table of Contents
+- [Login Page]()
 
-   HTTP Verb | Endpoint | Description
-   ----------|----------|------------
-    `GET`    | /cities | gets all cities
-    `GET`    | /cities/byId/:id | gets specific city by :id
-    `GET`    | /continents | gets all continents
-    `GET`    | /continents/byId/:id | gets specific continent by :id
-    `GET`    | /regions | gets all regions
-    `GET`    | /regions/byId/:id | gets specific region by :id
-    `GET`    | /characters/paths/:name | gets a character's path with a given name
+### Login Page
+- <b>Description:</b> When the user firsts starts up the app, the user is greeted with a login page to log the user into the app. 
+The user account is used to keep track of the user's fortunes, friends, etc.
+- <b>Features:</b>
+  1. The user is able to enter a username and password.
+  2. A Login button allows the user to login to their account if the username exists and the password is correct. Upon login, the user is taken to their [homepage](#homepage-1---fortune)
+  3. If the user doesn't have an account, the user can [register](#register-page) on a different page
+
+### Register Page
+- <b>Description:</b> If the user wants to make a new account, they can do so by entering a new username and a new password.
+- <b>Features:</b>
+  1. The user is able to enter a username which will be used as that user's account username.
+  2. The user can enter a password and reenter that password to create a new password for their new account.
+  3. If the passwords match and the username is not already taken, a new user is created with the specified username as their new username and the specified password as their new password. The user is then logged into their account and sent to their [homepage](#homepage-1---fortune)
+  
+### Homepage 1 - Fortune
