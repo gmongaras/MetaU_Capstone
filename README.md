@@ -161,6 +161,7 @@ There are a lot of views in this project, and I will go over each one below.
 - [Fortune Detailed View](#fortune-detailed-view)
 
 ### Login Page
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Login%20Page.png" height="400" title="Login Page"></p>
 - <b>Description:</b> When the user firsts starts up the app, the user is greeted with a login page to log the user into the app. 
 The user account is used to keep track of the user's fortunes, friends, etc.
 - <b>Features:</b>
@@ -170,6 +171,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   4. Pressing the back button exits the app
 
 ### Register Page
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Register%20Page.png" height="400" title="Register Page"></p>
 - <b>Description:</b> If the user wants to make a new account, they can do so by entering a new username and a new password.
 - <b>Features:</b>
   1. The user is able to enter a username which will be used as that user's account username.
@@ -178,6 +180,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   4. Pressing the back button takes the user back to the login page
 
 ### Main Menu
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Main%20Menu.png" height="400" title="Main Menu"></p>
 - <b>Description:</b> The main menu allows the user to access 4 different views:
   1. [Map](#map) - The user's map showing where they received each fortune.
   2. [Home](#homepage---countdown) - The user's homepage to open a new fortune cookie or view the time left until a new fortune is availble.
@@ -189,6 +192,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   - Pressing back on the homepage exits the app while pressing back on any other page goes back to the main page.
 
 ### Homepage - Countdown
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Homepage%20-%20Countdown.png" height="400" title="Homepage - Countdown"></p>
 - <b>Description:</b> If the user is accessing the app within 23 hours after opening their last fortune, the user will see see a timer counting down until they can open their next fortune cookie.
 - <b>Features:</b>
   1. The countdown timer counts down from 23 hours starting at when the user last received a fortune.
@@ -196,6 +200,8 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   3. When the countdown timer ends (even when the user is not on the app), a push notification is sent to the user's phone, notifying them a new fortune cookie is availble for them to open.
   
 ### Homepage - Fortune
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Homepage%20-%20Fortune%201.png" height="400" title="Homepage - Fortune"></p>
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Homepage%20-%20Fortune%202.png" height="400" title="Homepage - Fortune"></p>
 - <b>Description:</b> If the user is accessing the app 23 hours after openning their last fortune, the user will be taken to this page where they can open a new fortune cookie and receive a new fortune.
 - <b>Features:</b>
   1. When the fortune cookie is clicked, a little animation will play. At the end of the animation, the new fortune for the user will be displayed and saved to the user's account.
