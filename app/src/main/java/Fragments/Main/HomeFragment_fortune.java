@@ -114,6 +114,7 @@ public class HomeFragment_fortune extends Fragment {
         tvFortuneText = view.findViewById(R.id.tvFortuneText);
         tvTextPrompt = view.findViewById(R.id.tvTextPrompt);
         avCookie = view.findViewById(R.id.avCookie);
+        avCookie.setClickable(true);
         //ivFortune = view.findViewById(R.id.ivFortune);
 
         // Create the animations
@@ -169,6 +170,7 @@ public class HomeFragment_fortune extends Fragment {
                 }
 
                 // Play the animation
+                avCookie.setClickable(false);
                 avCookie.playAnimation();
                 boolean finalMode = mode;
                 List<String> finalFortunes = fortunes;
@@ -238,7 +240,6 @@ public class HomeFragment_fortune extends Fragment {
                         // Change the displayed text
                         tvTextPrompt.setText(R.string.promptAfter);
                         tvFortuneText.setText(fortune);
-                        avCookie.setClickable(false);
                     }
 
                     @Override
