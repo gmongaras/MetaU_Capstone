@@ -4,6 +4,19 @@
 - [Cloning The Project](#cloning-the-project)
 - [Executing The Project](#executing-the-project)
 - [View Descriptions](#view-descriptions)
+  - [Login Page](#login-page)
+  - [Register Page](#register-page)
+  - [Main Menu](#main-menu)
+  - [Homepage - Countdown](#homepage---countdown)
+  - [Homepage - Fortune](#homepage---fortune)
+  - [Map](#map)
+  - [Profile - Logged in user](#profile---logged-in-user)
+  - [Profile Menu - Logged in user](#profile-menu---logged-in-user)
+  - [Friends](#friends)
+  - [Profile - Friend/Other User](#profile-menu---friendother-user)
+  - [Profile Menu - Friend/Other User](#profile-menu---friendother-user)
+  - [Settings](#settings)
+  - [Fortune Detailed View](#fortune-detailed-view)
 
 
 # Project Description
