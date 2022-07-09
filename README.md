@@ -1,12 +1,22 @@
 # Overview
 - [Project Description](#project-description)
 - [Project Requirements](#project-requirements)
-   - [Java Packages](#)
-   - [APIs used](#)
 - [Cloning The Project](#cloning-the-project)
 - [Executing The Project](#executing-the-project)
 - [View Descriptions](#view-descriptions)
-  - [Login View](#)
+  - [Login Page](#login-page)
+  - [Register Page](#register-page)
+  - [Main Menu](#main-menu)
+  - [Homepage - Countdown](#homepage---countdown)
+  - [Homepage - Fortune](#homepage---fortune)
+  - [Map](#map)
+  - [Profile - Logged in user](#profile---logged-in-user)
+  - [Profile Menu - Logged in user](#profile-menu---logged-in-user)
+  - [Friends](#friends)
+  - [Profile - Friend/Other User](#profile-menu---friendother-user)
+  - [Profile Menu - Friend/Other User](#profile-menu---friendother-user)
+  - [Settings](#settings)
+  - [Fortune Detailed View](#fortune-detailed-view)
 
 
 # Project Description
@@ -48,6 +58,8 @@ Additionally, the following permissions are used:
 - SCHEDULE_EXACT_ALARM
 
 The following APIs are used:
+- [Parse](https://parseplatform.org/)
+- [Google Maps](https://developers.google.com/maps)
 
 
 
@@ -123,6 +135,10 @@ Note: I am using Android Studio version: 2021.2.1 Patch 1 (chipmunk(
 
 
 # Executing The Project
+   
+To execute the project with an APK, go to the [APKs directory]() and download one of the APKs. Then, using the Android Installer on an Android phone, install the app.
+   
+To create an APK using Android Studio, in the Menu, click on `Build > Build Bundles(s) / APK(s) > Build APK(s)`. The APK file should be located in `MetaU_Capstone > app > build > outputs > apk` and should be called `app-debug.apk`.
 
 
 
