@@ -162,8 +162,10 @@ There are a lot of views in this project, and I will go over each one below.
 
 ### Login Page
 <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Login%20Page.png" height="400" title="Login Page"></p>
+  
 - <b>Description:</b> When the user firsts starts up the app, the user is greeted with a login page to log the user into the app. 
 The user account is used to keep track of the user's fortunes, friends, etc.
+  
 - <b>Features:</b>
   1. The user is able to enter a username and password.
   2. A Login button allows the user to login to their account if the username exists and the password is correct. Upon login, the user is taken to their [homepage](#homepage---fortune)
@@ -172,8 +174,10 @@ The user account is used to keep track of the user's fortunes, friends, etc.
 
 ### Register Page
 <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Register%20Page.png" height="400" title="Register Page"></p>
+  
 - <b>Description:</b> If the user wants to make a new account, they can do so by entering a new username and a new password.
 - <b>Features:</b>
+  
   1. The user is able to enter a username which will be used as that user's account username.
   2. The user can enter a password and reenter that password to create a new password for their new account.
   3. If the passwords match and the username is not already taken, a new user is created with the specified username as their new username and the specified password as their new password. The user is then logged into their account and sent to their [homepage](#homepage---fortune)
@@ -181,11 +185,13 @@ The user account is used to keep track of the user's fortunes, friends, etc.
 
 ### Main Menu
 <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Main%20Menu.png" height="400" title="Main Menu"></p>
+  
 - <b>Description:</b> The main menu allows the user to access 4 different views:
   1. [Map](#map) - The user's map showing where they received each fortune.
   2. [Home](#homepage---countdown) - The user's homepage to open a new fortune cookie or view the time left until a new fortune is availble.
   3. [Profile](#profile---logged-in-user) - The user's profile in which they can view their fortunes, search through their fortunes, change their settings, or logout.
   4. [Friends](#friends) - The user's friends page which shows the user's current friends, shows the user's friends requests, and allows the user to search for new friends.
+  
 - <b>Special Features:</b>
   - The user can swipe left or right to change to the view to the left or right of the current view.
   - Clicking on a menu item will take the user to that page.
@@ -193,7 +199,9 @@ The user account is used to keep track of the user's fortunes, friends, etc.
 
 ### Homepage - Countdown
 <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Homepage%20-%20Countdown.png" height="400" title="Homepage - Countdown"></p>
+  
 - <b>Description:</b> If the user is accessing the app within 23 hours after opening their last fortune, the user will see see a timer counting down until they can open their next fortune cookie.
+  
 - <b>Features:</b>
   1. The countdown timer counts down from 23 hours starting at when the user last received a fortune.
   2. When the countdown timer ends and the user is on the homepage, the user is sent to a [new page](#homepage---fortune) in which they can open a new fortune cookie.
@@ -201,7 +209,9 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   
 ### Homepage - Fortune
 <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Homepage%20-%20Fortune%201.png" height="400" title="Homepage - Fortune"></p>
+  
 <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Homepage%20-%20Fortune%202.png" height="400" title="Homepage - Fortune"></p>
+  
 - <b>Description:</b> If the user is accessing the app 23 hours after openning their last fortune, the user will be taken to this page where they can open a new fortune cookie and receive a new fortune.
 - <b>Features:</b>
   1. When the fortune cookie is clicked, a little animation will play. At the end of the animation, the new fortune for the user will be displayed and saved to the user's account.
@@ -209,19 +219,27 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   2. After opening the cookie, if the user changed pages, the user will be greeted with a [countdown timer](#homepage---countdown) showing them how much time is left until they can open their next fortune cookie.
 
 ### Map
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Map.png" height="400" title="Map"></p>
+  
 - <b>Description:</b> Each time the user opens a new fortune cookie, the location of the user is saved. This view shows a map with a marker at each location which the user opened a fortune at.
 - <b>Features:</b>
+  
   1. The location of each fortune of the logged in user is shown on the map.
   2. If one of the markers is clicked, a little discription of the fortune at that location is shown.
 
 ### Profile - Logged in user
+[img]
+  
 - <b>Description:</b> The logged in user's profile shows the user's current fortunes and has [a menu](#profile-menu---logged-in-user) allowing the user more access to their fortunes. Each part of the menu is described in more detail below.
+  
 - <b>Features:</b>
   1. The user has access to [a menu](#profile-menu---logged-in-user) containing their fortunes, allowing them to search for different fortunes, like fortunes, and view their liked fortunes.
   2. If the user clicks on their profile picture, a window pops up, allowing the user to change their profile picture with one on their current device.
   3. In the top right of the view, there is a settings menu, allowing the user to change their [settings](#settings) or logout of their account, which takes them to the [login page](#login-page)
 
 ### Profile Menu - Logged in user
+[img]
+  
 - <b>Description:</b> The logged in user's profile page has a menu with 4 views, allowing them to view their fortunes or search for fortunes.
   1. <b>Fortune List:</b> The fortune list view lists the fortunes the user owns.
      - <b>Features:</b>
@@ -230,7 +248,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        3. A heart for each fortune is either red, if the used has liked the fortune, or black, if the user has not liked the fortune.
        4. Single tapping on a fortune will go into the [detailed view](#fortune-detailed-view) of that fortune.
        5. Double tapping on a fortue will like or unlike it and will add or unadd the fortune to the user's liked list.
-  2. <b>Text Search:<b> Allows the user to search for any fortunes they own by text.
+  2. <b>Text Search:</b> Allows the user to search for any fortunes they own by text.
      - <b>Features:</b>
        1. The user can enter some text in the search bar and press enter or search to search through all their fortunes for the given text they entered.
        2. Upon searching, if fortunes were found, they will be displayed. If no fortunes were found, error text will be displayed.
@@ -243,11 +261,14 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   4. <b>Liked List:</b> Allows the user to view any fortunes they liked, whether that's from their own fortune list or another user's fortune list.
      - <b>Features</b>
        - This view contains all features from the fortune list.
+  
 - <b>Special Features:</b>
   - Swiping left or right will take the user to the page next to the current page.
   - Clicking on a menu item will take the user to that page
 
 ### Friends
+[img]
+  
 - <b>Description:</b> The friends page has three different views allowing the user to access their friends or other users.
   1. <b>Friends List:</b> The friends list shows all the user's current friends
      - <b>Features:</b>
@@ -277,12 +298,16 @@ The user account is used to keep track of the user's fortunes, friends, etc.
           - If the other user is not accepting friends, "User not currently accepting friend requests" is shown without any clickable functionality.
           - If the other user blocked the current user, "This user has blocked you" is displayed without any clickacle functionality
           - If none of the other conditions are met, "Send Friend Request" is displayed, allowing the user to send a friend request to the other user.
+  
 - <b>Speical Features:</b>
   - Swiping left or right takes the user to the view to the left or right of the current view.
   - Clicking on a menu item takes the user to that view.
 
 ### Profile - Friend/Other User
+[img]
+  
 - <b>Description:</b> The friend or other user profile shows the user's current fortunes and has [a menu](#profile-menu---friendother-user) allowing the current user more access to other user's fortunes. Each part of the menu is described in more detail below.
+  
 - <b>Features:</b>
   1. The user has access to [a menu](#profile-menu---friendother-user) containing the other user's fortunes, allowing them to search through that user's fortunes fortunes, like the other user's fortunes, and view the other user's liked fortunes.
   3. In the top right of the view, there is a menu:
@@ -290,6 +315,8 @@ The user account is used to keep track of the user's fortunes, friends, etc.
      - For other users, this menu only has a block option. Blocking removes all liked fortunes between the current user and the other user.
 
 ### Profile Menu - Friend/Other User
+[img]
+  
 - <b>Description:</b> The other user's profile page has a menu with 4 views, allowing the current user to view the other user's fortunes or search through the other user's fortunes.
   - If the other user does not allow the current user (whether they are a friend or not a friend) to view their fortunes, none of the view will show up and error text will be displayed.
   1. <b>Fortune List:</b> The fortune list view lists the fortunes the other user owns.
@@ -299,7 +326,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        3. A heart for each fortune is either red, if the current used has liked the fortune, or black, if the current user has not liked the fortune.
        4. Single tapping on a fortune will go into the [detailed view](#fortune-detailed-view) of that fortune.
        5. Double tapping on a fortue will cause the current user to like or unlike it and will add or unadd the fortune to the current user's liked list.
-  2. <b>Text Search:<b> Allows the current user to search for any fortunes the other user owns by text.
+  2. <b>Text Search:</b> Allows the current user to search for any fortunes the other user owns by text.
      - <b>Features:</b>
        1. The current user can enter some text in the search bar and press enter or search to search through all the other user's fortunes for the given text they entered.
        2. Upon searching, if fortunes were found, they will be displayed. If no fortunes were found, error text will be displayed.
@@ -312,13 +339,17 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   4. <b>Liked List:</b> Allows the user to view any fortunes the other user has liked, whether that's from the other user's own fortune list or another user's fortune list.
      - <b>Features</b>
        - This view contains all features from the fortune list.
+  
 - <b>Special Features:</b>
   - Swiping left or right will take the current user to the page next to the current page.
   - Clicking on a menu item will take the user to that page
   - Clicking the back button will take the user back the the [Friends](#friends) page.
    
 ### Settings
+[img]
+  
 - <b>Description:</b> Allows the user to change their profile picture, privacy settings, application settings, and delete their account.
+  
 - <b>Features:</b>
   1. Clicking on the user's profile picture pops up a window allowing the user to upload an image from their device to change their profile picture.
   2. The user can change their privacy/user settings:
@@ -335,7 +366,10 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   5. Pressing the back button sends the user back to their [profile](#profile---logged-in-user)
 
 ### Fortune Detailed View
+[img]
+  
 - <b>Description:</b> When a fortune is clicked from either the current user's profile, a friend's profile, or a different user's profile, they are taken to this view which shows the user more details on the selected fortune.
+  
 - <b>Features:</b>
   1. A map is shown which shows all fortunes and their location for the user this fortune belongs to. If this fortune has a location, the map is zoomed in on that location. If the user this fortune belongs to has the map turned off for the current user, the map is not shown.
   2. The time the fortune was received at is shown below the map.
