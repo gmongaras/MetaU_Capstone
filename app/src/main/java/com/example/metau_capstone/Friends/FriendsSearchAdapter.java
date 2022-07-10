@@ -30,9 +30,11 @@ import com.parse.SaveCallback;
 import java.util.List;
 import java.util.Objects;
 
-import Fragments.Main.FriendsFragment;
 import Fragments.Main.ProfileFragment;
 
+/**
+ ** Adapter used to manage the Friends Search Fragment recycler view
+ */
 public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdapter.ViewHolder> {
     private static final String TAG = "FriendsSearchAdapter";
 
@@ -50,6 +52,13 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
     List<ParseUser> sent;
     List<ParseUser> blocked;
 
+    /**
+     * Initialize the adapter
+     * @param users A list of ParseUser objects which we want to initialize the
+     *                recycler view with.
+     * @param context Context from the class using this adapter
+     * @param fragmentManager Fragment manager using this adapter to handle back presses
+     */
     public FriendsSearchAdapter(List<ParseUser> users, Context context, FragmentManager fragmentManager) {
         this.users = users;
         this.fragmentManager = fragmentManager;
@@ -77,7 +86,12 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         // Default mode is 2
         holder.mode = 2;
 
-        // Get the mode of the current user. Is it a friend (1) or another user (2)?
+        // Get the mode of the current user
+        // 0 - Current user
+        // 1 - Friend
+        // 2 - Other user
+        // 3 - Other user blocked by logged in user
+        // 4 - Logged in user blocked by other user
         ParseRelation<ParseUser> friends = ParseUser.getCurrentUser().getRelation("friends");
         ParseQuery<ParseUser> q = friends.getQuery();
         q.whereEqualTo("objectId", friend.getObjectId());
@@ -179,7 +193,12 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         // Is the user friending someone?
         boolean friending;
 
-        // User mode
+        // What mode should the profile be put in?
+        // 0 - Current user
+        // 1 - Friend
+        // 2 - Other user
+        // 3 - Other user blocked by logged in user
+        // 4 - Logged in user blocked by other user
         public int mode;
 
         // Has a button been displayed yet?
@@ -445,7 +464,15 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         }
 
 
-        // Given some text and a color, display the button with that text and background color
+        /**
+         * Given some text and a color, display the button with that text and background color
+         * @param text The text to show in the button
+         * @param colorId The id of the button color
+         * @param mode The mode to add an onClick listener to the button:
+         *             null: Don't add a listener
+         *             "send": When the button is clicked, send a friend request
+         *             "remove": When the button is clicked, remove a friend request
+         */
         private void displayButton(String text, int colorId, @Nullable String mode) {
             // Get the color
             int color = 0;

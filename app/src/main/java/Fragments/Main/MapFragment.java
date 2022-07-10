@@ -23,9 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MapFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Map Fragment
  */
 public class MapFragment extends Fragment {
 

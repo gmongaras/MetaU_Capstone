@@ -11,6 +11,9 @@ import Fragments.Profile.ProfileList;
 import Fragments.Profile.ProfileSearchLoc;
 import Fragments.Profile.ProfileSearchText;
 
+/**
+ ** Adapter used to manage the view holder in the Profile Fragment
+ */
 public class ProfileCollectionAdapter extends FragmentStateAdapter {
     // User to load data for
     ParseUser user;
@@ -18,12 +21,20 @@ public class ProfileCollectionAdapter extends FragmentStateAdapter {
     // Mode to load user
     int mode;
 
+    /**
+     * Initialize the view pager adapter
+     * @param fragment The fragment that controls the view pager (Profile Fragment)
+     * @param user The user which we want to load into the Profile Fragment
+     * @param mode The mode to load the user in
+     */
     public ProfileCollectionAdapter(Fragment fragment, ParseUser user, int mode) {
         super(fragment);
         this.user = user;
         this.mode = mode;
     }
 
+    // Given a position in the view holder, create a new
+    // fragment for that page position.
     @NonNull
     @Override
     public Fragment createFragment(int position) {

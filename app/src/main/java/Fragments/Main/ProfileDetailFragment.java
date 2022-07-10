@@ -35,12 +35,9 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileDetailFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Profile Detail Fragment
  */
 public class ProfileDetailFragment extends Fragment {
 
@@ -51,6 +48,11 @@ public class ProfileDetailFragment extends Fragment {
     private Fortune fortune;
 
     // Mode in which the profile is in
+    // 0 - Current user
+    // 1 - Friend
+    // 2 - Other user
+    // 3 - Other user blocked by logged in user
+    // 4 - Logged in user blocked by other user
     private static final String ARG_INT = "mode";
     private int mode;
 
@@ -87,7 +89,13 @@ public class ProfileDetailFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // When the fragment is created, get the fortune that was passed in
+    /**
+     * When the fragment is created, get the fortune to load
+     * @param fortune The fortune to load into this fragment
+     * @param user The user who owns this fortune
+     * @param mode What mode the user who owns this fortune should be loaded as
+     * @return The newly created Profile Detail Fragment
+     */
     public static ProfileDetailFragment newInstance(Fortune fortune, ParseUser user, int mode) {
         ProfileDetailFragment fragment = new ProfileDetailFragment();
         Bundle args = new Bundle();

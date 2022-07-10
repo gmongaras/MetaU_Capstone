@@ -7,6 +7,10 @@ import android.widget.TextView;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
+/**
+ ** This class handles the creation of popups above each of the
+ ** markers in any of the Google Maps views.
+ */
 public class CustomWindowAdapter implements GoogleMap.InfoWindowAdapter {
     LayoutInflater mInflater;
 

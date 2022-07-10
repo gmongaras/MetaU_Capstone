@@ -9,6 +9,10 @@ import android.content.Intent;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ ** When the BootReceiver receives an alert that it should broadcast
+ ** a new push notification, send out that notification.
+ */
 public class BootReceiver extends BroadcastReceiver {
 
     @Override

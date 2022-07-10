@@ -1,35 +1,23 @@
 package Fragments.Main;
 
-import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.metau_capstone.Friends.FriendCollectionAdapter;
 import com.example.metau_capstone.R;
 import com.google.android.material.tabs.TabLayout;
-import com.parse.ParseQuery;
-
-import Fragments.Friends.FriendsListFragment;
-import Fragments.Friends.FriendsRequestFragment;
-import Fragments.Friends.FriendsSearchFragment;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FriendsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Friends List Fragment
  */
 public class FriendsFragment extends Fragment {
 
@@ -51,6 +39,13 @@ public class FriendsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * When initializing the friends fragment, A page is needed to
+     * load in the correct page in the view pager
+     * @param page A page values between 0 and 2 which 0 is friends
+     *             list, 1 is friend requests, and 2 is friend search
+     * @return The newly created friends fragment
+     */
     public static FriendsFragment newInstance(int page) {
         FriendsFragment fragment = new FriendsFragment();
         Bundle args = new Bundle();
@@ -133,9 +128,11 @@ public class FriendsFragment extends Fragment {
     }
 
 
-
-
-    // Handle fragment changes
+    /**
+     * Given a fragment value, change the fragment in the page viewer to
+     * the given fragment number
+     * @param fragVal The fragment to change in the view pager
+     */
     public void changeFrag(int fragVal) {
         switch (fragVal) {
             // If the menu item clicked is Friends
@@ -171,7 +168,6 @@ public class FriendsFragment extends Fragment {
 
                 // Change the fragment
                 pagerFriends.setCurrentItem(2);
-                int i = 0;
 
                 break;
         }

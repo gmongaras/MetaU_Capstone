@@ -14,8 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -33,9 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileSearchText#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Profile Search by Text Fragment
  */
 public class ProfileSearchText extends Fragment {
 
@@ -63,6 +59,11 @@ public class ProfileSearchText extends Fragment {
     ProfileAdapter adapter;
 
     // Mode in which the profile is in
+    // 0 - Current user
+    // 1 - Friend
+    // 2 - Other user
+    // 3 - Other user blocked by logged in user
+    // 4 - Logged in user blocked by other user
     private static final String ARG_INT = "mode";
     private int mode;
 
@@ -83,6 +84,12 @@ public class ProfileSearchText extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Create the fragment given information to load in
+     * @param user The user to load into this fragment
+     * @param mode The mode to load the user in
+     * @return The newly created fragment
+     */
     public static ProfileSearchText newInstance(ParseUser user, int mode) {
         ProfileSearchText fragment = new ProfileSearchText();
         Bundle args = new Bundle();

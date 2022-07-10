@@ -36,10 +36,9 @@ import java.util.Objects;
 
 import Fragments.Main.HomeFragment_countdown;
 
+
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FriendsListFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Friends List Fragment
  */
 public class FriendsListFragment extends Fragment {
 
@@ -156,7 +155,11 @@ public class FriendsListFragment extends Fragment {
 
 
 
-    // Update the user's friends (and friends while we're at it)
+    /**
+     ** Upon refresh, handle any updates found in the Friend_queue class where
+     ** this user is in "user". This ensures the user can update any
+     ** friend requests when they log in.
+     */
     public void updateFriends() {
         ParseUser curUser = ParseUser.getCurrentUser();
         ParseQuery<Friend_queue> q = new ParseQuery<Friend_queue>(Friend_queue.class);
@@ -223,22 +226,13 @@ public class FriendsListFragment extends Fragment {
                     }
                 });
 
-                // Save the new friends
-//                curUser.add("friends", c);
-//                curUser.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(ParseException e) {
-//                        if (e != null) {
-//                            Log.e(TAG, "Error saving new friends", e);
-//                        }
-//                    }
-//                });
             }
         });
     }
 
 
 
+    // Load in more friends
     private void getFriends() {
         pbFriends.setVisibility(View.VISIBLE);
         swipeContainer.setRefreshing(false);
@@ -264,12 +258,6 @@ public class FriendsListFragment extends Fragment {
                     pbFriends.setVisibility(View.INVISIBLE);
                     return;
                 }
-
-                // If the fragment is not added, don't do anything
-//                if (!isDetached()) {
-//                    pbFriends.setVisibility(View.INVISIBLE);
-//                    return;
-//                }
 
                 // If the user has friends, setup the recycler view
 

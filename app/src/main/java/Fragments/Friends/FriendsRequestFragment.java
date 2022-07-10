@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.Friends.FriendsRequestAdapter;
-import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -36,9 +35,7 @@ import java.util.Objects;
 import Fragments.Main.FriendsFragment;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FriendsRequestFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Friends Request Fragment
  */
 public class FriendsRequestFragment extends Fragment {
 
@@ -48,7 +45,7 @@ public class FriendsRequestFragment extends Fragment {
     // Constant number to load each time we want to load more posts
     private static final int loadRate = 10;
 
-    private static final String TAG = "FriendsListFragment";
+    private static final String TAG = "FriendsRequestFragment";
 
     // Elements in the view
     TextView tvNoRequests;
@@ -144,7 +141,11 @@ public class FriendsRequestFragment extends Fragment {
     }
 
 
-    // Update the user's requests (and friends while we're at it)
+    /**
+     ** Upon refresh, handle any updates found in the Friend_queue class where
+     ** this user is in "user". This ensures the user can update any
+     ** friend requests when they log in.
+     */
     public void updateRequests() {
         ParseUser curUser = ParseUser.getCurrentUser();
         ParseQuery<Friend_queue> q = new ParseQuery<Friend_queue>(Friend_queue.class);
@@ -211,21 +212,12 @@ public class FriendsRequestFragment extends Fragment {
                     }
                 });
 
-                // Save the new friends
-//                curUser.add("friends", c);
-//                curUser.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(ParseException e) {
-//                        if (e != null) {
-//                            Log.e(TAG, "Error saving new friends", e);
-//                        }
-//                    }
-//                });
             }
         });
     }
 
 
+    // Load in more friend requests
     private void getRequests() {
         swipeContainer.setRefreshing(false);
 

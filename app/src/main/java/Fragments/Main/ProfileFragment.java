@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -57,13 +56,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import Fragments.Friends.FriendsListFragment;
 import Fragments.Profile.SettingsFragment;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Profile Fragment
  */
 public class ProfileFragment extends Fragment {
 
@@ -96,6 +92,12 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Create the fragment given information to load in
+     * @param user The user to load into this fragment
+     * @param mode The mode to load the user in
+     * @return The newly created fragment
+     */
     public static ProfileFragment newInstance(ParseUser user, int mode) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -306,6 +308,7 @@ public class ProfileFragment extends Fragment {
 
 
 
+    // Inflate and show the current user popup menu in the top right
     private void showUserMenu(View v) {
         // Show the popup menu
         Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
@@ -359,6 +362,7 @@ public class ProfileFragment extends Fragment {
 
 
 
+    // Inflate and show the friend popup menu in the top right
     private void showFriendMenu(View v) {
         // Show the popup menu
         Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
@@ -438,6 +442,7 @@ public class ProfileFragment extends Fragment {
 
 
 
+    // Inflate and show the other user popup menu in the top right
     private void showOtherUserMenu(View v) {
         // Is the user blocked?
         ParseRelation<ParseUser> rel = ParseUser.getCurrentUser().getRelation("Blocked");
@@ -809,6 +814,7 @@ public class ProfileFragment extends Fragment {
     }
 
 
+    // Given the URI of a file on the device, load in the file into a bitmap
     public Bitmap loadFromUri(Uri photoUri) {
         Bitmap image = null;
         try {

@@ -5,6 +5,10 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+
+/**
+ ** Parse class used to manager the Fortune class in the database
+ */
 @ParseClassName("Fortune")
 public class Fortune extends ParseObject {
 

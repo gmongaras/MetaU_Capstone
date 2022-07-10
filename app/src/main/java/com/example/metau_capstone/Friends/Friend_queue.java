@@ -4,6 +4,9 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+/**
+ ** Parse class used to manage the Friend_queue class in the database
+ */
 @ParseClassName("Friend_queue")
 public class Friend_queue extends ParseObject {
 

@@ -14,6 +14,9 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+/**
+ ** This class is used to manage the Register Activity (activity_register.xml)
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";

@@ -26,6 +26,9 @@ import java.util.List;
 
 import Fragments.Main.ProfileFragment;
 
+/**
+ ** Adapter used to manage the Friends List Fragment recycler view
+ */
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
     // List in the recycler view
@@ -36,6 +39,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     Context context;
 
+    /**
+     * Initialize the adapter
+     * @param friends A list of ParseUser objects which we want to initialize the
+     *                recycler view with.
+     * @param context Context from the class using this adapter
+     * @param fragmentManager Fragment manager using this adapter to handle back presses
+     */
     public FriendsAdapter(List<ParseUser> friends, Context context, FragmentManager fragmentManager) {
         this.friends = friends;
         this.fragmentManager = fragmentManager;

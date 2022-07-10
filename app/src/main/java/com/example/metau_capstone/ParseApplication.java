@@ -6,6 +6,9 @@ import com.parse.ParseObject;
 
 import android.app.Application;
 
+/**
+ * Class used to initialize Parse when the application is loaded
+ */
 public class ParseApplication extends Application {
 
     // Initializes Parse SDK as soon as the application is created
@@ -13,7 +16,7 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Register classes
+        // Register custom classes
         ParseObject.registerSubclass(Fortune.class);
         ParseObject.registerSubclass(Friend_queue.class);
 

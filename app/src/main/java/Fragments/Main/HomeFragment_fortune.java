@@ -54,9 +54,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment_fortune#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Home Fortune Fragment
  */
 public class HomeFragment_fortune extends Fragment {
 
@@ -234,8 +232,6 @@ public class HomeFragment_fortune extends Fragment {
                         avCookie.setAnimation(fadeOut);
                         tvFortuneText.setAnimation(fadeIn);
                         tvTextPrompt.setAnimation(fadeIn);
-//                        avCookie.setVisibility(View.INVISIBLE);
-//                        tvFortuneText.setVisibility(View.VISIBLE);
 
                         // Change the displayed text
                         tvTextPrompt.setText(R.string.promptAfter);
@@ -370,8 +366,11 @@ public class HomeFragment_fortune extends Fragment {
 
 
 
-
-    // Generate a random array given the 2-D size of the array
+    /**
+     * Generate a random array given the size of the array
+     * @param Size A long array with the size of the wanted output array
+     * @return A tensor of random floats with the same shape as the given size
+     */
     public Tensor generateTensor(long[] Size) {
         // Create a random array of floats
         Random rand = new Random();
@@ -387,7 +386,14 @@ public class HomeFragment_fortune extends Fragment {
         return tensor;
     }
 
-    // Load in the vocab given the filename
+    /**
+     * Given a the filename of the vocab file, load it into memory
+     * @param fileName The filename of the vocab file
+     * @return A map mapping integer values (which will be outputted by the model)
+     *          to Strings (which will be the word to model predicted)
+     *          containing the entire vocab.
+     * @throws IOException
+     */
     public Map<Integer, String> loadVocab(String fileName) throws IOException {
         // Open the file
         FileInputStream fstream = new FileInputStream(fileName);

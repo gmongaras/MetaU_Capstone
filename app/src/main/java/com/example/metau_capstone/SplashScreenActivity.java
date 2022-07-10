@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * This class handles loading the the Splash Screen on activities that use it
+ */
 public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

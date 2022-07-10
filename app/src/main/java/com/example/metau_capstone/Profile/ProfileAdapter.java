@@ -31,6 +31,9 @@ import java.util.List;
 
 import Fragments.Main.ProfileDetailFragment;
 
+/**
+ ** Adapter used to manage fortune loading for all views in the Profile Fragment
+ */
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
 
     private final static String TAG = "ProfileAdapter";
@@ -49,13 +52,25 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     // User to load the profile for
     ParseUser user;
 
-    // The user mode
+    // What mode should the profile be put in?
+    // 0 - Current user
+    // 1 - Friend
+    // 2 - Other user
+    // 3 - Other user blocked by logged in user
+    // 4 - Logged in user blocked by other user
     int mode;
 
     // Used to convert the date
     dateFormatter df = new dateFormatter();
 
-    // Constructor to create the adapter with context and a list
+    /**
+     * Initialize the adapter
+     * @param fortunes A list of fortunes to initialize the list with
+     * @param user The user to load fortunes for
+     * @param context What object is using this adapter?
+     * @param manager The manager which manages the fragments this adapter is in
+     * @param mode The user mode to load the fortunes ^
+     */
     public ProfileAdapter(List<Fortune> fortunes, ParseUser user, Context context, FragmentManager manager, int mode) {
         this.fortunes = fortunes;
         this.user = user;

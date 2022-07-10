@@ -1,11 +1,14 @@
 package com.example.metau_capstone;
 
-import com.parse.ParseQuery;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ ** This class is used to easily change the date from a Date object
+ ** to a formatted string
+ */
 public class dateFormatter {
 
     // Dictionary to convert an integer representation of a Month to

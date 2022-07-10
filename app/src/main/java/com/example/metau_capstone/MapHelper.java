@@ -18,7 +18,6 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -31,7 +30,10 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-// Helper methods to work with a map
+
+/**
+ * Class with helper methods to easily work with any Google Maps map
+ */
 public class MapHelper {
     // The map we want to work with
     private GoogleMap map;
@@ -52,7 +54,12 @@ public class MapHelper {
     }
 
 
-
+    /**
+     * Load this map given information to load the map with
+     * @param user The user to load the map for (who's fortunes should be loaded?)
+     * @param errorText Text to display when the map can't be loaded
+     * @param goToLoc True to go to the current user's location, False otherwise
+     */
     public void loadMap(ParseUser user, TextView errorText, boolean goToLoc) {
         // If the map was loaded properly
         if (map != null) {
@@ -88,6 +95,7 @@ public class MapHelper {
 
 
 
+    // go to the current location of the user
     private void goToLocation() {
         // Setup the location manager to get the location
         LocationManager locationManager = (LocationManager) context.getApplicationContext().getSystemService(context.LOCATION_SERVICE);
@@ -116,6 +124,7 @@ public class MapHelper {
 
 
 
+    // Given a user, load all the fortunes as pins on the map for that user
     private void loadPins(ParseUser user) {
         // Specify which class to query
         ParseQuery<Fortune> query = ParseQuery.getQuery(Fortune.class);

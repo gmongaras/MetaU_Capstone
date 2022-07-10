@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Objects;
 
 
+/**
+ ** This class is used to manage the Login Activity (activity_login.xml)
+ */
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
@@ -126,9 +129,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-
-    // Add or removes all friends in the queue
+    /**
+     ** Upon login, handle any updates found in the Friend_queue class where
+     ** this user is in "user". This ensures the user can update any
+     ** friend requests when they log in.
+     */
     public void addFriends() {
         ParseUser curUser = ParseUser.getCurrentUser();
         ParseQuery<Friend_queue> q = new ParseQuery<Friend_queue>(Friend_queue.class);
@@ -181,16 +186,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
-                // Save the new friends
-//                curUser.add("friends", c);
-//                curUser.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(ParseException e) {
-//                        if (e != null) {
-//                            Log.e(TAG, "Error saving new friends", e);
-//                        }
-//                    }
-//                });
             }
         });
     }

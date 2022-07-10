@@ -4,23 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.parse.ParseUser;
-
 import Fragments.Friends.FriendsListFragment;
 import Fragments.Friends.FriendsRequestFragment;
 import Fragments.Friends.FriendsSearchFragment;
-import Fragments.Main.FriendsFragment;
-import Fragments.Profile.ProfileLikedFragment;
-import Fragments.Profile.ProfileList;
-import Fragments.Profile.ProfileSearchLoc;
-import Fragments.Profile.ProfileSearchText;
 
+/**
+ ** Adapter used to manage the View Pager in the Friends Fragment
+ */
 public class FriendCollectionAdapter extends FragmentStateAdapter {
 
+    // Initialize the view pager with a given fragment
     public FriendCollectionAdapter(Fragment fragment) {
         super(fragment);
     }
 
+    // Given a position, create a new fragment for that position
     @NonNull
     @Override
     public Fragment createFragment(int position) {

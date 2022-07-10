@@ -32,6 +32,9 @@ import java.util.Objects;
 import Fragments.Friends.FriendsListFragment;
 import Fragments.Main.FriendsFragment;
 
+/**
+ ** Adapter used to manage the Friends Request Fragment recycler view
+ */
 public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAdapter.ViewHolder> {
     private static final String TAG = "FriendsRequestAdapter";
 
@@ -44,6 +47,13 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
     Context context;
 
 
+    /**
+     * Initialize the adapter
+     * @param users A list of ParseUser objects which we want to initialize the
+     *                recycler view with.
+     * @param context Context from the class using this adapter
+     * @param fragmentManager Fragment manager using this adapter to handle back presses
+     */
     public FriendsRequestAdapter(List<ParseUser> users, Context context, FragmentManager fragmentManager) {
         this.requests = users;
         this.fragmentManager = fragmentManager;
@@ -211,7 +221,11 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         }
 
 
-        // Given a user and a friend, add the friend to the user's friends list
+        /**
+         * Given a user and a friend, add the friend to the user's friends list
+         * @param user The user to add a new friend to
+         * @param friend The friend to add to the user
+         */
         private void addFriend(ParseUser user, ParseUser friend) {
             ParseRelation<ParseUser> friends = user.getRelation("friends");
             friends.add(friend);
@@ -230,8 +244,11 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         }
 
 
-
-        // Given a user and a friend, add the friend to the user's friend's queue
+        /**
+         * Given a user and a friend, add the friend to the user's friend's queue
+         * @param user The user to add a new friend to
+         * @param friend The friend to add to the user
+         */
         private void addFriendToQueue(ParseUser user, ParseUser friend) {
             Friend_queue queue = new Friend_queue();
             queue.setFriend(friend);
@@ -249,7 +266,14 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
 
 
-        // Given a user and a friend, remove the friend from the user's requests list
+        /**
+         * Given a user and a friend, remove the friend from the user's requests list
+         * @param user The user to remove the request from
+         * @param friend The friend that sent the request
+         * @param mode The mode in which the request should be removed. "accept" if
+         *             the user accepted the request and "reject" if the user
+         *             rejected the request.
+         */
         private void removeRequest(ParseUser user, ParseUser friend, String mode) {
             ParseRelation<ParseUser> requests = user.getRelation("friend_requests");
             requests.remove(friend);

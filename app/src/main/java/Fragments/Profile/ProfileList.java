@@ -27,9 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileList#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Profile List Fragment
  */
 public class ProfileList extends Fragment {
 
@@ -53,6 +51,11 @@ public class ProfileList extends Fragment {
     ProfileAdapter adapter;
 
     // Mode in which the profile is in
+    // 0 - Current user
+    // 1 - Friend
+    // 2 - Other user
+    // 3 - Other user blocked by logged in user
+    // 4 - Logged in user blocked by other user
     private static final String ARG_INT = "mode";
     private int mode;
 
@@ -67,6 +70,12 @@ public class ProfileList extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Create the fragment given information to load in
+     * @param user The user to load into this fragment
+     * @param mode The mode to load the user in
+     * @return The newly created fragment
+     */
     public static ProfileList newInstance(ParseUser user, int mode) {
         ProfileList fragment = new ProfileList();
         Bundle args = new Bundle();

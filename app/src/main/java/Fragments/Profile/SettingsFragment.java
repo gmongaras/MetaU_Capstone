@@ -26,36 +26,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.metau_capstone.BootReceiver;
-import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import Fragments.Main.HomeFragment_countdown;
 import Fragments.Main.ProfileFragment;
 
+
+/**
+ * This class is used to manage the Setting Fragment
+ */
 public class SettingsFragment extends Fragment {
 
     private static final String TAG = "SettingsFragment";

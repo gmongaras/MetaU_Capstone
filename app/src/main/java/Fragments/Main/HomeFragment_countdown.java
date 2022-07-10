@@ -29,9 +29,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment_countdown#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Home Countdown Fragment
  */
 public class HomeFragment_countdown extends Fragment {
 

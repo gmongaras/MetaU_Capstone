@@ -34,9 +34,7 @@ import java.util.List;
 import Fragments.Main.FriendsFragment;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FriendsSearchFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This class is used to manage the Friends Search Fragment
  */
 public class FriendsSearchFragment extends Fragment {
 
@@ -239,7 +237,10 @@ public class FriendsSearchFragment extends Fragment {
     }
 
 
-    // Query users given a username to query for
+    /**
+     * Query users given some text to query for
+     * @param queryText The text used to query for usernames
+     */
     private void queryUsers(String queryText) {
         // If the query is null, do nothing
         if (queryText == null) {
