@@ -208,9 +208,8 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   3. When the countdown timer ends (even when the user is not on the app), a push notification is sent to the user's phone, notifying them a new fortune cookie is availble for them to open.
   
 ### Homepage - Fortune
-<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Homepage%20-%20Fortune%201.png" height="400" title="Homepage - Fortune"></p>
-  
-<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Homepage%20-%20Fortune%202.png" height="400" title="Homepage - Fortune"></p>
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Homepage%20-%20Fortune%201.png" height="400" title="Homepage - Fortune">
+<img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Homepage%20-%20Fortune%202.png" height="400" title="Homepage - Fortune"></p>
   
 - <b>Description:</b> If the user is accessing the app 23 hours after openning their last fortune, the user will be taken to this page where they can open a new fortune cookie and receive a new fortune.
 - <b>Features:</b>
@@ -228,7 +227,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   2. If one of the markers is clicked, a little discription of the fortune at that location is shown.
 
 ### Profile - Logged in user
-[img]
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20-%20Logged%20in%20user.png" height="400" title="Profile - Logged in user"></p>
   
 - <b>Description:</b> The logged in user's profile shows the user's current fortunes and has [a menu](#profile-menu---logged-in-user) allowing the user more access to their fortunes. Each part of the menu is described in more detail below.
   
@@ -238,10 +237,10 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   3. In the top right of the view, there is a settings menu, allowing the user to change their [settings](#settings) or logout of their account, which takes them to the [login page](#login-page)
 
 ### Profile Menu - Logged in user
-[img]
   
 - <b>Description:</b> The logged in user's profile page has a menu with 4 views, allowing them to view their fortunes or search for fortunes.
   1. <b>Fortune List:</b> The fortune list view lists the fortunes the user owns.
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Logged%20in%20user%201.png" title="Profile Menu - Logged in user" height="400"></p>
      - <b>Features:</b>
        1. The date the user received each fortune is shown
        2. A text snippet of each fortune is shown
@@ -249,16 +248,19 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        4. Single tapping on a fortune will go into the [detailed view](#fortune-detailed-view) of that fortune.
        5. Double tapping on a fortue will like or unlike it and will add or unadd the fortune to the user's liked list.
   2. <b>Text Search:</b> Allows the user to search for any fortunes they own by text.
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Logged%20in%20user%202.png" title="Profile Menu - Logged in user" height="400"></p>
      - <b>Features:</b>
        1. The user can enter some text in the search bar and press enter or search to search through all their fortunes for the given text they entered.
        2. Upon searching, if fortunes were found, they will be displayed. If no fortunes were found, error text will be displayed.
        - This view also contains all features from the fortune list.
   3. <b>Location Search:</b> Allows the user to search for any fortunes they own by latitude and longitude within a given mile radius.
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Logged%20in%20user%203.png" title="Profile Menu - Logged in user" height="400"></p>
      - <b>Features:</b>
        1. The user can enter latitude and logitude values which describes the location they want to search for fortune for. Additionally, the user can add a mile value which is the radius the user wants to query fortunes within.
        2. Upon searching, if fortunes were found withing the given radius at the given latitude and logitude values, they will be displayed. If no fortunes were found within that radius, error text will be shown.
        - This view also contains all features from the fortune list.
   4. <b>Liked List:</b> Allows the user to view any fortunes they liked, whether that's from their own fortune list or another user's fortune list.
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Logged%20in%20user%204.png" title="Profile Menu - Logged in user" height="400"></p>
      - <b>Features</b>
        - This view contains all features from the fortune list.
   
@@ -267,16 +269,16 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   - Clicking on a menu item will take the user to that page
 
 ### Friends
-[img]
-  
 - <b>Description:</b> The friends page has three different views allowing the user to access their friends or other users.
   1. <b>Friends List:</b> The friends list shows all the user's current friends
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Friends%201.png" title="Friends" height="400"></p>
      - <b>Features:</b>
        1. The name of each friend is shown
        2. The profile picture of each friend is shown
        3. The number of fortunes of each friend is shown
        4. Clicking on a friend takes the user to the [friend's profile](#profile---friendother-user)
   2. <b>Friend Requests:</b> The friends request list shows all the user's who have sent a friend request to the current user
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Friends%202.png" title="Friends" height="400"></p>
      - <b>Features:</b>
        1. The name of each user who sent a request is shown
        2. The profile picture of each user who sent a request is shown
@@ -284,6 +286,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        4. A button is shown to accept a friend request. Upon accepting a friend request, both users add eachother as friends and the friended user will now show up in the Friends List.
        5. A button is shown to decline a friend request. Upon declining a friend request, the users are not added as friends and the request is removed.
   3. <b>Friend Search:</b> The friends search page allows the user to search for new friends
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Friends%203.png" title="Friends" height="400"></p>
      - <b>Features:</b>
        1. The search bar at the top of the page allows the user to enter text to query for new users. When the user presses the search button, users are queried. If no users were found, error text is shown. If users were found, they are displayed.
        2. Each displayed user has the name of the user shown.
@@ -304,7 +307,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   - Clicking on a menu item takes the user to that view.
 
 ### Profile - Friend/Other User
-[img]
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20-%20Friend:Other%20User.png" title="Profile - Friend/Other User" height="400"></p>
   
 - <b>Description:</b> The friend or other user profile shows the user's current fortunes and has [a menu](#profile-menu---friendother-user) allowing the current user more access to other user's fortunes. Each part of the menu is described in more detail below.
   
@@ -315,11 +318,10 @@ The user account is used to keep track of the user's fortunes, friends, etc.
      - For other users, this menu only has a block option. Blocking removes all liked fortunes between the current user and the other user.
 
 ### Profile Menu - Friend/Other User
-[img]
-  
 - <b>Description:</b> The other user's profile page has a menu with 4 views, allowing the current user to view the other user's fortunes or search through the other user's fortunes.
   - If the other user does not allow the current user (whether they are a friend or not a friend) to view their fortunes, none of the view will show up and error text will be displayed.
   1. <b>Fortune List:</b> The fortune list view lists the fortunes the other user owns.
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%201.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features:</b>
        1. The date the other user received each fortune is shown
        2. A text snippet of each fortune is shown
@@ -327,16 +329,19 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        4. Single tapping on a fortune will go into the [detailed view](#fortune-detailed-view) of that fortune.
        5. Double tapping on a fortue will cause the current user to like or unlike it and will add or unadd the fortune to the current user's liked list.
   2. <b>Text Search:</b> Allows the current user to search for any fortunes the other user owns by text.
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%202.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features:</b>
        1. The current user can enter some text in the search bar and press enter or search to search through all the other user's fortunes for the given text they entered.
        2. Upon searching, if fortunes were found, they will be displayed. If no fortunes were found, error text will be displayed.
        - This view also contains all features from the fortune list.
   3. <b>Location Search:</b> Allows the current user to search for any fortunes the other user owns by latitude and longitude within a given mile radius.
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%203.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features:</b>
        1. The current user can enter latitude and logitude values which describes the location they want to search the other user's fortunes for. Additionally, the user can add a mile value which is the radius the user wants to query fortunes within.
        2. Upon searching, if fortunes were found withing the given radius at the given latitude and logitude values, they will be displayed. If no fortunes were found within that radius, error text will be shown.
        - This view also contains all features from the fortune list.
   4. <b>Liked List:</b> Allows the user to view any fortunes the other user has liked, whether that's from the other user's own fortune list or another user's fortune list.
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%204.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features</b>
        - This view contains all features from the fortune list.
   
@@ -346,7 +351,8 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   - Clicking the back button will take the user back the the [Friends](#friends) page.
    
 ### Settings
-[img]
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Settings%201.png" title="Settings" height="400">
+<img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Settings%202.png" title="Settings" height="400"></p>
   
 - <b>Description:</b> Allows the user to change their profile picture, privacy settings, application settings, and delete their account.
   
@@ -366,7 +372,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   5. Pressing the back button sends the user back to their [profile](#profile---logged-in-user)
 
 ### Fortune Detailed View
-[img]
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Fortune%20Detailed%20View.png" title="Fortune Detailed View" height="400"></p>
   
 - <b>Description:</b> When a fortune is clicked from either the current user's profile, a friend's profile, or a different user's profile, they are taken to this view which shows the user more details on the selected fortune.
   
