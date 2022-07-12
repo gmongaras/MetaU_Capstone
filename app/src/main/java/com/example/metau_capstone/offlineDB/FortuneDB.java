@@ -1,4 +1,4 @@
-package com.example.metau_capstone;
+package com.example.metau_capstone.offlineDB;
 
 
 import androidx.room.ColumnInfo;
@@ -26,9 +26,9 @@ public class FortuneDB {
     @ColumnInfo
     public String message; // Fortune message
     @ColumnInfo
-    public float Lat_; // Latitude of location of fortune
+    public double Lat_; // Latitude of location of fortune
     @ColumnInfo
-    public float Long_; // Longitude of location of fortune
+    public double Long_; // Longitude of location of fortune
     @ColumnInfo
     public boolean liked; // Has the user liked this fortune?
     @ColumnInfo

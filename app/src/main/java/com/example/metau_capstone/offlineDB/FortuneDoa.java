@@ -1,10 +1,12 @@
-package com.example.metau_capstone;
+package com.example.metau_capstone.offlineDB;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import java.util.List;
 
 
 /**
@@ -17,6 +19,9 @@ public interface FortuneDoa {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public Long insertFortune(FortuneDB fort);
+
+    @Query("SELECT * FROM FortuneDB")
+    public List<FortuneDB> getFortunes();
 
     @Delete
     public void deleteFortune(FortuneDB fort);

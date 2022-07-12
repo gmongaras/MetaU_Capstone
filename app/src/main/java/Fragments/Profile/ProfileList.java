@@ -194,7 +194,7 @@ public class ProfileList extends Fragment {
             public void done(List<Fortune> objects, ParseException e) {
                 // If an error occurred, log an error
                 if (e != null) {
-                    Log.e(TAG, "Issue retrieving all posts", e);
+                    Log.e(TAG, "Issue retrieving all fortunes", e);
                     return;
                 }
 

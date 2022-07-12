@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.loader.content.AsyncTaskLoader;
 import androidx.room.Room;
 
 import android.util.Log;
@@ -26,10 +28,15 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.WakefulReceiver;
-import com.example.metau_capstone.database;
-import com.google.android.gms.location.FusedLocationProviderClient;
+import com.example.metau_capstone.dateFormatter;
+import com.example.metau_capstone.offlineDB.FortuneDB;
+import com.example.metau_capstone.offlineDB.FortuneDoa;
+import com.example.metau_capstone.offlineDB.database;
+import com.example.metau_capstone.offlineDB.databaseApp;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -76,10 +83,6 @@ public class HomeFragment_fortune extends Fragment {
 
     // Saved vocab
     Map<Integer, String> vocab;
-
-    // Used for location
-    FusedLocationProviderClient fusedLocationProviderClient;
-    Location userLoc;
 
     // Animations
     protected AlphaAnimation fadeIn = new AlphaAnimation(0.0f , 1.0f ) ;
@@ -362,7 +365,7 @@ public class HomeFragment_fortune extends Fragment {
                                 // When the fortune has been created and saved,
                                 // recreate the database on the user's device
                                 // and save all the fortunes to it
-                                createDatabase();
+                                createDatabase(requireContext());
                             }
                         }
                     });
@@ -372,11 +375,76 @@ public class HomeFragment_fortune extends Fragment {
     }
 
 
+    /**
+     * Create a new database and store all the current user's fortune in it. Then
+     * Save this database to the user's phone for offline loading.
+     */
+    public void createDatabase(Context context) {
+        // Get all the user's fortunes
+        ParseRelation<Fortune> fortRel = ParseUser.getCurrentUser().getRelation("fortunes");
+        ParseQuery<Fortune> fortuneQuery = fortRel.getQuery();
+        fortuneQuery.findInBackground(new FindCallback<Fortune>() {
+            @Override
+            public void done(List<Fortune> fortunes, ParseException e) {
+                // If an error occured, log it
+                if (e != null) {
+                    Log.e(TAG, "Unable to retrieve fortunes", e);
+                    return;
+                }
 
-    private void createDatabase() {
-        database myDatabase = Room.databaseBuilder(requireContext(), database.class, database.NAME).fallbackToDestructiveMigration().build();
+                // Get all the users liked fortunes
+                ParseRelation<Fortune> likedRel = ParseUser.getCurrentUser().getRelation("liked");
+                ParseQuery<Fortune> likedQuery = likedRel.getQuery();
+                likedQuery.findInBackground(new FindCallback<Fortune>() {
+                    @Override
+                    public void done(List<Fortune> liked, ParseException e) {
+                        // If an error occured, log it
+                        if (e != null) {
+                            Log.e(TAG, "Unable to retrieve liked fortunes", e);
+                            return;
+                        }
 
-        ;
+                        // Work with the database on a background thread
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Get the database DOA
+                                final FortuneDoa fortuneDoa = ((databaseApp) context.getApplicationContext()).getDatabase().fortuneDOA();
+
+                                // Delete all fortune from the database
+                                ((databaseApp) context.getApplicationContext()).getDatabase().clearAllTables();
+
+                                // Used to format dates
+                                dateFormatter df = new dateFormatter();
+
+                                // Iterate over each fortune
+                                for (Fortune f : fortunes) {
+                                    // Create a new fortune object for the database
+                                    // and store the needed information
+                                    FortuneDB fort = new FortuneDB();
+                                    fort.date = df.toMonthDay(f.getCreatedAt());
+                                    fort.dateDet = df.toMonthDayTime(f.getCreatedAt());
+                                    try { // Checking if the location is null
+                                        fort.Lat_ = f.getLocation().getLatitude();
+                                        fort.Long_ = f.getLocation().getLongitude();
+                                    }
+                                    catch (NullPointerException e2) {
+                                        fort.Lat_ = -1;
+                                        fort.Long_ = -1;
+                                    }
+                                    fort.likeCt = f.getLikeCt();
+
+                                    // Insert the fortune into the database
+                                    fortuneDoa.insertFortune(fort);
+                                }
+
+                            }
+                        });
+
+                    }
+                });
+            }
+        });
     }
 
 
