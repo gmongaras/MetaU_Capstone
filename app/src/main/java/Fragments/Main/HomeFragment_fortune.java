@@ -370,92 +370,11 @@ public class HomeFragment_fortune extends Fragment {
                                 // When the fortune has been created and saved,
                                 // recreate the database on the user's device
                                 // and save all the fortunes to it
-                                createDatabase(context);
+                                (new offlineHelpers()).createDatabase(context);
                             }
                         }
                     });
                 }
-            }
-        });
-    }
-
-
-    /**
-     * Create a new database and store all the current user's fortune in it. Then
-     * Save this database to the user's phone for offline loading.
-     */
-    public void createDatabase(Context context) {
-        // Get all the user's fortunes
-        ParseRelation<Fortune> fortRel = ParseUser.getCurrentUser().getRelation("fortunes");
-        ParseQuery<Fortune> fortuneQuery = fortRel.getQuery();
-        fortuneQuery.findInBackground(new FindCallback<Fortune>() {
-            @Override
-            public void done(List<Fortune> fortunes, ParseException e) {
-                // If an error occurred, log it
-                if (e != null) {
-                    Log.e(TAG, "Unable to retrieve fortunes", e);
-                    return;
-                }
-
-                // Get all the users liked fortunes
-                ParseRelation<Fortune> likedRel = ParseUser.getCurrentUser().getRelation("liked");
-                ParseQuery<Fortune> likedQuery = likedRel.getQuery();
-                likedQuery.findInBackground(new FindCallback<Fortune>() {
-                    @Override
-                    public void done(List<Fortune> liked, ParseException e) {
-                        // If an error occured, log it
-                        if (e != null) {
-                            Log.e(TAG, "Unable to retrieve liked fortunes", e);
-                            return;
-                        }
-
-                        // Work with the database on a background thread
-                        AsyncTask.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Get the database DOA
-                                final FortuneDoa fortuneDoa = ((databaseApp) context.getApplicationContext()).getDatabase().fortuneDOA();
-
-                                // Delete all fortune from the database
-                                ((databaseApp) context.getApplicationContext()).getDatabase().clearAllTables();
-
-                                // Used to format dates
-                                dateFormatter df = new dateFormatter();
-
-                                // Iterate over each fortune
-                                for (Fortune f : fortunes) {
-                                    // Create a new fortune object for the database
-                                    // and store the needed information
-                                    FortuneDB fort = new FortuneDB();
-                                    fort.date = new offlineHelpers().toTimestamp(f.getCreatedAt());
-                                    fort.message = f.getMessage();
-                                    try { // Checking if the location is null
-                                        fort.Lat_ = f.getLocation().getLatitude();
-                                        fort.Long_ = f.getLocation().getLongitude();
-                                    }
-                                    catch (NullPointerException e2) {
-                                        fort.Lat_ = -1;
-                                        fort.Long_ = -1;
-                                    }
-                                    fort.likeCt = f.getLikeCt();
-
-                                    // Does the user like this fortune
-                                    for (Fortune l : liked) {
-                                        if (Objects.equals(l.getObjectId(), f.getObjectId())) {
-                                            fort.liked = true;
-                                            break;
-                                        }
-                                    }
-
-                                    // Insert the fortune into the database
-                                    fortuneDoa.insertFortune(fort);
-                                }
-
-                            }
-                        });
-
-                    }
-                });
             }
         });
     }

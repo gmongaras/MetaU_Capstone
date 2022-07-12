@@ -186,10 +186,6 @@ public class ProfileList extends Fragment {
 
 
 
-    // Class used to convert dates to store offline
-
-
-
     // Load the user profile in offline mode
     private void loadOffline(View view) {
         // The skip value is initially 0
