@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.WakefulReceiver;
+import com.example.metau_capstone.database;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -319,7 +321,7 @@ public class HomeFragment_fortune extends Fragment {
         }
         newFortune.setMessage(fortune);
         newFortune.setUser(ParseUser.getCurrentUser());
-        newFortune.put("like_ct", 0);
+        newFortune.setLikeCt(0);
 
         // Send the fortune to the database
         newFortune.saveInBackground(new SaveCallback() {
@@ -356,12 +358,25 @@ public class HomeFragment_fortune extends Fragment {
                                     WakefulReceiver wr = new WakefulReceiver();
                                     wr.setAlarm(requireContext());
                                 }
+
+                                // When the fortune has been created and saved,
+                                // recreate the database on the user's device
+                                // and save all the fortunes to it
+                                createDatabase();
                             }
                         }
                     });
                 }
             }
         });
+    }
+
+
+
+    private void createDatabase() {
+        database myDatabase = Room.databaseBuilder(requireContext(), database.class, database.NAME).fallbackToDestructiveMigration().build();
+
+        ;
     }
 
 

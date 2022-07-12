@@ -648,7 +648,7 @@ public class ProfileFragment extends Fragment {
                                     rel.remove(f);
 
                                     // Update the like count
-                                    f.put("like_ct", f.getInt("like_ct")-1);
+                                    f.setLikeCt(f.getLikeCt()-1);
                                     f.saveInBackground();
                                 }
                             }
@@ -672,7 +672,7 @@ public class ProfileFragment extends Fragment {
                                                     rel.remove(f);
 
                                                     // Update the like count
-                                                    f.put("like_ct", f.getInt("like_ct")-1);
+                                                    f.setLikeCt(f.getLikeCt()-1);
                                                     f.saveInBackground();
                                                 }
                                             }

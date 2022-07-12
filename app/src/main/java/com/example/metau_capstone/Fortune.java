@@ -11,12 +11,12 @@ import com.parse.ParseUser;
  */
 @ParseClassName("Fortune")
 public class Fortune extends ParseObject {
-
     // Keys (columns names) in the database for each post
     public static final String KEY_USER = "user";
     public static final String KEY_TIME_CREATED = "createdAt";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_LOCATION = "location";
+    public static final String KEY_LIKECT = "like_ct";
 
     // Getter and setter methods for the user who owns this fortune
     public ParseUser getUser() {
@@ -33,4 +33,8 @@ public class Fortune extends ParseObject {
     // Getter and setter methods for the location of this fortune
     public ParseGeoPoint getLocation() { return getParseGeoPoint(KEY_LOCATION); }
     public void setLocation(ParseGeoPoint location) { put(KEY_LOCATION, location); }
+
+    // Getter and setter methods for the like count of this fortune
+    public int getLikeCt() { return getInt(KEY_LIKECT); }
+    public void setLikeCt(int likeCt) { put(KEY_LIKECT, likeCt); }
 }

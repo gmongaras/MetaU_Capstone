@@ -234,7 +234,7 @@ public class ProfileDetailFragment extends Fragment {
 
 
                 // Set the number of likes for the fortune
-                tvLikeCt.setText(String.valueOf(fortune.getInt("like_ct")));
+                tvLikeCt.setText(String.valueOf(fortune.getLikeCt()));
 
 
                 // Add an onClick listener to the like button
@@ -278,11 +278,11 @@ public class ProfileDetailFragment extends Fragment {
                                 int ct = Integer.parseInt(tvLikeCt.getText().toString());
                                 if (liked) {
                                     ct -= 1;
-                                    fortune.put("like_ct", ct);
+                                    fortune.setLikeCt(ct);
                                 }
                                 else {
                                     ct += 1;
-                                    fortune.put("like_ct", ct);
+                                    fortune.setLikeCt(ct);
                                 }
 
                                 // Save the like count

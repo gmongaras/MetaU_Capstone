@@ -265,7 +265,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                             }
                         }
                     });
-                    fortune.put("like_ct", fortune.getInt("like_ct")-1);
+                    fortune.setLikeCt(fortune.getLikeCt()-1);
                     fortune.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -299,7 +299,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                             }
                         }
                     });
-                    fortune.put("like_ct", fortune.getInt("like_ct")+1);
+                    fortune.setLikeCt(fortune.getLikeCt()+1);
                     fortune.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
