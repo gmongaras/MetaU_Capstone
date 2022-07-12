@@ -48,6 +48,7 @@ The project requires Android 21 or above to run and uses the following packages:
 - com.github.parse-community.Parse-SDK-Android:fcm: 3.0.1
 - com.airbnb.android:lottie: 3.0.1
 - androidx.swiperefreshlayout:swiperefreshlayout: 1.1.0
+- androidx.room:room-runtime:2.4.2
 
 Additionally, the following permissions are used:
 - ACCESS_NETWORK_STATE
