@@ -147,54 +147,59 @@ public class HomeFragment_countdown extends Fragment {
                 // If the difference is less than 23 hours, start the countdown timer
                 // with a tick every second
                 else {
-                    timer =  new CountDownTimer((long) (timeLeft-diff), 1000) {
+                    tvHomePrompt.setVisibility(View.VISIBLE);
+                    tvCountdown.setVisibility(View.VISIBLE);
 
-                        // Every second, update the on screen timer
-                        public void onTick(long millisUntilFinished) {
-                            // Get the hours, seconds, and minutes until the
-                            // timer is done
-                            hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished);
-                            minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)%60;
-                            seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)%60;
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            timer = new CountDownTimer((long) (timeLeft - diff), 1000) {
 
-                            // Get the values as a string and make sure
-                            // there are two characters.
-                            String h = String.valueOf(hours);
-                            if (h.length() == 1) {
-                                h = "0" + h;
-                            }
-                            String m = String.valueOf(minutes);
-                            if (m.length() == 1) {
-                                m = "0" + m;
-                            }
-                            String s = String.valueOf(seconds);
-                            if (s.length() == 1) {
-                                s = "0" + s;
-                            }
+                                // Every second, update the on screen timer
+                                public void onTick(long millisUntilFinished) {
+                                    // Get the hours, seconds, and minutes until the
+                                    // timer is done
+                                    hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished);
+                                    minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60;
+                                    seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60;
 
-                            // Display the new time left
-                            tvCountdown.setText(h + ":" + m + ":" + s);
-                        }
+                                    // Get the values as a string and make sure
+                                    // there are two characters.
+                                    String h = String.valueOf(hours);
+                                    if (h.length() == 1) {
+                                        h = "0" + h;
+                                    }
+                                    String m = String.valueOf(minutes);
+                                    if (m.length() == 1) {
+                                        m = "0" + m;
+                                    }
+                                    String s = String.valueOf(seconds);
+                                    if (s.length() == 1) {
+                                        s = "0" + s;
+                                    }
 
-                        // When the timer is finished, show a text prompt
-                        public void onFinish() {
-                            // If the user is on the main page, swap to the
-                            // fortune view when the timer is up
-                            if (getActivity() != null) {
-                                ArrayList<Fragment> stack = (ArrayList<Fragment>) getActivity().getSupportFragmentManager().getFragments();
-                                if (stack.get(stack.size() - 1).getClass() == HomeFragment_countdown.class) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
+                                    // Display the new time left
+                                    tvCountdown.setText(h + ":" + m + ":" + s);
+                                }
+
+                                // When the timer is finished, show a text prompt
+                                public void onFinish() {
+                                    // If the user is on the main page, swap to the
+                                    // fortune view when the timer is up
+                                    if (getActivity() != null) {
+                                        ArrayList<Fragment> stack = (ArrayList<Fragment>) getActivity().getSupportFragmentManager().getFragments();
+                                        if (stack.get(stack.size() - 1).getClass() == HomeFragment_countdown.class) {
                                             tvOffline = view.findViewById(R.id.tvOffline);
+                                            tvHomePrompt.setVisibility(View.INVISIBLE);
+                                            tvCountdown.setVisibility(View.INVISIBLE);
                                             tvOffline.setVisibility(View.VISIBLE);
                                             tvOffline.setText(timeUp);
                                         }
-                                    });
+                                    }
                                 }
-                            }
+                            }.start();
                         }
-                    }.start();
+                    });
                 }
 
 
