@@ -4,6 +4,10 @@ import androidx.room.Room;
 
 import com.example.metau_capstone.ParseApplication;
 
+/**
+ * This class is used to initialize the application with a database
+ * so that the database can be accessed from anywhere
+ */
 public class databaseApp extends ParseApplication {
     database db;
 

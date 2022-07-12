@@ -20,9 +20,7 @@ public class FortuneDB {
     // Parts of the fortune we want to store so it can be
     // retrieved later
     @ColumnInfo
-    public String date; // Date the fortune was created at
-    @ColumnInfo
-    public String dateDet; // Detailed date the fortune was created at
+    public Long date; // Date the fortune was created at
     @ColumnInfo
     public String message; // Fortune message
     @ColumnInfo

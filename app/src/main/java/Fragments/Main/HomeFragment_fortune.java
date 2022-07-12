@@ -33,6 +33,7 @@ import com.example.metau_capstone.offlineDB.FortuneDB;
 import com.example.metau_capstone.offlineDB.FortuneDoa;
 import com.example.metau_capstone.offlineDB.database;
 import com.example.metau_capstone.offlineDB.databaseApp;
+import com.example.metau_capstone.offlineHelpers;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -59,6 +60,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -289,6 +291,9 @@ public class HomeFragment_fortune extends Fragment {
 
     // Given a fortune, save the fortune to the database under this user
     public void saveFortune(String fortune) {
+        // Save the context
+        Context context = requireContext();
+
         // Setup the location manager to get the location
         LocationManager locationManager = (LocationManager) getContext().getApplicationContext().getSystemService(requireContext().LOCATION_SERVICE);
 
@@ -365,7 +370,7 @@ public class HomeFragment_fortune extends Fragment {
                                 // When the fortune has been created and saved,
                                 // recreate the database on the user's device
                                 // and save all the fortunes to it
-                                createDatabase(requireContext());
+                                createDatabase(context);
                             }
                         }
                     });
@@ -386,7 +391,7 @@ public class HomeFragment_fortune extends Fragment {
         fortuneQuery.findInBackground(new FindCallback<Fortune>() {
             @Override
             public void done(List<Fortune> fortunes, ParseException e) {
-                // If an error occured, log it
+                // If an error occurred, log it
                 if (e != null) {
                     Log.e(TAG, "Unable to retrieve fortunes", e);
                     return;
@@ -422,8 +427,8 @@ public class HomeFragment_fortune extends Fragment {
                                     // Create a new fortune object for the database
                                     // and store the needed information
                                     FortuneDB fort = new FortuneDB();
-                                    fort.date = df.toMonthDay(f.getCreatedAt());
-                                    fort.dateDet = df.toMonthDayTime(f.getCreatedAt());
+                                    fort.date = new offlineHelpers().toTimestamp(f.getCreatedAt());
+                                    fort.message = f.getMessage();
                                     try { // Checking if the location is null
                                         fort.Lat_ = f.getLocation().getLatitude();
                                         fort.Long_ = f.getLocation().getLongitude();
@@ -433,6 +438,14 @@ public class HomeFragment_fortune extends Fragment {
                                         fort.Long_ = -1;
                                     }
                                     fort.likeCt = f.getLikeCt();
+
+                                    // Does the user like this fortune
+                                    for (Fortune l : liked) {
+                                        if (Objects.equals(l.getObjectId(), f.getObjectId())) {
+                                            fort.liked = true;
+                                            break;
+                                        }
+                                    }
 
                                     // Insert the fortune into the database
                                     fortuneDoa.insertFortune(fort);
