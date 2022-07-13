@@ -22,6 +22,7 @@ import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.Profile.ProfileAdapter;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.offlineHelpers;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -122,6 +123,14 @@ public class ProfileSearchLoc extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // If the user is offline, show some text
+        if (!(new offlineHelpers()).isNetworkAvailable(requireContext())) {
+            view.findViewById(R.id.tvSearchLocPrompt).setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.pbProfileSearchLoc).setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.tvNotOnline_loc).setVisibility(View.VISIBLE);
+            return;
+        }
 
         // Get the search text prompt
         tvSearchLocPrompt = view.findViewById(R.id.tvSearchLocPrompt);
