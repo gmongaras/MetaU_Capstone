@@ -16,11 +16,18 @@ import android.widget.TextView;
 
 import com.example.metau_capstone.MapHelper;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.offlineDB.FortuneDB;
+import com.example.metau_capstone.offlineHelpers;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
+
+import java.io.Serializable;
+import java.util.List;
+
+import Fragments.Profile.ProfileList;
 
 /**
  * This class is used to manage the Map Fragment
@@ -28,6 +35,9 @@ import com.parse.ParseUser;
 public class MapFragment extends Fragment {
 
     private static final String TAG = "MapFragment";
+
+    private static final String ARG_FORTUNES = "fortunes";
+    private List<FortuneDB> fortunes;
 
     // Map helper object
     MapHelper mapHelper;
@@ -39,13 +49,30 @@ public class MapFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static MapFragment newInstance() {
-        return new MapFragment();
+    /**
+     * Create the fragment given information to load in
+     * @param fortunes A list of FortuneDB objects. This should be null if the
+     *                 user is online, and not null if the user is offline.
+     * @return The newly created fragment
+     */
+    public static MapFragment newInstance(List<FortuneDB> fortunes) {
+        MapFragment fragment = new MapFragment();
+        Bundle args = new Bundle();
+        if (fortunes != null) {
+            args.putSerializable(ARG_FORTUNES, (Serializable) fortunes);
+        }
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            if (getArguments().containsKey(ARG_FORTUNES)) {
+                fortunes = (List<FortuneDB>)getArguments().getSerializable(ARG_FORTUNES);
+            }
+        }
     }
 
     @Override
@@ -73,6 +100,11 @@ public class MapFragment extends Fragment {
 
                     // Load the map using the helper
                     mapHelper.loadMap(ParseUser.getCurrentUser(), errorText, true);
+
+                    // If the user is offline, also load the pins
+                    if (!((new offlineHelpers()).isNetworkAvailable(requireContext()))) {
+                        mapHelper.loadPinsOffline(fortunes);
+                    }
                 }
             });
         } else {

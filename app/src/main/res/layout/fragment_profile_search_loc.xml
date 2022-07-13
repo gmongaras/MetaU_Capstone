@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rvProfileSearchLoc" />
+        app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
 
     <TextView
         android:id="@+id/tvSearchLocPrompt"
@@ -46,7 +46,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/rvProfileSearchLoc"
-        app:layout_constraintTop_toTopOf="@+id/rvProfileSearchLoc" />
+        app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
 
     <ProgressBar
         android:id="@+id/pbProfileSearchLoc"
@@ -57,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rvProfileSearchLoc" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -117,7 +117,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rvProfileSearchLoc" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvBlocked1_loc"
@@ -131,7 +131,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rvProfileSearchLoc" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvBlocked2_loc"
@@ -145,6 +145,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rvProfileSearchLoc" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvNotOnline_loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cannot search fortunes when offline"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

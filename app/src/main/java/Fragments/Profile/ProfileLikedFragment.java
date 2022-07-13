@@ -1,5 +1,6 @@
 package Fragments.Profile;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,9 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.Profile.ProfileAdapter;
+import com.example.metau_capstone.Profile.ProfileAdapterOffline;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.offlineDB.FortuneDB;
+import com.example.metau_capstone.offlineDB.FortuneDoa;
+import com.example.metau_capstone.offlineDB.databaseApp;
+import com.example.metau_capstone.offlineHelpers;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -43,6 +50,7 @@ public class ProfileLikedFragment extends Fragment {
     // Recycler view stuff
     LinearLayoutManager layoutManager;
     ProfileAdapter adapter;
+    ProfileAdapterOffline adapterOffline;
 
     // Mode in which the profile is in
     // 0 - Current user
@@ -55,10 +63,14 @@ public class ProfileLikedFragment extends Fragment {
 
     // List of fortunes for the recycler view
     List<Fortune> Fortunes;
+    List<FortuneDB> FortunesDB;
 
     // The user to load data for
     private static final String ARG_USER = "user";
     private ParseUser user;
+
+    // In offline mode, have the first batch of fortunes been loaded?
+    boolean loadedSome;
 
     public ProfileLikedFragment() {
         // Required empty public constructor
@@ -98,6 +110,13 @@ public class ProfileLikedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // If the user is offline, handle offline fortune loading
+        if (!new offlineHelpers().isNetworkAvailable(requireContext())) {
+            loadOffline(view);
+            return;
+        }
+
 
         tvNoLiked = view.findViewById(R.id.tvNoLiked);
 
@@ -160,11 +179,73 @@ public class ProfileLikedFragment extends Fragment {
     }
 
 
+    // Load the liked fortunes in offline mode
+    private void loadOffline(View view) {
+        loadedSome = false;
+
+        // Get the elements
+        rvProfileLiked = view.findViewById(R.id.rvProfileLiked);
+
+        // Initialize the list
+        FortunesDB = new ArrayList<>();
+
+        // Initialize the adapter
+        try {
+            adapterOffline = new ProfileAdapterOffline(FortunesDB, user, getContext(), requireActivity().getSupportFragmentManager(), mode);
+        }
+        catch (Exception e2) {
+            return;
+        }
+        rvProfileLiked.setAdapter(adapterOffline);
+
+        // Configure the Recycler View Layout Manager
+        layoutManager = new LinearLayoutManager(getContext());
+        rvProfileLiked.setLayoutManager(layoutManager);
+
+        // Load in the fortunes
+        loadLikedOffline();
+    }
+
+
+    // Get some fortunes from the database
+    private void loadLikedOffline() {
+        // Use a background thread
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                // Get the database DOA
+                final FortuneDoa fortuneDoa = ((databaseApp) requireContext().getApplicationContext()).getDatabase().fortuneDOA();
+
+                // Get the fortunes from the database and load
+                // them in
+                FortunesDB = fortuneDoa.getLiked(Integer.MAX_VALUE);
+
+                // Notify the adapter
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapterOffline.fortunes = FortunesDB;
+                        adapterOffline.notifyDataSetChanged();
+
+                        // If the fortune count is 0, show a text prompt
+                        if (!loadedSome && FortunesDB.size() == 0) {
+                            getView().findViewById(R.id.tvNoLiked).setVisibility(View.VISIBLE);
+                        }
+
+                        loadedSome = true;
+                    }
+                });
+            }
+        });
+    }
+
+
     // Get fortunes the user has liked
     private void queryLiked() {
         // Get the liked relation and the query for it
         ParseRelation<Fortune> rel = user.getRelation("liked");
         ParseQuery<Fortune> query = rel.getQuery();
+        query.orderByDescending("createdAt");
 
         // Query for all liked fortunes
         query.findInBackground(new FindCallback<Fortune>() {

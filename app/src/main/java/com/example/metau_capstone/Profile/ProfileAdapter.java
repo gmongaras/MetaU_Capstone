@@ -84,6 +84,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         query.findInBackground(new FindCallback<Fortune>() {
             @Override
             public void done(List<Fortune> objects, ParseException e) {
+                if (objects == null) {
+                    return;
+                }
                 likedFortunes = new ArrayList<>();
                 for (Fortune f : objects) {
                     likedFortunes.add(f.getObjectId());
@@ -265,7 +268,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                             }
                         }
                     });
-                    fortune.put("like_ct", fortune.getInt("like_ct")-1);
+                    fortune.setLikeCt(fortune.getLikeCt()-1);
                     fortune.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -299,7 +302,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                             }
                         }
                     });
-                    fortune.put("like_ct", fortune.getInt("like_ct")+1);
+                    fortune.setLikeCt(fortune.getLikeCt()+1);
                     fortune.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {

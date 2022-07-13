@@ -22,6 +22,7 @@ import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.Profile.ProfileAdapter;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.offlineHelpers;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -118,6 +119,14 @@ public class ProfileSearchText extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // If the user is offline, show some text
+        if (!(new offlineHelpers()).isNetworkAvailable(requireContext())) {
+            view.findViewById(R.id.pbProfileSearchText).setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.tvSearchTextPrompt).setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.tvNotOnline_text).setVisibility(View.VISIBLE);
+            return;
+        }
 
         // Get the search text prompt
         tvSearchTextPrompt = view.findViewById(R.id.tvSearchTextPrompt);

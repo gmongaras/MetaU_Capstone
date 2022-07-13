@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
+import com.example.metau_capstone.offlineDB.FortuneDB;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -44,6 +45,12 @@ public class MapHelper {
     // Context so we know where the call is coming from
     Context context;
 
+    // Used to convert times
+    dateFormatter df;
+
+    // Used to work with offline data
+    offlineHelpers h;
+
 
 
     // Constructor taking in a map and the support fragment
@@ -51,6 +58,8 @@ public class MapHelper {
         this.map = map;
         this.mapFragment = mapFragment;
         this.context = context;
+        this.df = new dateFormatter();
+        this.h = new offlineHelpers();
     }
 
 
@@ -76,7 +85,9 @@ public class MapHelper {
 
 
             // Load in all the fortunes as pins into the map
-            loadPins(user);
+            if (user != null) {
+                loadPins(user);
+            }
 
             // Go to the location of the user for a better map experience
             // if request to do so
@@ -160,8 +171,8 @@ public class MapHelper {
                     options.position(latLng);
 
                     // Set the title and snippet from the given view
-                    options.title(fortune.getCreatedAt().toString());
-                    String message = fortune.getMessage().toString();
+                    options.title(df.toMonthDayTime(fortune.getCreatedAt()));
+                    String message = fortune.getMessage();
                     if (message.length() > 50) {
                         message = message.substring(0, 50) + "...";
                     }
@@ -175,6 +186,39 @@ public class MapHelper {
                 }
             }
         });
+    }
+
+
+    // Given a list of FortuneDB object, load the pins on the map
+    public void loadPinsOffline(List<FortuneDB> fortunes) {
+        // If no error occurred, load in the fortunes
+        for (FortuneDB fortune : fortunes) {
+            // Create the marker options
+            MarkerOptions options = new MarkerOptions();
+
+            // If the longitude is -1, there is no location for this fortune
+            if (fortune.Long_ == -99999999) {
+                continue;
+            }
+
+            // Set the position of the marker
+            LatLng latLng = new LatLng(fortune.Lat_, fortune.Long_);
+            options.position(latLng);
+
+            // Set the title and snippet from the given view
+            options.title(df.toMonthDayTime(h.toDate(fortune.date)));
+            String message = fortune.message;
+            if (message.length() > 50) {
+                message = message.substring(0, 50) + "...";
+            }
+            options.snippet(message);
+
+            // Define custom marker
+            //options.icon(bitmapDescriptorFromVector(MapDemoActivity.this, R.drawable.marker));
+
+            // Add the marker with an animation
+            dropPinEffect(map.addMarker(options));
+        }
     }
 
 

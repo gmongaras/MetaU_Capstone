@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Friends.FriendsSearchAdapter;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.offlineHelpers;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -89,12 +90,19 @@ public class FriendsSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_friends, container, false);
+        return inflater.inflate(R.layout.fragment_friends_search, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // If the user is offline, show a message
+        if (!(new offlineHelpers()).isNetworkAvailable(requireContext())) {
+            view.findViewById(R.id.tv_notOnine_search).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.tvPrompt).setVisibility(View.INVISIBLE);
+            return;
+        }
 
         skipVal = 0;
 
@@ -114,9 +122,6 @@ public class FriendsSearchFragment extends Fragment {
 
         // Initialize the Users list
         Users = new ArrayList<>();
-
-        // Get the Users using the query text
-        //queryUsers(" ");
 
 
 

@@ -23,6 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
@@ -31,6 +32,19 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="No friends :(\nAdd some with the search tab!"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_notOnine_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cannot view friends when offline"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:visibility="invisible"

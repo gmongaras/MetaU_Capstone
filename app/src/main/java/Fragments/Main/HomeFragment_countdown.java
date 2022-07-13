@@ -1,5 +1,6 @@
 package Fragments.Main;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -17,6 +18,10 @@ import android.widget.TextView;
 
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.offlineDB.FortuneDB;
+import com.example.metau_capstone.offlineDB.FortuneDoa;
+import com.example.metau_capstone.offlineDB.databaseApp;
+import com.example.metau_capstone.offlineHelpers;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -35,6 +40,8 @@ public class HomeFragment_countdown extends Fragment {
 
     // Elements in the view
     TextView tvCountdown;
+    TextView tvHomePrompt;
+    TextView tvOffline;
 
     // Current timer values
     long hours;
@@ -78,8 +85,128 @@ public class HomeFragment_countdown extends Fragment {
         // Get the elements in the view
         tvCountdown = view.findViewById(R.id.tvCountdown);
 
+        // If the user is offline, load the timer offline
+        if (!(new offlineHelpers().isNetworkAvailable(requireContext()))) {
+            setTimerOffline(view);
+            return;
+        }
+
         // Get the last fortune and set the timer
         setTimer();
+    }
+
+
+    // Query the database and set the timer
+    private void setTimerOffline(View view) {
+        tvHomePrompt = view.findViewById(R.id.tvHomePrompt);
+        tvHomePrompt.setVisibility(View.INVISIBLE);
+        tvCountdown.setVisibility(View.INVISIBLE);
+
+        String noLoad = "Timer cannot be loaded as you do not have any fortunes.";
+        String timeUp = "Time for a new fortune! When you are back online, you can open it!";
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                // Get the newest fortune from the database
+                final FortuneDoa fortuneDoa = ((databaseApp) requireContext().getApplicationContext()).getDatabase().fortuneDOA();
+                List<FortuneDB> fort = fortuneDoa.getFortunes(1);
+
+                // If the fortune count is 0, show a prompt as there's nothing to load
+                if (fort.size() == 0) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tvOffline = view.findViewById(R.id.tvOffline);
+                            tvOffline.setVisibility(View.VISIBLE);
+                            tvOffline.setText(noLoad);
+                        }
+                    });
+                    return;
+                }
+
+                // If the user has fortunes, get the time of the latest one
+                Date latestCreatedAt = (new offlineHelpers()).toDate(fort.get(0).date);
+
+                // Get the current date
+                Date currentTime = Calendar.getInstance().getTime();
+
+                // Get the difference between the date times. If the difference
+                // is more than 23 hours, go to the fortune page
+                long diff = currentTime.getTime() - latestCreatedAt.getTime();
+                if (diff >= timeLeft) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tvOffline = view.findViewById(R.id.tvOffline);
+                            tvOffline.setVisibility(View.VISIBLE);
+                            tvOffline.setText(timeUp);
+                        }
+                    });
+                }
+                // If the difference is less than 23 hours, start the countdown timer
+                // with a tick every second
+                else {
+                    tvHomePrompt.setVisibility(View.VISIBLE);
+                    tvCountdown.setVisibility(View.VISIBLE);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            timer = new CountDownTimer((long) (timeLeft - diff), 1000) {
+
+                                // Every second, update the on screen timer
+                                public void onTick(long millisUntilFinished) {
+                                    // Get the hours, seconds, and minutes until the
+                                    // timer is done
+                                    hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished);
+                                    minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60;
+                                    seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60;
+
+                                    // Get the values as a string and make sure
+                                    // there are two characters.
+                                    String h = String.valueOf(hours);
+                                    if (h.length() == 1) {
+                                        h = "0" + h;
+                                    }
+                                    String m = String.valueOf(minutes);
+                                    if (m.length() == 1) {
+                                        m = "0" + m;
+                                    }
+                                    String s = String.valueOf(seconds);
+                                    if (s.length() == 1) {
+                                        s = "0" + s;
+                                    }
+
+                                    // Display the new time left
+                                    tvCountdown.setText(h + ":" + m + ":" + s);
+                                }
+
+                                // When the timer is finished, show a text prompt
+                                public void onFinish() {
+                                    // If the user is on the main page, swap to the
+                                    // fortune view when the timer is up
+                                    if (getActivity() != null) {
+                                        ArrayList<Fragment> stack = (ArrayList<Fragment>) getActivity().getSupportFragmentManager().getFragments();
+                                        if (stack.get(stack.size() - 1).getClass() == HomeFragment_countdown.class) {
+                                            tvOffline = view.findViewById(R.id.tvOffline);
+                                            tvHomePrompt.setVisibility(View.INVISIBLE);
+                                            tvCountdown.setVisibility(View.INVISIBLE);
+                                            tvOffline.setVisibility(View.VISIBLE);
+                                            tvOffline.setText(timeUp);
+                                        }
+                                    }
+                                }
+                            }.start();
+                        }
+                    });
+                }
+
+
+            }
+        });
+
+
     }
 
 

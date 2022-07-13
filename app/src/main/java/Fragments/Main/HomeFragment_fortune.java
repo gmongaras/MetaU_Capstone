@@ -6,12 +6,15 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.loader.content.AsyncTaskLoader;
+import androidx.room.Room;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,9 +28,16 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.WakefulReceiver;
-import com.google.android.gms.location.FusedLocationProviderClient;
+import com.example.metau_capstone.dateFormatter;
+import com.example.metau_capstone.offlineDB.FortuneDB;
+import com.example.metau_capstone.offlineDB.FortuneDoa;
+import com.example.metau_capstone.offlineDB.database;
+import com.example.metau_capstone.offlineDB.databaseApp;
+import com.example.metau_capstone.offlineHelpers;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -50,6 +60,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -74,10 +85,6 @@ public class HomeFragment_fortune extends Fragment {
 
     // Saved vocab
     Map<Integer, String> vocab;
-
-    // Used for location
-    FusedLocationProviderClient fusedLocationProviderClient;
-    Location userLoc;
 
     // Animations
     protected AlphaAnimation fadeIn = new AlphaAnimation(0.0f , 1.0f ) ;
@@ -284,6 +291,9 @@ public class HomeFragment_fortune extends Fragment {
 
     // Given a fortune, save the fortune to the database under this user
     public void saveFortune(String fortune) {
+        // Save the context
+        Context context = requireContext();
+
         // Setup the location manager to get the location
         LocationManager locationManager = (LocationManager) getContext().getApplicationContext().getSystemService(requireContext().LOCATION_SERVICE);
 
@@ -319,7 +329,7 @@ public class HomeFragment_fortune extends Fragment {
         }
         newFortune.setMessage(fortune);
         newFortune.setUser(ParseUser.getCurrentUser());
-        newFortune.put("like_ct", 0);
+        newFortune.setLikeCt(0);
 
         // Send the fortune to the database
         newFortune.saveInBackground(new SaveCallback() {
@@ -356,6 +366,11 @@ public class HomeFragment_fortune extends Fragment {
                                     WakefulReceiver wr = new WakefulReceiver();
                                     wr.setAlarm(requireContext());
                                 }
+
+                                // When the fortune has been created and saved,
+                                // recreate the database on the user's device
+                                // and save all the fortunes to it
+                                (new offlineHelpers()).createDatabase(context);
                             }
                         }
                     });

@@ -23,6 +23,8 @@ import com.parse.SaveCallback;
 import java.util.List;
 import java.util.Objects;
 
+import Fragments.Main.HomeFragment_fortune;
+
 
 /**
  ** This class is used to manage the Login Activity (activity_login.xml)
@@ -51,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // If the user is already logged in, go straight to the main activity
         if (ParseUser.getCurrentUser() != null) {
+            // Go to the main activity
             goMainActivity();
         }
 
@@ -195,6 +198,12 @@ public class LoginActivity extends AppCompatActivity {
 
     // Go to the main activity when the user has logged in
     private void goMainActivity() {
+        // Create a database when the user logs in and save it to
+        // the user's phone for offline loading, if the user is online
+        if (new offlineHelpers().isNetworkAvailable(this)) {
+            (new offlineHelpers()).createDatabase(this);
+        }
+
         // When the user logs in, check if they have any new friends and add them
         addFriends();
 
