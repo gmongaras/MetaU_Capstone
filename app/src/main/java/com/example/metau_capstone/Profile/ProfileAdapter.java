@@ -84,6 +84,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         query.findInBackground(new FindCallback<Fortune>() {
             @Override
             public void done(List<Fortune> objects, ParseException e) {
+                if (objects == null) {
+                    return;
+                }
                 likedFortunes = new ArrayList<>();
                 for (Fortune f : objects) {
                     likedFortunes.add(f.getObjectId());

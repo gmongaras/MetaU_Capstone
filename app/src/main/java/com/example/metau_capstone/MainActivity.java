@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -11,9 +13,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.example.metau_capstone.offlineDB.FortuneDB;
+import com.example.metau_capstone.offlineDB.FortuneDoa;
+import com.example.metau_capstone.offlineDB.databaseApp;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
+import java.util.List;
 import java.util.Map;
 
 import Fragments.Main.FriendsFragment;
@@ -167,15 +173,55 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
 
-                // Create the fragment with paramters
+                // Create the animation
                 ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-                MapFragment fragmentMap = MapFragment.newInstance();
 
-                curFrag = 0;
+                final MapFragment[] fragmentMap = new MapFragment[1];
 
-                // Change the fragment
-                ft.replace(R.id.flContainer, fragmentMap);
-                ft.commit();
+                // If the user is offline we need to load in the fortunes and
+                // send it to the activity
+                if (!((new offlineHelpers()).isNetworkAvailable(this))) {
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Get the database DOA
+                            final FortuneDoa fortuneDoa = ((databaseApp) getApplicationContext()).getDatabase().fortuneDOA();
+
+                            // Get all the fortunes from the database
+                            List<FortuneDB> fortunes = fortuneDoa.getFortunes(Integer.MAX_VALUE);
+
+                            // Notify the adapter
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // Start the fragment transition
+                                    FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
+
+                                    // Create the animation
+                                    ft2.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+
+                                    fragmentMap[0] = MapFragment.newInstance(fortunes);
+
+                                    curFrag = 0;
+
+                                    // Change the fragment
+                                    ft2.replace(R.id.flContainer, fragmentMap[0]);
+                                    ft2.commit();
+                                }
+                            });
+                        }
+                    });
+                }
+                // Otherwise, just create the activity
+                else {
+                    fragmentMap[0] = MapFragment.newInstance(null);
+
+                    curFrag = 0;
+
+                    // Change the fragment
+                    ft.replace(R.id.flContainer, fragmentMap[0]);
+                    ft.commit();
+                }
 
                 break;
 
