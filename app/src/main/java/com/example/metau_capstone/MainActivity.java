@@ -2,6 +2,7 @@ package com.example.metau_capstone;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
@@ -65,12 +66,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Dark or light mode?
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            setTheme(R.style.Theme_DarkMode); //when dark mode is enabled, we use the dark theme
+        } else {
+            setTheme(R.style.Theme_LightMode);  //default app theme
+        }
         setContentView(R.layout.activity_main);
 
         // Get the elements
         bottomNav = findViewById(R.id.bottomNav);
         flContainer = findViewById(R.id.flContainer);
 
+        // Hide the action bar
         try {
             getSupportActionBar().hide();
         }
