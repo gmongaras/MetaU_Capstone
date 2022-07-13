@@ -102,7 +102,7 @@ public class HomeFragment_countdown extends Fragment {
         tvHomePrompt.setVisibility(View.INVISIBLE);
         tvCountdown.setVisibility(View.INVISIBLE);
 
-        String noLoad = "No fortunes to load";
+        String noLoad = "Timer cannot be loaded as you do not have any fortunes.";
         String timeUp = "Time for a new fortune! When you are back online, you can open it!";
 
         AsyncTask.execute(new Runnable() {

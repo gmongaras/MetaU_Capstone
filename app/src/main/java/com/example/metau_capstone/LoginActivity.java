@@ -53,12 +53,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // If the user is already logged in, go straight to the main activity
         if (ParseUser.getCurrentUser() != null) {
-            // Create a database when the user logs in and save it to
-            // the user's phone for offline loading, if the user is online
-            if (new offlineHelpers().isNetworkAvailable(this)) {
-                (new offlineHelpers()).createDatabase(this);
-            }
-
             // Go to the main activity
             goMainActivity();
         }
@@ -204,6 +198,12 @@ public class LoginActivity extends AppCompatActivity {
 
     // Go to the main activity when the user has logged in
     private void goMainActivity() {
+        // Create a database when the user logs in and save it to
+        // the user's phone for offline loading, if the user is online
+        if (new offlineHelpers().isNetworkAvailable(this)) {
+            (new offlineHelpers()).createDatabase(this);
+        }
+
         // When the user logs in, check if they have any new friends and add them
         addFriends();
 

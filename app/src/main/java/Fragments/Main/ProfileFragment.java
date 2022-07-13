@@ -205,6 +205,17 @@ public class ProfileFragment extends Fragment {
                 }
             });
         }
+        // If the user if offline, show a prompt stating settings
+        // aren't available offline
+        else {
+            ivOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(requireContext(), "Settings unavailable offline", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
 
 
         // Handle back button presses

@@ -74,6 +74,9 @@ public class ProfileList extends Fragment {
     List<Fortune> Fortunes;
     List<FortuneDB> FortunesDB;
 
+    // In offline mode, have the first batch of fortunes been loaded?
+    boolean loadedSome;
+
     // The user to load data for
     private static final String ARG_USER = "user";
     private ParseUser user;
@@ -188,6 +191,8 @@ public class ProfileList extends Fragment {
 
     // Load the user profile in offline mode
     private void loadOffline(View view) {
+        loadedSome = false;
+
         // The skip value is initially 0
         skipVal = 1;
 
@@ -242,6 +247,13 @@ public class ProfileList extends Fragment {
                     public void run() {
                         adapterOffline.fortunes = FortunesDB;
                         adapterOffline.notifyDataSetChanged();
+
+                        // If the fortune count is 0, show a text prompt
+                        if (!loadedSome && FortunesDB.size() == 0) {
+                            getView().findViewById(R.id.tvNoFortunes).setVisibility(View.VISIBLE);
+                        }
+
+                        loadedSome = true;
                     }
                 });
 

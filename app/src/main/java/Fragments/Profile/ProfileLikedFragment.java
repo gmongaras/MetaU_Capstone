@@ -69,6 +69,9 @@ public class ProfileLikedFragment extends Fragment {
     private static final String ARG_USER = "user";
     private ParseUser user;
 
+    // In offline mode, have the first batch of fortunes been loaded?
+    boolean loadedSome;
+
     public ProfileLikedFragment() {
         // Required empty public constructor
     }
@@ -178,6 +181,8 @@ public class ProfileLikedFragment extends Fragment {
 
     // Load the liked fortunes in offline mode
     private void loadOffline(View view) {
+        loadedSome = false;
+
         // Get the elements
         rvProfileLiked = view.findViewById(R.id.rvProfileLiked);
 
@@ -221,6 +226,13 @@ public class ProfileLikedFragment extends Fragment {
                     public void run() {
                         adapterOffline.fortunes = FortunesDB;
                         adapterOffline.notifyDataSetChanged();
+
+                        // If the fortune count is 0, show a text prompt
+                        if (!loadedSome && FortunesDB.size() == 0) {
+                            getView().findViewById(R.id.tvNoLiked).setVisibility(View.VISIBLE);
+                        }
+
+                        loadedSome = true;
                     }
                 });
             }
