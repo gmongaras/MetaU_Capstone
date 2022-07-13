@@ -41,6 +41,7 @@ import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.Profile.ProfileCollectionAdapter;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.offlineHelpers;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.parse.FindCallback;
@@ -167,8 +168,8 @@ public class ProfileFragment extends Fragment {
 
         // When the user profile picture is clicked, allow the
         // user to upload a new profile picture.
-        // Do this only if the mode is 0
-        if (mode == 0) {
+        // Do this only if the mode is 0 and the user is online
+        if (mode == 0 && (new offlineHelpers().isNetworkAvailable(requireContext()))) {
             ivProfileImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -182,25 +183,28 @@ public class ProfileFragment extends Fragment {
         }
 
 
-        // Add an onClick listener to the options menu
-        ivOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // If the mode is 0, show the user menu
-                if (mode == 0) {
-                    showUserMenu(v);
-                }
-                // If the mode is 1, show the friend menu
-                else if (mode == 1) {
-                    showFriendMenu(v);
-                }
-                // If the mode is 2, show the other user menu
-                else {
-                    showOtherUserMenu(v);
-                }
+        // Add an onClick listener to the options menu if the
+        // user is online
+        if (new offlineHelpers().isNetworkAvailable(requireContext())) {
+            ivOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // If the mode is 0, show the user menu
+                    if (mode == 0) {
+                        showUserMenu(v);
+                    }
+                    // If the mode is 1, show the friend menu
+                    else if (mode == 1) {
+                        showFriendMenu(v);
+                    }
+                    // If the mode is 2, show the other user menu
+                    else {
+                        showOtherUserMenu(v);
+                    }
 
-            }
-        });
+                }
+            });
+        }
 
 
         // Handle back button presses

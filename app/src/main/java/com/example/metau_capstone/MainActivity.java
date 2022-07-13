@@ -194,19 +194,14 @@ public class MainActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // Start the fragment transition
-                                    FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
-
-                                    // Create the animation
-                                    ft2.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
-
                                     fragmentMap[0] = MapFragment.newInstance(fortunes);
 
                                     curFrag = 0;
 
                                     // Change the fragment
-                                    ft2.replace(R.id.flContainer, fragmentMap[0]);
-                                    ft2.commit();
+                                    ft.replace(R.id.flContainer, fragmentMap[0]);
+                                    ft.commit();
+                                    bottomNav.setSelectedItemId(R.id.action_map);
                                 }
                             });
                         }
