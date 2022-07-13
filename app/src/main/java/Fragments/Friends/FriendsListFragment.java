@@ -22,6 +22,7 @@ import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.Friends.FriendsAdapter;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.offlineHelpers;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -90,6 +91,12 @@ public class FriendsListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // If the user is offline, show a message
+        if (!(new offlineHelpers()).isNetworkAvailable(requireContext())) {
+            view.findViewById(R.id.tv_notOnine_list).setVisibility(View.VISIBLE);
+            return;
+        }
 
         // Get the elements
         rvFriends = view.findViewById(R.id.rvFriendRequests);
