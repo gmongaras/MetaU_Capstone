@@ -17,6 +17,7 @@
   - [Profile Menu - Friend/Other User](#profile-menu---friendother-user)
   - [Settings](#settings)
   - [Fortune Detailed View](#fortune-detailed-view)
+- [Offline Mode](#offline-mode)
 
 
 # Project Description
@@ -385,3 +386,18 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   5. A like button is shown next to the number of likes which allows the current user to like or unlike this fortune.
   6. A share button is shown next to the like button allowing the user to share this fortune to other apps.
   7. Pressing the back button takes the user back to the profile they were examining before going into the detail view.
+
+# Offline Mode
+When the user is offline, the following features are still available:
+- A timer on the home screen shows the time left until their next fortune.
+- The user's fortune list still apears as it would normally.
+- The user's liked fortune list still apears as it would normally.
+- A detailed view of each fortune can be access by clicking on a fortune.
+- The map shows the location of each fortune.
+
+The following features are not available:
+- A new fortune cannot be opened
+- The liked state of a fortune cannot be changed.
+- Friends cannot be accessed in any way.
+- Settings cannot be changed.
+- User's cannot search through their fortunes.
