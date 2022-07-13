@@ -5,13 +5,17 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  ** Class used to store fortune data so it can be stored in the Room database
  */
 @Entity
-public class FortuneDB {
+public class FortuneDB implements Serializable {
     // Used to store fortunes in a database
     @ColumnInfo
     @PrimaryKey(autoGenerate=true)

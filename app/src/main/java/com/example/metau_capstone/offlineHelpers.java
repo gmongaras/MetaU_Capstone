@@ -54,6 +54,7 @@ public class offlineHelpers {
         // Get all the user's fortunes
         ParseRelation<Fortune> fortRel = ParseUser.getCurrentUser().getRelation("fortunes");
         ParseQuery<Fortune> fortuneQuery = fortRel.getQuery();
+        fortuneQuery.include("location");
         fortuneQuery.findInBackground(new FindCallback<Fortune>() {
             @Override
             public void done(List<Fortune> fortunes, ParseException e) {
@@ -69,7 +70,7 @@ public class offlineHelpers {
                 likedQuery.findInBackground(new FindCallback<Fortune>() {
                     @Override
                     public void done(List<Fortune> liked, ParseException e) {
-                        // If an error occured, log it
+                        // If an error occurred, log it
                         if (e != null) {
                             Log.e("offlineHelpers", "Unable to retrieve liked fortunes", e);
                             return;
@@ -100,8 +101,8 @@ public class offlineHelpers {
                                         fort.Long_ = f.getLocation().getLongitude();
                                     }
                                     catch (NullPointerException e2) {
-                                        fort.Lat_ = -1;
-                                        fort.Long_ = -1;
+                                        fort.Lat_ = -99999999;
+                                        fort.Long_ = -99999999;
                                     }
                                     fort.likeCt = f.getLikeCt();
 

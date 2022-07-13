@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Fragments.Main.ProfileDetailFragment;
+import Fragments.Main.ProfileDetailOfflineFragment;
 
 /**
  ** Adapter used to manage fortune loading for all Fortune in the Profile Fragment
@@ -127,11 +128,11 @@ public class ProfileAdapterOffline extends RecyclerView.Adapter<ProfileAdapterOf
 
                     // Create the fragment with paramters
                     ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-//                    ProfileDetailFragment fragmentProfileDetail = ProfileDetailFragment.newInstance(fortune, user, mode);
-//
-//                    // Change the fragment
-//                    ft.replace(R.id.flContainer, fragmentProfileDetail);
-//                    ft.commit();
+                    ProfileDetailOfflineFragment fragmentProfileDetail = ProfileDetailOfflineFragment.newInstance(fortune, user, fortunes);
+
+                    // Change the fragment
+                    ft.replace(R.id.flContainer, fragmentProfileDetail);
+                    ft.commit();
                 }
             });
         }
