@@ -20,8 +20,11 @@ public interface FortuneDoa {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public Long insertFortune(FortuneDB fort);
 
-    @Query("SELECT * FROM FortuneDB ORDER BY date DESC LIMIT :limit")
+    @Query("SELECT * FROM FortuneDB WHERE likedFort = 0 ORDER BY date DESC LIMIT :limit")
     public List<FortuneDB> getFortunes(int limit);
+
+    @Query("SELECT * FROM FortuneDB WHERE likedFort = 1 ORDER BY date DESC LIMIT :limit")
+    public List<FortuneDB> getLiked(int limit);
 
     @Delete
     public void deleteFortune(FortuneDB fort);

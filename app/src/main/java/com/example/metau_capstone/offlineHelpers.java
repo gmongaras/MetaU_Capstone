@@ -67,6 +67,7 @@ public class offlineHelpers {
                 // Get all the users liked fortunes
                 ParseRelation<Fortune> likedRel = ParseUser.getCurrentUser().getRelation("liked");
                 ParseQuery<Fortune> likedQuery = likedRel.getQuery();
+                likedQuery.include("location");
                 likedQuery.findInBackground(new FindCallback<Fortune>() {
                     @Override
                     public void done(List<Fortune> liked, ParseException e) {
@@ -86,9 +87,6 @@ public class offlineHelpers {
                                 // Delete all fortune from the database
                                 ((databaseApp) context.getApplicationContext()).getDatabase().clearAllTables();
 
-                                // Used to format dates
-                                dateFormatter df = new dateFormatter();
-
                                 // Iterate over each fortune
                                 for (Fortune f : fortunes) {
                                     // Create a new fortune object for the database
@@ -105,6 +103,7 @@ public class offlineHelpers {
                                         fort.Long_ = -99999999;
                                     }
                                     fort.likeCt = f.getLikeCt();
+                                    fort.likedFort = 0;
 
                                     // Does the user like this fortune
                                     for (Fortune l : liked) {
@@ -113,6 +112,31 @@ public class offlineHelpers {
                                             break;
                                         }
                                     }
+
+                                    // Insert the fortune into the database
+                                    fortuneDoa.insertFortune(fort);
+                                }
+
+
+
+                                // Iterate over each liked fortune
+                                for (Fortune f : liked) {
+                                    // Create a new fortune object for the database
+                                    // and store the needed information
+                                    FortuneDB fort = new FortuneDB();
+                                    fort.date = new offlineHelpers().toTimestamp(f.getCreatedAt());
+                                    fort.message = f.getMessage();
+                                    try { // Checking if the location is null
+                                        fort.Lat_ = f.getLocation().getLatitude();
+                                        fort.Long_ = f.getLocation().getLongitude();
+                                    }
+                                    catch (NullPointerException e2) {
+                                        fort.Lat_ = -99999999;
+                                        fort.Long_ = -99999999;
+                                    }
+                                    fort.likeCt = f.getLikeCt();
+                                    fort.likedFort = 1;
+                                    fort.liked = true;
 
                                     // Insert the fortune into the database
                                     fortuneDoa.insertFortune(fort);

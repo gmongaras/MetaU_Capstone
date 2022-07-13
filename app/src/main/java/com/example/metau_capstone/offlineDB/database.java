@@ -3,7 +3,7 @@ package com.example.metau_capstone.offlineDB;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-@Database(entities={FortuneDB.class}, version=3)
+@Database(entities={FortuneDB.class}, version=5)
 public abstract class database extends RoomDatabase {
     // Declare your data access objects as abstract
     public abstract FortuneDoa fortuneDOA();

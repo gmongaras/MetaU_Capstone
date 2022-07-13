@@ -35,4 +35,7 @@ public class FortuneDB implements Serializable {
     public boolean liked; // Has the user liked this fortune?
     @ColumnInfo
     public int likeCt; // Like count of this fortune
+    @ColumnInfo
+    public int likedFort; // Is this fortune in the database one that appears in the
+                          // liked page (1) or the normal page (0)
 }
