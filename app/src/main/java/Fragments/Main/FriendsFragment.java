@@ -11,6 +11,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,23 +81,6 @@ public class FriendsFragment extends Fragment {
         tlFriends = view.findViewById(R.id.tlFriends);
         pagerFriends = view.findViewById(R.id.pagerFriends);
 
-        ColorStateList colors;
-        if (Build.VERSION.SDK_INT >= 23) {
-            colors = getResources().getColorStateList(R.color.friends_tab_selector, requireContext().getTheme());
-        }
-        else {
-            colors = getResources().getColorStateList(R.color.friends_tab_selector);
-        }
-        for (int i = 0; i < tlFriends.getTabCount(); i++) {
-            TabLayout.Tab tab = tlFriends.getTabAt(i);
-            Drawable icon = tab.getIcon();
-
-            if (icon != null) {
-                icon = DrawableCompat.wrap(icon);
-                DrawableCompat.setTintList(icon, colors);
-            }
-        }
-
         // Setup the page viewer
         setupViewer(view);
     }
@@ -111,24 +95,27 @@ public class FriendsFragment extends Fragment {
         // Initialize the tab layout on top of the pager
         tlFriends.addTab(tlFriends.newTab().setText("Friends").setIcon(R.drawable.friends_list));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            tlFriends.getTabAt(0).getIcon().setTint(requireContext().getColor(R.color.purple_500));
+            final TypedValue value = new TypedValue ();
+            getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorSecondary, value, true);
+            tlFriends.getTabAt(0).getIcon().setTint(value.data);
         }
         tlFriends.addTab(tlFriends.newTab().setText("Requests").setIcon(R.drawable.friend_request));
         tlFriends.addTab(tlFriends.newTab().setText("Search").setIcon(R.drawable.search));
         tlFriends.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    tab.getIcon().setTint(requireContext().getColor(R.color.purple_500));
-                }
+                final TypedValue value = new TypedValue ();
+                getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorSecondary, value, true);
+                tab.getIcon().setTint(value.data);
+
                 pagerFriends.setCurrentItem(tab.getPosition());
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    tab.getIcon().setTint(requireContext().getColor(R.color.black));
-                }
+                final TypedValue value = new TypedValue ();
+                getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorTertiary, value, true);
+                tab.getIcon().setTint(value.data);
             }
 
             @Override

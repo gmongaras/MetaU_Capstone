@@ -20,7 +20,8 @@
         app:tabIndicatorColor="?colorSecondary"
         app:tabRippleColor="?attr/colorTertiary"
         app:tabSelectedTextColor="?colorSecondary"
-        app:tabTextColor="?attr/colorTertiary" />
+        app:tabTextColor="?attr/colorTertiary"
+        app:tabIconTint="?attr/colorTertiary" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pagerFriends"
