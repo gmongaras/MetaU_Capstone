@@ -1,10 +1,13 @@
 package Fragments.Main;
 
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -76,6 +79,23 @@ public class FriendsFragment extends Fragment {
         // Get the elements in the view
         tlFriends = view.findViewById(R.id.tlFriends);
         pagerFriends = view.findViewById(R.id.pagerFriends);
+
+        ColorStateList colors;
+        if (Build.VERSION.SDK_INT >= 23) {
+            colors = getResources().getColorStateList(R.color.friends_tab_selector, requireContext().getTheme());
+        }
+        else {
+            colors = getResources().getColorStateList(R.color.friends_tab_selector);
+        }
+        for (int i = 0; i < tlFriends.getTabCount(); i++) {
+            TabLayout.Tab tab = tlFriends.getTabAt(i);
+            Drawable icon = tab.getIcon();
+
+            if (icon != null) {
+                icon = DrawableCompat.wrap(icon);
+                DrawableCompat.setTintList(icon, colors);
+            }
+        }
 
         // Setup the page viewer
         setupViewer(view);

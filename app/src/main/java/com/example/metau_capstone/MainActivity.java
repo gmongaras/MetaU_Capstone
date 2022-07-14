@@ -67,12 +67,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Dark or light mode?
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        // When the user logs in, change themes to dark or light mode
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            setTheme(R.style.Theme_DarkMode); //when dark mode is enabled, we use the dark theme
+            setTheme(R.style.Theme_DarkMode);
         } else {
-            setTheme(R.style.Theme_LightMode);  //default app theme
+            setTheme(R.style.Theme_LightMode);
         }
         setContentView(R.layout.activity_main);
 

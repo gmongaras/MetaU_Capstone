@@ -85,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("pushNotifications", true);
                     user.put("useAI", true);
                     user.put("friendable", true);
+                    user.put("darkMode", false);
 
                     // Sign the user up
                     user.signUpInBackground(new SignUpCallback() {

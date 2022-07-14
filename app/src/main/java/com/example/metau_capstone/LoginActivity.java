@@ -211,6 +211,17 @@ public class LoginActivity extends AppCompatActivity {
             (new offlineHelpers()).createDatabase(this);
         }
 
+        // Change if the user is in dark or light mode
+        try {
+            if (ParseUser.getCurrentUser().fetch().getBoolean("darkMode")) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         // When the user logs in, check if they have any new friends and add them
         addFriends();
 

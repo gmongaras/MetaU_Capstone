@@ -1,4 +1,3 @@
-
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,7 +9,8 @@
         android:layout_height="match_parent"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        tools:context="Fragments.Profile.SettingsFragment">
+        tools:context="Fragments.Profile.SettingsFragment"
+        android:background="?colorPrimary">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="Change Profile Picture"
-                android:textColor="@color/black"
+                android:textColor="?textFillColor"
                 app:layout_constraintBottom_toBottomOf="@+id/ivChangePFP"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/ivChangePFP" />
@@ -61,7 +61,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:text="Profile Settings"
-                android:textColor="@color/light_grey"
+                android:textColor="?textOutlineColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,7 +93,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Allow other users to friend you"
-                android:textColor="@color/black"
+                android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Show fortunes to friends"
-                android:textColor="@color/black"
+                android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/swFriendable"
                 app:layout_constraintTop_toBottomOf="@+id/swFriendable" />
 
@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Show fortunes to other users"
-                android:textColor="@color/black"
+                android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/swFriendable"
                 app:layout_constraintTop_toBottomOf="@+id/swShowFortunesFriends" />
 
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Show map to friends"
-                android:textColor="@color/black"
+                android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/swFriendable"
                 app:layout_constraintTop_toBottomOf="@+id/swShowFortunesUsers" />
 
@@ -134,7 +134,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:text="Show map to other users"
-                android:textColor="@color/black"
+                android:textColor="?textFillColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/swFriendable"
                 app:layout_constraintTop_toBottomOf="@+id/swShowMapFriends" />
@@ -146,7 +146,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:text="Other User Settings"
-                android:textColor="@color/light_grey"
+                android:textColor="?textOutlineColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -168,7 +168,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:text="Application Settings"
-                android:textColor="@color/light_grey"
+                android:textColor="?textOutlineColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Allow push notifications"
-                android:textColor="@color/black"
+                android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/swGenerateMode"
                 app:layout_constraintTop_toBottomOf="@+id/swGenerateMode" />
 
@@ -189,7 +189,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:text="Generate fortunes using AI?"
-                android:textColor="@color/black"
+                android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -210,7 +210,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="20dp"
                 android:text="Allow location access"
-                android:textColor="@color/black"
+                android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/swPushNotif" />
 
@@ -226,7 +226,9 @@
                 app:layout_constraintStart_toEndOf="@+id/textView10"
                 app:layout_constraintTop_toBottomOf="@+id/swPushNotif"
                 app:layout_goneMarginStart="10dp"
-                tools:layout_marginStart="10dp" />
+                tools:layout_marginStart="10dp"
+                android:textColor="?textColorSearchUrl"
+                android:backgroundTint="?colorSecondary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -241,7 +243,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
+            android:textColor="?textColorSearchUrl"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
