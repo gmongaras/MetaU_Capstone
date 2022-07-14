@@ -220,16 +220,10 @@ public class ProfileDetailFragment extends Fragment {
 
                 // Change the drawable based on the liked state
                 if (liked) {
-                    Glide.with(view.getContext())
-                            .load(R.drawable.like_filled)
-                            .circleCrop()
-                            .into(ivLike);
+                    ivLike.setImageResource(R.drawable.like_filled);
                 }
                 else {
-                    Glide.with(view.getContext())
-                            .load(R.drawable.like)
-                            .circleCrop()
-                            .into(ivLike);
+                    ivLike.setImageResource(R.drawable.like);
                 }
 
 
@@ -298,16 +292,10 @@ public class ProfileDetailFragment extends Fragment {
 
                                         // Change the image of the like button
                                         if (liked) {
-                                            Glide.with(view.getContext())
-                                                    .load(R.drawable.like)
-                                                    .circleCrop()
-                                                    .into(ivLike);
+                                            ivLike.setImageResource(R.drawable.like);
                                         }
                                         else {
-                                            Glide.with(view.getContext())
-                                                    .load(R.drawable.like_filled)
-                                                    .circleCrop()
-                                                    .into(ivLike);
+                                            ivLike.setImageResource(R.drawable.like_filled);
                                         }
 
 

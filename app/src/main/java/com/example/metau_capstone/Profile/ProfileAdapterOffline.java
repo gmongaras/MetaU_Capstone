@@ -153,15 +153,9 @@ public class ProfileAdapterOffline extends RecyclerView.Adapter<ProfileAdapterOf
 
             // Is the fortune liked?
             if (fortune.liked) {
-                Glide.with(itemView.getContext())
-                        .load(R.drawable.like_filled)
-                        .circleCrop()
-                        .into(ivLiked);
+                ivLiked.setImageResource(R.drawable.like_filled);
             } else {
-                Glide.with(itemView.getContext())
-                        .load(R.drawable.like)
-                        .circleCrop()
-                        .into(ivLiked);
+                ivLiked.setImageResource(R.drawable.like);
             }
         }
 

@@ -1,14 +1,17 @@
 package Fragments.Profile;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,7 @@ import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.Profile.ProfileAdapter;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.offlineHelpers;
+import com.google.android.material.color.MaterialColors;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -186,9 +190,10 @@ public class ProfileSearchText extends Fragment {
         tvNoResultsText = view.findViewById(R.id.tvNoResultsText);
         pbProfileSearchText = view.findViewById(R.id.pbProfileSearchText);
         int id = svProfileSearchText.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-        tvProfileSearchText = ((TextView)svProfileSearchText.findViewById(id));
-        tvProfileSearchText.setTextColor(getResources().getColor(R.color.black));
-        tvProfileSearchText.setHintTextColor(getResources().getColor(R.color.black));
+        tvProfileSearchText = svProfileSearchText.findViewById(id);
+
+        // Change how the search view looks based on the style
+        tvProfileSearchText.setHintTextColor(MaterialColors.getColor(requireContext(), androidx.constraintlayout.widget.R.attr.textOutlineColor, Color.BLACK));
 
         // Initialize the fortunes
         Fortunes = new ArrayList<>();

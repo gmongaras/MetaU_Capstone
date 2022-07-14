@@ -1,6 +1,7 @@
 package com.example.metau_capstone.Profile;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -193,15 +195,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
                         // Change the drawable based on the liked state
                         if (liked) {
-                            Glide.with(itemView.getContext())
-                                    .load(R.drawable.like_filled)
-                                    .circleCrop()
-                                    .into(ivLiked);
+                            ivLiked.setImageResource(R.drawable.like_filled);
                         } else {
-                            Glide.with(itemView.getContext())
-                                    .load(R.drawable.like)
-                                    .circleCrop()
-                                    .into(ivLiked);
+                            ivLiked.setImageResource(R.drawable.like);
                         }
 
                         changing = false;
@@ -223,15 +219,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
                 // Change the drawable based on the liked state
                 if (liked) {
-                    Glide.with(itemView.getContext())
-                            .load(R.drawable.like_filled)
-                            .circleCrop()
-                            .into(ivLiked);
+                    ivLiked.setImageResource(R.drawable.like_filled);
                 } else {
-                    Glide.with(itemView.getContext())
-                            .load(R.drawable.like)
-                            .circleCrop()
-                            .into(ivLiked);
+                    ivLiked.setImageResource(R.drawable.like);
                 }
 
                 changing = false;
@@ -284,10 +274,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                     likedFortunes.remove(fortune.getObjectId());
 
                     // Update the image;
-                    Glide.with(itemView.getContext())
-                            .load(R.drawable.like)
-                            .circleCrop()
-                            .into(ivLiked);
+                    ivLiked.setImageResource(R.drawable.like);
                 }
                 // If the item is not liked, like it
                 else {
@@ -318,10 +305,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                     likedFortunes.add(fortune.getObjectId());
 
                     // Update the image;
-                    Glide.with(itemView.getContext())
-                            .load(R.drawable.like_filled)
-                            .circleCrop()
-                            .into(ivLiked);
+                    ivLiked.setImageResource(R.drawable.like_filled);
                 }
 
 

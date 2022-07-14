@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Fragments.Profile.ProfileList">
+    tools:context="Fragments.Profile.ProfileList"
+    android:background="?attr/colorPrimary">
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="You do not have access\nto this user's fortunes"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,7 +37,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="You blocked this user and cannot\nsee their information. Unblock this\nuser to see their info."
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,7 +51,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="You have been blocked by the\nother user and cannot see their info."
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -64,7 +65,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="You currently have no fortunes"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
