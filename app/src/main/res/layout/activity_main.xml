@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_bottom_navigation"
-        app:itemIconTint="?attr/colorSecondary"
+        app:itemIconTint="@color/tab_selector"
         app:itemTextColor="?attr/colorSecondary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
