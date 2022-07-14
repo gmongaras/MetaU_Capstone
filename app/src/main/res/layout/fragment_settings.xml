@@ -132,12 +132,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
                 android:text="Show map to other users"
                 android:textColor="?textFillColor"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/swFriendable"
                 app:layout_constraintTop_toBottomOf="@+id/swShowMapFriends" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swDarkMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Use dark mode?"
+                android:textColor="?textFillColor"
+                app:layout_constraintStart_toStartOf="@+id/swShowMapUsers"
+                app:layout_constraintTop_toBottomOf="@+id/swShowMapUsers" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -149,6 +157,18 @@
                 android:textColor="?textOutlineColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="Note: Restart the app to change the app style"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/swDarkMode"
+                app:layout_constraintTop_toBottomOf="@+id/swDarkMode"
+                android:textColor="?textFillColor"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -244,7 +264,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
-            android:textColor="?textColorSearchUrl"/>
+            android:textColor="?textFillColor"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
