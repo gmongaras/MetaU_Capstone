@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +14,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.metau_capstone.offlineDB.FortuneDB;
-import com.example.metau_capstone.offlineDB.FortuneDoa;
+import com.example.metau_capstone.offlineDB.FortuneDao;
 import com.example.metau_capstone.offlineDB.databaseApp;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
@@ -194,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             // Get the database DOA
-                            final FortuneDoa fortuneDoa = ((databaseApp) getApplicationContext()).getDatabase().fortuneDOA();
+                            final FortuneDao fortuneDoa = ((databaseApp) getApplicationContext()).getDatabase().fortuneDAO();
 
                             // Get all the fortunes from the database
                             List<FortuneDB> fortunes = fortuneDoa.getFortunes(Integer.MAX_VALUE);
