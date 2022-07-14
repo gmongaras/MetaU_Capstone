@@ -21,6 +21,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="20dp"
+                android:text="Note: Restart the app to change the app style"
+                android:textColor="?textFillColor"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/swDarkMode"
+                app:layout_constraintTop_toBottomOf="@+id/swDarkMode"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swDarkMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Use dark mode?"
+                android:textColor="?textFillColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivChangePFP" />
+
             <View
                 android:id="@+id/colored_bar3"
                 android:layout_width="0dp"
@@ -48,8 +73,6 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/textView9"
                 tools:src="@tools:sample/avatars" />
@@ -132,20 +155,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="Show map to other users"
                 android:textColor="?textFillColor"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/swFriendable"
                 app:layout_constraintTop_toBottomOf="@+id/swShowMapFriends" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/swDarkMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Use dark mode?"
-                android:textColor="?textFillColor"
-                app:layout_constraintStart_toStartOf="@+id/swShowMapUsers"
-                app:layout_constraintTop_toBottomOf="@+id/swShowMapUsers" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -157,18 +172,6 @@
                 android:textColor="?textOutlineColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:text="Note: Restart the app to change the app style"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/swDarkMode"
-                app:layout_constraintTop_toBottomOf="@+id/swDarkMode"
-                android:textColor="?textFillColor"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
