@@ -1,5 +1,6 @@
 package Fragments.Friends;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -23,6 +24,7 @@ import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Friends.FriendsSearchAdapter;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.offlineHelpers;
+import com.google.android.material.color.MaterialColors;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -110,12 +112,13 @@ public class FriendsSearchFragment extends Fragment {
         tvAlert = view.findViewById(R.id.tvAlert);
         svFriends_search = view.findViewById(R.id.svProfileSearchText);
         int id = svFriends_search.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-        tvSearchFriends_search = ((TextView)svFriends_search.findViewById(id));
-        tvSearchFriends_search.setTextColor(getResources().getColor(R.color.black));
-        tvSearchFriends_search.setHintTextColor(getResources().getColor(R.color.black));
+        tvSearchFriends_search = svFriends_search.findViewById(id);
         rvFriends_search = view.findViewById(R.id.rvFriends_search);
         tvPrompt = view.findViewById(R.id.tvPrompt);
         pbFriends = requireActivity().findViewById(R.id.pbFriends);
+
+        // Change how the search view looks based on the style
+        tvSearchFriends_search.setHintTextColor(MaterialColors.getColor(requireContext(), androidx.constraintlayout.widget.R.attr.textOutlineColor, Color.BLACK));
 
         // Get the current user
         user = ParseUser.getCurrentUser();

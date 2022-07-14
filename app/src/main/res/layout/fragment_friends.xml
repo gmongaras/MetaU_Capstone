@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:background="@color/white"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
     tools:context="Fragments.Main.FriendsFragment">
 
@@ -13,15 +13,15 @@
         android:id="@+id/tlFriends"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIconTint="@color/black"
-        app:tabIndicatorColor="@color/purple_500"
-        app:tabRippleColor="@color/light_grey"
-        app:tabSelectedTextColor="@color/purple_500"
-        app:tabTextColor="@color/black" />
+        app:tabIconTint="?attr/colorSecondary"
+        app:tabIndicatorColor="?colorSecondary"
+        app:tabRippleColor="?attr/colorTertiary"
+        app:tabSelectedTextColor="?colorSecondary"
+        app:tabTextColor="?attr/colorSecondary" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pagerFriends"
