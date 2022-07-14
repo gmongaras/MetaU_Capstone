@@ -2,8 +2,11 @@ package com.example.metau_capstone;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.metau_capstone.Friends.Friend_queue;
+import com.example.metau_capstone.offlineDB.databaseApp;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -42,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
         try {
             getSupportActionBar().hide();
@@ -55,7 +58,11 @@ public class LoginActivity extends AppCompatActivity {
         if (ParseUser.getCurrentUser() != null) {
             // Go to the main activity
             goMainActivity();
+            return;
         }
+
+        setTheme(R.style.Theme_LightMode); // Use the default app theme
+        setContentView(R.layout.activity_login);
 
         // Get the attributes
         etUsername = findViewById(R.id.etUsername);
@@ -207,8 +214,52 @@ public class LoginActivity extends AppCompatActivity {
         // When the user logs in, check if they have any new friends and add them
         addFriends();
 
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        finish();
+        // Change if the user is in dark or light mode
+        if ((new offlineHelpers()).isNetworkAvailable(this)) {
+            try { // If the user is online
+                if (ParseUser.getCurrentUser().fetch().getBoolean("darkMode")) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            // Switch to the main activity
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+        else {
+            // If the user is offline, use a background thread to get the dark mode state
+
+            Context context = this;
+
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    // Get the dark mode state
+                    boolean darkMode = ((databaseApp)getApplicationContext()).getDatabase().userSettingsDAO().getDarkMode().get(0).state;
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Set the apps dark mode setting
+                            if (darkMode) {
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                            } else {
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                            }
+
+                            // Switch to the main activity
+                            Intent i = new Intent(context, MainActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
+                    });
+                }
+            });
+        }
     }
 }

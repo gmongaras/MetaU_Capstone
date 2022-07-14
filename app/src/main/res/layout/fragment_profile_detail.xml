@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Fragments.Main.ProfileDetailFragment">
+    tools:context="Fragments.Main.ProfileDetailFragment"
+    android:background="?attr/colorPrimary">
 
     <fragment
         android:id="@+id/profileMap"
@@ -24,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +39,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDate_detail"
@@ -50,7 +51,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="You do not have access\nto this user's map data"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/profileMap"
@@ -93,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         app:layout_constraintBottom_toBottomOf="@+id/ivLike"
         app:layout_constraintEnd_toStartOf="@+id/ivLike"
         app:layout_constraintTop_toTopOf="@+id/ivLike"

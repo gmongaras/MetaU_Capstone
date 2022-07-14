@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="top"
-    android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="?attr/background" >
 
     <EditText
         android:id="@+id/etUsername"
@@ -16,14 +16,13 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="?attr/backgroundColor"
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/light_grey"
-        tools:textColorHint="@color/light_grey" />
+        android:textColor="?attr/textFillColor"
+        android:textColorHint="?attr/textOutlineColor" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -31,13 +30,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/light_grey" />
+        android:backgroundTint="?attr/backgroundColor"
+        android:textColor="?attr/textFillColor"
+        android:textColorHint="?attr/textOutlineColor" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -45,7 +44,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:text="@string/subBtn" />
+        android:text="@string/subBtn"
+        android:textColor="?attr/textColorSearchUrl"
+        android:backgroundTint="?attr/colorSecondary" />
 
     <Button
         android:id="@+id/btnRegisterGoTo"
@@ -53,5 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:text="New here? Register" />
+        android:text="New here? Register"
+        android:textColor="?attr/textColorSearchUrl"
+        android:backgroundTint="?attr/colorSecondary" />
 </LinearLayout>

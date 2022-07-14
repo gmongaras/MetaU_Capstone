@@ -55,7 +55,7 @@ public class MapFragment extends Fragment {
      *                 user is online, and not null if the user is offline.
      * @return The newly created fragment
      */
-    public static MapFragment newInstance(List<FortuneDB> fortunes) {
+    public static MapFragment newInstance(@Nullable List<FortuneDB> fortunes) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
         if (fortunes != null) {

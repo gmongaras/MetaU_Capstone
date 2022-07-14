@@ -1,6 +1,7 @@
 package com.example.metau_capstone;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,12 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            setTheme(R.style.Theme_DarkMode); //when dark mode is enabled, we use the dark theme
+        } else {
+            setTheme(R.style.Theme_DarkMode);  //default app theme
+        }
         setContentView(R.layout.activity_register);
 
         try {
@@ -78,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("pushNotifications", true);
                     user.put("useAI", true);
                     user.put("friendable", true);
+                    user.put("darkMode", false);
 
                     // Sign the user up
                     user.signUpInBackground(new SignUpCallback() {

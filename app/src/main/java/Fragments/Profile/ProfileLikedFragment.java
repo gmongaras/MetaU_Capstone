@@ -15,13 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.Profile.ProfileAdapter;
 import com.example.metau_capstone.Profile.ProfileAdapterOffline;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.offlineDB.FortuneDB;
-import com.example.metau_capstone.offlineDB.FortuneDoa;
+import com.example.metau_capstone.offlineDB.FortuneDao;
 import com.example.metau_capstone.offlineDB.databaseApp;
 import com.example.metau_capstone.offlineHelpers;
 import com.parse.FindCallback;
@@ -214,7 +213,7 @@ public class ProfileLikedFragment extends Fragment {
             @Override
             public void run() {
                 // Get the database DOA
-                final FortuneDoa fortuneDoa = ((databaseApp) requireContext().getApplicationContext()).getDatabase().fortuneDOA();
+                final FortuneDao fortuneDoa = ((databaseApp) requireContext().getApplicationContext()).getDatabase().fortuneDAO();
 
                 // Get the fortunes from the database and load
                 // them in

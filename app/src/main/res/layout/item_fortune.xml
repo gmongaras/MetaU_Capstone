@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="?attr/colorPrimary">
 
     <TextView
         android:id="@+id/tvDate"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Feb 28, 2021" />
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvDate"
         app:layout_constraintTop_toBottomOf="@+id/tvDate"
@@ -34,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="10dp"
-        android:background="@color/very_light_grey"
+        android:background="?attr/colorTertiary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFortune" />

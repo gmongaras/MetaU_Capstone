@@ -14,6 +14,7 @@ import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -45,6 +46,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import Fragments.Main.ProfileFragment;
 
@@ -63,6 +65,7 @@ public class SettingsFragment extends Fragment {
     SwitchCompat swShowFortunesUsers;
     SwitchCompat swShowMapFriends;
     SwitchCompat swShowMapUsers;
+    SwitchCompat swDarkMode;
     SwitchCompat swGenerateMode;
     SwitchCompat swPushNotif;
     Button btnLocPerm;
@@ -82,7 +85,8 @@ public class SettingsFragment extends Fragment {
             R.id.swShowMapFriends, "showMapFriends",
             R.id.swShowMapUsers, "showMapUsers",
             R.id.swGenerateMode, "useAI",
-            R.id.swPushNotif, "pushNotifications"
+            R.id.swPushNotif, "pushNotifications",
+            R.id.swDarkMode, "darkMode"
     );
 
     public SettingsFragment() {
@@ -116,6 +120,7 @@ public class SettingsFragment extends Fragment {
         swShowFortunesUsers = view.findViewById(R.id.swShowFortunesUsers);
         swShowMapFriends = view.findViewById(R.id.swShowMapFriends);
         swShowMapUsers = view.findViewById(R.id.swShowMapUsers);
+        swDarkMode = view.findViewById(R.id.swDarkMode);
         swGenerateMode = view.findViewById(R.id.swGenerateMode);
         swPushNotif = view.findViewById(R.id.swPushNotif);
         btnLocPerm = view.findViewById(R.id.btnLocPerm);
@@ -155,6 +160,7 @@ public class SettingsFragment extends Fragment {
         initializeState(swShowMapUsers);
         initializeState(swGenerateMode);
         initializeState(swPushNotif);
+        initializeState(swDarkMode);
 
         // Put on click listeners on all switches
         swFriendable.setOnClickListener(new View.OnClickListener() {
@@ -185,6 +191,12 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 handleClick(swShowMapUsers);
+            }
+        });
+        swDarkMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleClick(swDarkMode);
             }
         });
         swGenerateMode.setOnClickListener(new View.OnClickListener() {

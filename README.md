@@ -112,6 +112,7 @@ Note: I am using Android Studio version: 2021.2.1 Patch 1 (chipmunk(
 - pushNotifications [Boolean]
 - friendable [Boolean]
 - useAI [Boolean]
+- darkMode [Boolean]
 - Blocked [Relation<User>]
 - liked [Relation<Fortune>]
 
@@ -360,18 +361,19 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   
 - <b>Features:</b>
   1. Clicking on the user's profile picture pops up a window allowing the user to upload an image from their device to change their profile picture.
-  2. The user can change their privacy/user settings:
+  2. User's can set whether they want to display the app in dark mode or light mode (default)
+  3. The user can change their privacy/user settings:
      - User's can set whether they are allowing other users to friend them. Turning this off does not allow any other users to make new friend requests to the current user.
      - User's can set whether they are allowing friends to see their fortunes or not. Setting this off hides all fortunes when <b>friends</b> are viewing the current user's profile. This setting does not effect other users.
      - User's can set whether they are allowing other users to see their fortune or not. Setting this off hides all fortunes when <b>other users</b> are viewing the current user's profile. This setting does not effect friends.
      - User's can set whether they are allowing friends to see their map or not. Setting this off hides the map when <b>friends</b> go into the detailed view of one of the current user's fortunes. Note that if friends cannot view the current user's fortunes, this setting does not matter. This setting does not effect other users.
      - User's can set whether they are allowing other users to see their map or not. Setting this off hides the map when <b>other users</b> go into the detailed view of one of the current user's fortunes. Note that if other users cannot view the current user's fortunes, this setting does not matter. This setting does not effect friends.
-  3. The user can change setting involving the app:
+  4. The user can change setting involving the app:
      - The user can choose whether they want an AI to generate fortunes or if they want to pull from real fortunes when receiving a new fortune. Turning this switch on has the AI generate fortunes while turning this switch off pulls from a list of real fortunes.
      - The user can choose whether they want push notifications from the app. If this switch is on, the user will receive a push notification 23 hours after opening a fortune cookie, but if the switch is off, the user will not receive this notification.
      - If the user has not given the app location permission, the user can do so by clicking the "Give permission" button. If the user already gave location permission, this button does nothing.
-  4. The user can delete their account which unfriends the user from all other users and removes fortunes from this user. This deleting is permanent and the user has no way of getting their account back.
-  5. Pressing the back button sends the user back to their [profile](#profile---logged-in-user)
+  5. The user can delete their account which unfriends the user from all other users and removes fortunes from this user. This deleting is permanent and the user has no way of getting their account back.
+  6. Pressing the back button sends the user back to their [profile](#profile---logged-in-user)
 
 ### Fortune Detailed View
 <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Fortune%20Detailed%20View.png" title="Fortune Detailed View" height="400"></p>
@@ -394,6 +396,7 @@ When the user is offline, the following features are still available:
 - The user's liked fortune list still apears as it would normally.
 - A detailed view of each fortune can be access by clicking on a fortune.
 - The map shows the location of each fortune.
+- The dark mode/light mode theme is shown.
 
 The following features are not available:
 - A new fortune cannot be opened

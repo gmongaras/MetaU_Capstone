@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.offlineDB.FortuneDB;
-import com.example.metau_capstone.offlineDB.FortuneDoa;
+import com.example.metau_capstone.offlineDB.FortuneDao;
 import com.example.metau_capstone.offlineDB.databaseApp;
 import com.example.metau_capstone.offlineHelpers;
 import com.parse.FindCallback;
@@ -109,7 +109,7 @@ public class HomeFragment_countdown extends Fragment {
             @Override
             public void run() {
                 // Get the newest fortune from the database
-                final FortuneDoa fortuneDoa = ((databaseApp) requireContext().getApplicationContext()).getDatabase().fortuneDOA();
+                final FortuneDao fortuneDoa = ((databaseApp) requireContext().getApplicationContext()).getDatabase().fortuneDAO();
                 List<FortuneDB> fort = fortuneDoa.getFortunes(1);
 
                 // If the fortune count is 0, show a prompt as there's nothing to load

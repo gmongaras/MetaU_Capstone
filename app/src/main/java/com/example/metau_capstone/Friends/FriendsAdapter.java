@@ -116,10 +116,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             // Store the user image
             ParseFile pic = friend.getParseFile("profilePic");
             if (pic == null) {
-                Glide.with(context)
-                        .load(R.drawable.default_pfp)
-                        .circleCrop()
-                        .into(ivFriend);
+                ivFriend.setImageResource(R.drawable.default_pfp);
             }
             else {
                 Glide.with(context)

@@ -178,16 +178,10 @@ public class ProfileDetailOfflineFragment extends Fragment {
 
         // Change the drawable based on the liked state
         if (liked) {
-            Glide.with(view.getContext())
-                    .load(R.drawable.like_filled)
-                    .circleCrop()
-                    .into(ivLike);
+            ivLike.setImageResource(R.drawable.like_filled);
         }
         else {
-            Glide.with(view.getContext())
-                    .load(R.drawable.like)
-                    .circleCrop()
-                    .into(ivLike);
+            ivLike.setImageResource(R.drawable.like);
         }
 
         // Set the number of likes for the fortune

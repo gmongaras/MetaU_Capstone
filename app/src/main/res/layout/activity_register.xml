@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="top"
-    android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".RegisterActivity">
+    tools:context=".RegisterActivity"
+    android:background="?attr/background">
 
     <EditText
         android:id="@+id/etUsername_reg"
@@ -16,13 +16,13 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/light_grey" />
+        android:backgroundTint="?attr/backgroundColor"
+        android:textColor="?attr/textFillColor"
+        android:textColorHint="?attr/textOutlineColor"/>
 
     <EditText
         android:id="@+id/etPassword_reg"
@@ -30,14 +30,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/light_grey"
-        tools:inputType="textPassword" />
+        tools:inputType="textPassword"
+        android:backgroundTint="?attr/backgroundColor"
+        android:textColor="?attr/textFillColor"
+        android:textColorHint="?attr/textOutlineColor"/>
 
     <EditText
         android:id="@+id/etPassword2_reg"
@@ -45,14 +45,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="password again"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/light_grey"
-        tools:inputType="textPassword" />
+        tools:inputType="textPassword"
+        android:backgroundTint="?attr/backgroundColor"
+        android:textColor="?attr/textFillColor"
+        android:textColorHint="?attr/textOutlineColor"/>
 
     <Button
         android:id="@+id/btnRegister"
@@ -60,5 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:text="Register" />
+        android:text="Register"
+        android:textColor="?attr/textColorSearchUrl"
+        android:backgroundTint="?attr/colorSecondary"/>
 </LinearLayout>

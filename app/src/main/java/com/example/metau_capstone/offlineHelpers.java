@@ -1,17 +1,18 @@
 package com.example.metau_capstone;
 
 
+import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import androidx.room.TypeConverter;
-
 import com.example.metau_capstone.offlineDB.FortuneDB;
-import com.example.metau_capstone.offlineDB.FortuneDoa;
+import com.example.metau_capstone.offlineDB.FortuneDao;
 import com.example.metau_capstone.offlineDB.databaseApp;
+import com.example.metau_capstone.offlineDB.userSettingsDB;
+import com.example.metau_capstone.offlineDB.userSettingsDao;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -82,10 +83,30 @@ public class offlineHelpers {
                             @Override
                             public void run() {
                                 // Get the database DOA
-                                final FortuneDoa fortuneDoa = ((databaseApp) context.getApplicationContext()).getDatabase().fortuneDOA();
+                                final FortuneDao fortuneDoa = ((databaseApp) context.getApplicationContext()).getDatabase().fortuneDAO();
 
                                 // Delete all fortune from the database
                                 ((databaseApp) context.getApplicationContext()).getDatabase().clearAllTables();
+
+                                // Set the user's dark mode state
+                                AsyncTask.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        userSettingsDB setting = new userSettingsDB();
+                                        try {
+                                            setting.state = ParseUser.getCurrentUser().fetch().getBoolean("darkMode");
+                                        } catch (ParseException e) {
+                                            setting.state = false;
+                                        }
+                                        setting.tag = "darkMode";
+
+                                        // Get the database DOA
+                                        final userSettingsDao settingsDao = ((databaseApp) context.getApplicationContext()).getDatabase().userSettingsDAO();
+
+                                        // Add the new state to the database
+                                        settingsDao.addSetting(setting);
+                                    }
+                                });
 
                                 // Iterate over each fortune
                                 for (Fortune f : fortunes) {

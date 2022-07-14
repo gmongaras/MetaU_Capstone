@@ -5,7 +5,8 @@
     android:id="@+id/friendsListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Fragments.Friends.FriendsListFragment">
+    tools:context="Fragments.Friends.FriendsListFragment"
+    android:background="?colorPrimary">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srlList"
@@ -32,7 +33,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="No friends :(\nAdd some with the search tab!"
-        android:textColor="@color/black"
+        android:textColor="?textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -45,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cannot view friends when offline"
-        android:textColor="@color/black"
+        android:textColor="?textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"

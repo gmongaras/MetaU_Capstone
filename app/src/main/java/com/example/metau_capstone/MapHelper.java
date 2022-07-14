@@ -14,6 +14,7 @@ import android.view.animation.BounceInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 
 import com.example.metau_capstone.offlineDB.FortuneDB;
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
@@ -82,6 +84,11 @@ public class MapHelper {
             // Set the custom info window for each marker
             LayoutInflater inflater = LayoutInflater.from(context);
             map.setInfoWindowAdapter(new CustomWindowAdapter(inflater));
+
+            // Put the map in dark mode
+            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                map.setMapStyle(MapStyleOptions.loadRawResourceStyle(mapFragment.requireContext(), R.raw.map_dark));
+            }
 
 
             // Load in all the fortunes as pins into the map

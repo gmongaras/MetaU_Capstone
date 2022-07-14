@@ -146,10 +146,7 @@ public class ProfileFragment extends Fragment {
         // Store the user image
         ParseFile pic = user.getParseFile("profilePic");
         if (pic == null) {
-            Glide.with(view.getContext())
-                    .load(R.drawable.default_pfp)
-                    .circleCrop()
-                    .into(ivProfileImage);
+            ivProfileImage.setImageResource(R.drawable.default_pfp);
         }
         else {
             Glide.with(view.getContext())

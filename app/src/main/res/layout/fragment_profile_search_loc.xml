@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="Fragments.Profile.ProfileSearchLoc"
+    android:background="?attr/colorPrimary"
     >
 
 
@@ -13,12 +14,11 @@
         android:id="@+id/rvProfileSearchLoc"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" >
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No results for query"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Use the search bar above to search for\nfortunes by latitude and logitude!"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,38 +71,38 @@
         <EditText
             android:id="@+id/svProfileSearchLat"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@color/light_grey"
+            android:backgroundTint="?attr/colorTertiary"
             android:ems="10"
             android:hint="Latitude"
             android:inputType="numberDecimal"
-            android:textColor="@color/black"
-            android:textColorHint="@color/light_grey" />
+            android:textColor="?attr/textFillColor"
+            android:textColorHint="?attr/textOutlineColor" />
 
         <EditText
             android:id="@+id/svProfileSearchLng"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@color/light_grey"
+            android:backgroundTint="?attr/colorTertiary"
             android:ems="10"
             android:hint="Longitude"
             android:inputType="numberDecimal"
-            android:textColor="@color/black"
-            android:textColorHint="@color/light_grey" />
+            android:textColor="?attr/textFillColor"
+            android:textColorHint="?attr/textOutlineColor" />
 
         <EditText
             android:id="@+id/svProfileSearchDist"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@color/light_grey"
+            android:backgroundTint="?attr/colorTertiary"
             android:ems="10"
             android:hint="Distance (mi)"
             android:inputType="numberDecimal"
-            android:textColor="@color/black"
-            android:textColorHint="@color/light_grey" />
+            android:textColor="?attr/textFillColor"
+            android:textColorHint="?attr/textOutlineColor" />
     </LinearLayout>
 
     <TextView
@@ -111,7 +111,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="You do not have access\nto this user's fortunes"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -125,7 +125,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="You blocked this user and cannot\nsee their information. Unblock this\nuser to see their info."
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -139,7 +139,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="You have been blocked by the\nother user and cannot see their info."
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -152,7 +152,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cannot search fortunes when offline"
-        android:textColor="@color/black"
+        android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
