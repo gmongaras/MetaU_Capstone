@@ -36,6 +36,8 @@
         <item name="textOutlineColor">@color/light_grey</item> <!-- Tertiary Text color -->
         <item name="background">@color/white</item>      <!-- Primary background color -->
         <item name="backgroundColor">@color/black</item> <!-- Secondary background color -->
+
+        <item name="colorError">@color/darker_red</item> <!-- Red color -->
     </style>
 
     <!-- Light mode theme -->
@@ -48,5 +50,7 @@
         <item name="textOutlineColor">@color/light_grey</item> <!-- Tertiary Text color -->
         <item name="background">@color/black</item>      <!-- Primary background color -->
         <item name="backgroundColor">@color/white</item> <!-- Secondary background color -->
+
+        <item name="colorError">@color/darker_red</item> <!-- Red color -->
     </style>
 </resources>

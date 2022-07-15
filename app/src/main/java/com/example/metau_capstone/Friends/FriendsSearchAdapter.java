@@ -2,6 +2,7 @@ package com.example.metau_capstone.Friends;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,12 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
     List<ParseUser> sent;
     List<ParseUser> blocked;
 
+    // Colors that may be user
+    int colorSecondary;
+    int colorPrimary;
+    int tertiaryColor;
+    int colorRed;
+
     /**
      * Initialize the adapter
      * @param users A list of ParseUser objects which we want to initialize the
@@ -70,6 +77,12 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
     public FriendsSearchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Create the view and inflate it
         View view = LayoutInflater.from(context).inflate(R.layout.item_friends_search, parent, false);
+
+        // Get the theme colors to use later
+        colorPrimary = androidx.constraintlayout.widget.R.attr.textFillColor;
+        colorSecondary = androidx.constraintlayout.widget.R.attr.textColorSearchUrl;
+        tertiaryColor = androidx.constraintlayout.widget.R.attr.textOutlineColor;
+        colorRed = com.google.android.material.R.attr.colorError;
 
         // Return the view
         return new FriendsSearchAdapter.ViewHolder(view);
@@ -308,7 +321,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                                             Log.e(TAG, "Unable to save remove request to queue", e);
                                         }
                                         else {
-                                            displayButton("Send Friend Request", R.color.black, "send");
+                                            displayButton("Send Friend Request", colorPrimary, colorSecondary, "send");
                                         }
 
                                         friending = false;
@@ -326,7 +339,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                                     }
                                     else {
                                         Log.i(TAG, "Removed request from queue");
-                                        displayButton("Send Friend Request", R.color.black, "send");
+                                        displayButton("Send Friend Request", colorPrimary, colorSecondary, "send");
                                     }
                                     friending = false;
                                 }
@@ -372,7 +385,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                                 Log.e(TAG, "Unable to request save to queue", e);
                             }
                             else {
-                                displayButton("Remove Friend Request", R.color.darker_red, "remove");
+                                displayButton("Remove Friend Request", colorRed, colorPrimary, "remove");
                             }
                             friending = false;
                         }
@@ -387,7 +400,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             // Is the other user a friend of this user?
             for (ParseUser f : friends) {
                 if (Objects.equals(f.getObjectId(), friend.getObjectId())) {
-                    displayButton("Already Friends!", R.color.light_grey, null);
+                    displayButton("Already Friends!", tertiaryColor, colorSecondary, null);
                     displayed = true;
                     break;
                 }
@@ -397,7 +410,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             if (displayed == false) {
                 for (ParseUser b : blocked) {
                     if (Objects.equals(b.getObjectId(), friend.getObjectId())) {
-                        displayButton("You blocked this user", R.color.darker_red, null);
+                        displayButton("You blocked this user", colorRed, colorPrimary, null);
                         displayed = true;
                         break;
                     }
@@ -408,7 +421,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             if (!displayed) {
                 for (ParseUser s : sent) {
                     if (Objects.equals(s.getObjectId(), friend.getObjectId())) {
-                        displayButton("Remove Friend Request", R.color.darker_red, "remove");
+                        displayButton("Remove Friend Request", colorRed, colorPrimary, "remove");
                         displayed = true;
                         break;
                     }
@@ -419,7 +432,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             if (!displayed) {
                 for (ParseUser r : sent) {
                     if (Objects.equals(r.getObjectId(), friend.getObjectId())) {
-                        displayButton("Currently have a request", R.color.light_grey, null);
+                        displayButton("Currently have a request", tertiaryColor, colorSecondary, null);
                         displayed = true;
                         break;
                     }
@@ -429,7 +442,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             // Is the other user accepting friend requests?
             if (!displayed) {
                 if (friend.getBoolean("friendable") == false) {
-                    displayButton("User not currently\naccepting friend requests", R.color.light_grey, null);
+                    displayButton("User not currently\naccepting friend requests", tertiaryColor, colorSecondary, null);
                     displayed = true;
                 }
             }
@@ -445,13 +458,13 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                         // If the number of objects is not 0 and there is no error,
                         // the current user is blocked by the other user
                         if (e == null && objects.size() > 0) {
-                            displayButton("This user has blocked you", R.color.darker_red, null);
+                            displayButton("This user has blocked you", colorRed, colorPrimary, null);
                             displayed = true;
                             return;
                         }
 
                         // Default to sending a request
-                        displayButton("Send Friend Request", R.color.black, "send");
+                        displayButton("Send Friend Request", colorPrimary, colorSecondary, "send");
                         displayed = true;
                     }
                 });
@@ -465,21 +478,33 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
          * Given some text and a color, display the button with that text and background color
          * @param text The text to show in the button
          * @param colorId The id of the button color
+         * @param textColorId The id of the button text color
          * @param mode The mode to add an onClick listener to the button:
          *             null: Don't add a listener
          *             "send": When the button is clicked, send a friend request
          *             "remove": When the button is clicked, remove a friend request
          */
-        private void displayButton(String text, int colorId, @Nullable String mode) {
+        private void displayButton(String text, int colorId, int textColorId, @Nullable String mode) {
             // Get the color
             int color = 0;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                color = itemView.getContext().getColor(colorId);
+                final TypedValue value = new TypedValue ();
+                context.getTheme().resolveAttribute(colorId, value, true);
+                color = value.data;
+            }
+
+            // Get the text color
+            int textColor = 0;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                final TypedValue value = new TypedValue ();
+                context.getTheme().resolveAttribute(textColorId, value, true);
+                textColor = value.data;
             }
 
             // Show the button
             btnState.setBackgroundColor(color);
             btnState.setText(text);
+            btnState.setTextColor(textColor);
             btnState.setVisibility(View.VISIBLE);
 
             // If the mode is not null, add an onclick listener to the button
