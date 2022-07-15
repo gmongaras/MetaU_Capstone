@@ -280,6 +280,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        2. The profile picture of each friend is shown
        3. The number of fortunes of each friend is shown
        4. Clicking on a friend takes the user to the [friend's profile](#profile---friendother-user)
+       5. Pulling down from the top of the screen will reload the user's friend list.
   2. <b>Friend Requests:</b> The friends request list shows all the user's who have sent a friend request to the current user
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Friends%202.png" title="Friends" height="400"></p>
      - <b>Features:</b>
@@ -288,6 +289,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        3. The number of fortunes of each user who sent a request is shown
        4. A button is shown to accept a friend request. Upon accepting a friend request, both users add eachother as friends and the friended user will now show up in the Friends List.
        5. A button is shown to decline a friend request. Upon declining a friend request, the users are not added as friends and the request is removed.
+       6. Pulling down from the top of the screen will reload the user's friend requests.
   3. <b>Friend Search:</b> The friends search page allows the user to search for new friends
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Friends%203.png" title="Friends" height="400"></p>
      - <b>Features:</b>
