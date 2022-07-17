@@ -120,7 +120,7 @@ public class HomeFragment_fortune extends Fragment {
 
         // Load the model
         try {
-            module = LiteModuleLoader.load(assetFilePath(view.getContext(), "model8.ptl"));
+            module = LiteModuleLoader.load(assetFilePath(view.getContext(), "model-2.ptl"));
         } catch (IOException e) {
             Log.e(TAG, "Unable to load model", e);
             return;
@@ -128,7 +128,7 @@ public class HomeFragment_fortune extends Fragment {
 
         // Load in the dictionary
         try {
-            vocab = loadVocab(assetFilePath(view.getContext(), "vocab2.csv"));
+            vocab = loadVocab(assetFilePath(view.getContext(), "vocab-2.csv"));
         } catch (IOException e) {
             Log.e(TAG, "Unable to load file", e);
         }
@@ -380,7 +380,7 @@ public class HomeFragment_fortune extends Fragment {
         Random rand = new Random();
         double[] arr = new double[(int)(Size[0])];
         for (int i = 0; i < Size[0]; i++) {
-            arr[i] = rand.nextFloat();
+            arr[i] = rand.nextGaussian();
         }
 
         // Create the tensor
