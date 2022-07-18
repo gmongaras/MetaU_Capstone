@@ -94,6 +94,12 @@ public class RegisterActivity extends AppCompatActivity {
                             if (e == null) {
                                 Toast.makeText(RegisterActivity.this, "User Registered!", Toast.LENGTH_SHORT).show();
 
+                                // Create a database when the user logs in and save it to
+                                // the user's phone for offline loading, if the user is online
+                                if (new offlineHelpers().isNetworkAvailable(RegisterActivity.this)) {
+                                    (new offlineHelpers()).createDatabase(RegisterActivity.this);
+                                }
+
                                 // Go to the main page
                                 Intent i = new Intent(RegisterActivity.this, MainActivity.class);
                                 startActivity(i);

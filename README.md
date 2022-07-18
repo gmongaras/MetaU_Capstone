@@ -116,6 +116,7 @@ Note: I am using Android Studio version: 2021.2.1 Patch 1 (chipmunk(
 - darkMode [Boolean]
 - Blocked [Relation<User>]
 - liked [Relation<Fortune>]
+- lang [String]
 
 <b>Fortune</b>
 - objectId [String]

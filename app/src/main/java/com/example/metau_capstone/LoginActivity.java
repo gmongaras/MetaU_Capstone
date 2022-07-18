@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.offlineDB.databaseApp;
+import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -213,6 +214,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // When the user logs in, check if they have any new friends and add them
         addFriends();
+
+        // Create a new translation manager object
+        translationManager manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
 
         // Change if the user is in dark or light mode
         if ((new offlineHelpers()).isNetworkAvailable(this)) {
