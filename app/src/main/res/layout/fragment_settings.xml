@@ -22,12 +22,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvRestartApp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="20dp"
-                android:text="Note: Restart the app to change the app style"
+                android:text="@string/restartApp"
                 android:textColor="?textFillColor"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Use dark mode?"
+                android:text="@string/darkMode"
                 android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivChangePFP" />
@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Change Profile Picture"
+                android:text="@string/changePFP"
                 android:textColor="?textFillColor"
                 app:layout_constraintBottom_toBottomOf="@+id/ivChangePFP"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
-                android:text="Profile Settings"
+                android:text="@string/profileSettings"
                 android:textColor="?textOutlineColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Allow other users to friend you"
+                android:text="@string/otherFriends"
                 android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -125,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Show fortunes to friends"
+                android:text="@string/friendFortunes"
                 android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/swFriendable"
                 app:layout_constraintTop_toBottomOf="@+id/swFriendable" />
@@ -135,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Show fortunes to other users"
+                android:text="@string/userFortunes"
                 android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/swFriendable"
                 app:layout_constraintTop_toBottomOf="@+id/swShowFortunesFriends" />
@@ -145,7 +145,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Show map to friends"
+                android:text="@string/mapFriends"
                 android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/swFriendable"
                 app:layout_constraintTop_toBottomOf="@+id/swShowFortunesUsers" />
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="Show map to other users"
+                android:text="@string/userFriends"
                 android:textColor="?textFillColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/swFriendable"
@@ -168,7 +168,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
-                android:text="Other User Settings"
+                android:text="@string/otherSettings"
                 android:textColor="?textOutlineColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -190,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
-                android:text="Application Settings"
+                android:text="@string/appSettings"
                 android:textColor="?textOutlineColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -200,7 +200,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Allow push notifications"
+                android:text="@string/pushNotif"
                 android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/swGenerateMode"
                 app:layout_constraintTop_toBottomOf="@+id/swGenerateMode" />
@@ -211,7 +211,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
-                android:text="Generate fortunes using AI?"
+                android:text="@string/generateAI"
                 android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -232,7 +232,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="20dp"
-                android:text="Allow location access"
+                android:text="@string/locAccess"
                 android:textColor="?textFillColor"
                 app:layout_constraintStart_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/swPushNotif" />
@@ -244,14 +244,14 @@
                 android:layout_marginStart="48dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="Give permission"
+                android:backgroundTint="?colorSecondary"
+                android:text="@string/givePerm"
+                android:textColor="?textColorSearchUrl"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView10"
                 app:layout_constraintTop_toBottomOf="@+id/swPushNotif"
                 app:layout_goneMarginStart="10dp"
-                tools:layout_marginStart="10dp"
-                android:textColor="?textColorSearchUrl"
-                android:backgroundTint="?colorSecondary" />
+                tools:layout_marginStart="10dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -262,12 +262,12 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:backgroundTint="@color/darker_red"
-            android:text="Delete Account"
+            android:text="@string/deleteAcct"
+            android:textColor="?textFillColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
-            android:textColor="?textFillColor"/>
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

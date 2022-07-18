@@ -1,15 +1,92 @@
 <resources>
     <string name="app_name">MetaU_Capstone</string>
 
-
-    <string name="username">username</string>
-    <string name="password">password</string>
-    <string name="subBtn">Log In</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+    <!-- Login/Register -->
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="passwordAgain">password again</string>
+    <string name="subBtn">Log In</string>
+    <string name="regBtn">New here? Register</string>
+    <string name="regBtn2">Register</string>
+
+    <!-- Maps -->
+    <string name="mapError">Unable to load map. Does this phone have Google Play support?</string>
+
+    <!-- Main/Home -->
     <string name="promptBefore">Click on the cookie below to get your fortune!</string>
     <string name="promptAfter">"Here's your fortune!"</string>
 
-    <string name="mapError">Unable to load map. Does this phone have Google Play support?</string>
+    <!-- Friends List -->
+    <string name="noFriends">No friends :(\nAdd some with the search tab!</string>
+    <string name="offlineFriends">Cannot view friends when offline</string>
+
+    <!-- Friends Requests -->
+    <string name="noRequests">No requests at the moment!</string>
+    <string name="offlineRequests">Cannot view requests when offline</string>
+
+    <!-- Friends Search -->
+    <string name="alertFriendsSearch">No friends found with that username :(</string>
+    <string name="promptFriendsSearch">Click on the search bar above to search for friends!</string>
+    <string name="offlineFriendsSearch">Cannot search friends when offline</string>
+
+    <!-- Profile General -->
+    <string name="blocked2">You have been blocked by the\nother user and cannot see their info.</string>
+    <string name="blocked1">You blocked this user and cannot\nsee their information. Unblock this\nuser to see their info.</string>
+    <string name="noResultsProfile">No results for query</string>
+    <string name="offlineProfileSearch">Cannot search fortunes when offline</string>
+    <string name="noAccessProfile">You do not have access\nto this user\'s fortunes</string>
+
+    <!-- Profile Detail -->
+    <string name="noAccessMap">You do not have access\nto this user\'s map data</string>
+
+    <!-- Profile Liked -->
+    <string name="noLiked">You currently have no liked fortunes</string>
+
+    <!-- Profile List -->
+    <string name="noFortunes">You currently have no fortunes</string>
+
+    <!-- Profile Search Loc -->
+    <string name="searchLocPrompt">Use the search bar above to search for\nfortunes by latitude and longitude!</string>
+
+    <!-- Profile Search Text -->
+    <string name="searchTextPrompt">Use the search bar above to\nsearch for fortunes by text!</string>
+
+    <!-- Settings -->
+    <string name="restartApp">Note: Restart the app to change the app style</string>
+    <string name="profileSettings">Profile Settings</string>
+    <string name="changePFP">Change Profile Picture</string>
+    <string name="darkMode">Use dark mode?</string>
+
+    <string name="otherSettings">Other User Settings</string>
+    <string name="otherFriends">Allow other users to friend you</string>
+    <string name="friendFortunes">Show fortunes to friends</string>
+    <string name="userFortunes">Show fortunes to other users</string>
+    <string name="mapFriends">Show map to friends</string>
+    <string name="userFriends">Show map to other users</string>
+
+    <string name="appSettings">Application Settings</string>
+    <string name="generateAI">Generate fortunes using AI?</string>
+    <string name="pushNotif">Allow push notifications</string>
+    <string name="locAccess">Allow location access</string>
+    <string name="givePerm">Give permission</string>
+
+    <string name="deleteAcct">Delete Account</string>
+
+    <!-- item Friend -->
+    <string name="numForts">Number of fortunes: </string>
+
+    <!-- item Friend Requests -->
+    <string name="requestAccept">Accept Request</string>
+    <string name="requestDecline">Decline Request</string>
+    <string name="requestAccepted">Friend Added!</string>
+    <string name="requestDeclined">Request declined</string>
+
+    <!-- Friends Menu -->
+    <string name="Friends">Friends</string>
+    <string name="Requests">Requests</string>
+    <string name="Search">Search</string>
+
 </resources>

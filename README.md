@@ -50,6 +50,7 @@ The project requires Android 21 or above to run and uses the following packages:
 - com.airbnb.android:lottie: 3.0.1
 - androidx.swiperefreshlayout:swiperefreshlayout: 1.1.0
 - androidx.room:room-runtime:2.4.2
+- com.google.mlkit:translate:17.0.0
 
 Additionally, the following permissions are used:
 - ACCESS_NETWORK_STATE

@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:text="New here? Register"
-        android:textColor="?attr/textColorSearchUrl"
-        android:backgroundTint="?attr/colorSecondary" />
+        android:backgroundTint="?attr/colorSecondary"
+        android:text="@string/regBtn"
+        android:textColor="?attr/textColorSearchUrl" />
 </LinearLayout>

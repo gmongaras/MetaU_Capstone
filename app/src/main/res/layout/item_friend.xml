@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:text="Number of fortunes: "
+        android:text="@string/numForts"
         android:textColor="?textFillColor"
         app:layout_constraintStart_toEndOf="@+id/ivFriend"
         app:layout_constraintTop_toBottomOf="@+id/tvFriendUsername" />

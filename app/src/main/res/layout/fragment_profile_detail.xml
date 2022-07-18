@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You do not have access\nto this user's map data"
+        android:text="@string/noAccessMap"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
