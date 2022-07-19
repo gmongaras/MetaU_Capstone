@@ -5,10 +5,12 @@ import static java.util.Map.entry;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -501,16 +503,16 @@ public class translationManager {
     );
 
     // English translation string
-    String english;
+    public String english;
 
     // Current language to translate to
-    String lang;
+    public String lang;
 
     // The actual translator used to translate strings
-    Translator translator;
+    private Translator translator;
 
     // Manages downloaded models
-    RemoteModelManager modelManager;
+    private RemoteModelManager modelManager;
 
 
     /**
@@ -670,6 +672,76 @@ public class translationManager {
                         // put the untranslated text in the view
                         Log.e(TAG, "Error translating text", e);
                         tab.setText(text);
+                    }
+                });
+    }
+
+
+    /**
+     * Given a Switch and text to translate, translate the text and put it into
+     * The text view in the switch
+     * @param switchCompat A switch to add text to
+     * @param text The text to translate and put into the view
+     */
+    public void addText(SwitchCompat switchCompat, String text) {
+        // If the language is english, don't worry about
+        // translating
+        if (Objects.equals(lang, "en")) {
+            switchCompat.setText(text);
+            return;
+        }
+
+        // Translate the text
+        translator.translate(text)
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        // If the translation succeeds, put the text in the view
+                        switchCompat.setText(s);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // If the translation does not succeed, log it and
+                        // put the untranslated text in the view
+                        Log.e(TAG, "Error translating text", e);
+                        switchCompat.setText(text);
+                    }
+                });
+    }
+
+
+    /**
+     * Given a Button and text to translate, translate the text and put it into
+     * The text view in the button
+     * @param button A button to add text to
+     * @param text The text to translate and put into the view
+     */
+    public void addText(Button button, String text) {
+        // If the language is english, don't worry about
+        // translating
+        if (Objects.equals(lang, "en")) {
+            button.setText(text);
+            return;
+        }
+
+        // Translate the text
+        translator.translate(text)
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        // If the translation succeeds, put the text in the view
+                        button.setText(s);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // If the translation does not succeed, log it and
+                        // put the untranslated text in the view
+                        Log.e(TAG, "Error translating text", e);
+                        button.setText(text);
                     }
                 });
     }

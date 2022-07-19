@@ -23,6 +23,7 @@ import com.example.metau_capstone.R;
 import com.example.metau_capstone.dateFormatter;
 import com.example.metau_capstone.offlineDB.FortuneDB;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -84,6 +85,8 @@ public class ProfileDetailOfflineFragment extends Fragment {
 
     // Used to work with offline data
     offlineHelpers h;
+
+    translationManager manager;
 
     public ProfileDetailOfflineFragment() {
         // Required empty public constructor
@@ -148,9 +151,12 @@ public class ProfileDetailOfflineFragment extends Fragment {
         tvLikeCt = view.findViewById(R.id.tvLikeCt);
         ivBack = view.findViewById(R.id.ivBack);
 
+        // Get the translation manager
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
         // Get the fortune information and store it
-        tvDate_detail.setText(df.toMonthDayTime(h.toDate(date)));
-        tvFortune_detail.setText(message);
+        manager.addText(tvDate_detail, df.toMonthDayTime(h.toDate(date)));
+        manager.addText(tvFortune_detail, message);
 
         // Get the map information and load it
         SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.profileMap));
@@ -185,20 +191,33 @@ public class ProfileDetailOfflineFragment extends Fragment {
         }
 
         // Set the number of likes for the fortune
-        tvLikeCt.setText(String.valueOf(likeCt));
+        manager.addText(tvLikeCt, String.valueOf(likeCt));
 
         // Handle clicks on the share button
         ivShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                sendIntent.setType("text/plain");
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Check ou this fortune I got from a Fortune Cookie app:\n" + tvFortune_detail.getText());
+                // Create an intent and translate the text
+                manager.getText("Check ou this fortune I got from a Fortune Cookie app:\n" + tvFortune_detail.getText(), new translationManager.onCompleteListener() {
+                    @Override
+                    public void onComplete(String text) {
+                        manager.getText("Check out this fortune I got", new translationManager.onCompleteListener() {
+                            @Override
+                            public void onComplete(String title) {
+                                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                                sendIntent.setType("text/plain");
 
-                sendIntent.putExtra(Intent.EXTRA_TITLE, "Check out this fortune I got");
+                                // Translate the text
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, text);
 
-                // Show the Sharesheet
-                startActivity(Intent.createChooser(sendIntent, null));
+                                sendIntent.putExtra(Intent.EXTRA_TITLE, title);
+
+                                // Show the Sharesheet
+                                startActivity(Intent.createChooser(sendIntent, null));
+                            }
+                        });
+                    }
+                });
             }
         });
 
