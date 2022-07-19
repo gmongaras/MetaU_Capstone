@@ -676,6 +676,41 @@ public class translationManager {
 
 
     /**
+     * Given a text view and text to translate, translate the text and set it
+     * as a hint in the text view
+     * @param view A text view to add text to
+     * @param text The text to translate and put into the view
+     */
+    public void addHint(TextView view, String text) {
+        // If the language is english, don't worry about
+        // translating
+        if (Objects.equals(lang, "en")) {
+            view.setHint(text);
+            return;
+        }
+
+        // Translate the text
+        translator.translate(text)
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        // If the translation succeeds, put the text in the view
+                        view.setHint(s);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // If the translation does not succeed, log it and
+                        // put the untranslated text in the view
+                        Log.e(TAG, "Error translating text", e);
+                        view.setHint(text);
+                    }
+                });
+    }
+
+
+    /**
      * Given context and text to translate, translate the text and display a toast
      * @param context The context to display the toast with
      * @param text The text to translate and put in the toast

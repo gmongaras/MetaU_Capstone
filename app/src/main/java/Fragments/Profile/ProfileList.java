@@ -24,6 +24,7 @@ import com.example.metau_capstone.offlineDB.FortuneDB;
 import com.example.metau_capstone.offlineDB.FortuneDao;
 import com.example.metau_capstone.offlineDB.databaseApp;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -77,6 +78,8 @@ public class ProfileList extends Fragment {
     private static final String ARG_USER = "user";
     private ParseUser user;
 
+    translationManager manager;
+
     public ProfileList() {
         // Required empty public constructor
     }
@@ -116,13 +119,25 @@ public class ProfileList extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
         // If the user is offline, handle offline fortune loading
         if (!new offlineHelpers().isNetworkAvailable(requireContext())) {
             loadOffline(view);
             return;
         }
 
+        // Get the elements in the view
+        tvNoAccess = view.findViewById(R.id.tvNoAccess);
+        tvBlocked1 = view.findViewById(R.id.tvBlocked1);
+        tvBlocked2 = view.findViewById(R.id.tvBlocked2);
         tvNoFortunes = view.findViewById(R.id.tvNoFortunes);
+
+        // Setup the text in the text views
+        manager.addText(tvNoAccess, R.string.noAccessProfile, requireContext());
+        manager.addText(tvBlocked1, R.string.blocked1, requireContext());
+        manager.addText(tvBlocked2, R.string.blocked2, requireContext());
+        manager.addText(tvNoFortunes, R.string.noFortunes, requireContext());
 
         // Should the fortunes be loaded
         boolean load = true;

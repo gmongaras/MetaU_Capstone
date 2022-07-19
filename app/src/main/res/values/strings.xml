@@ -55,6 +55,7 @@
 
     <!-- Profile Search Text -->
     <string name="searchTextPrompt">Use the search bar above to\nsearch for fortunes by text!</string>
+    <string name="searchBarPrompt">Search friends by username</string>
 
     <!-- Settings -->
     <string name="restartApp">Note: Restart the app to change the app style</string>

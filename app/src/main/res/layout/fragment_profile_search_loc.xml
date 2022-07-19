@@ -26,27 +26,27 @@
         android:id="@+id/tvNoResultsLoc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/noResultsProfile"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toTopOf="@+id/linearLayout2"
+        tools:text="@string/noResultsProfile" />
 
     <TextView
         android:id="@+id/tvSearchLocPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/searchLocPrompt"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/rvProfileSearchLoc"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toTopOf="@+id/linearLayout2"
+        tools:text="@string/searchLocPrompt" />
 
     <ProgressBar
         android:id="@+id/pbProfileSearchLoc"
@@ -75,7 +75,6 @@
             android:layout_weight="1"
             android:backgroundTint="?attr/colorTertiary"
             android:ems="10"
-            android:hint="Latitude"
             android:inputType="numberDecimal"
             android:textColor="?attr/textFillColor"
             android:textColorHint="?attr/textOutlineColor" />
@@ -87,7 +86,6 @@
             android:layout_weight="1"
             android:backgroundTint="?attr/colorTertiary"
             android:ems="10"
-            android:hint="Longitude"
             android:inputType="numberDecimal"
             android:textColor="?attr/textFillColor"
             android:textColorHint="?attr/textOutlineColor" />
@@ -99,7 +97,6 @@
             android:layout_weight="1"
             android:backgroundTint="?attr/colorTertiary"
             android:ems="10"
-            android:hint="Distance (mi)"
             android:inputType="numberDecimal"
             android:textColor="?attr/textFillColor"
             android:textColorHint="?attr/textOutlineColor" />
@@ -110,54 +107,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/noAccessProfile"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/noAccessProfile" />
 
     <TextView
         android:id="@+id/tvBlocked1_loc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/blocked1"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/blocked1" />
 
     <TextView
         android:id="@+id/tvBlocked2_loc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/blocked2"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/blocked2" />
 
     <TextView
         android:id="@+id/tvNotOnline_loc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/offlineProfileSearch"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchLoc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/offlineProfileSearch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
