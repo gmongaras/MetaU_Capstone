@@ -4,6 +4,7 @@ package com.example.metau_capstone;
 import static java.util.Map.entry;
 
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -578,6 +579,34 @@ public class translationManager {
                     public void onFailure(@NonNull Exception e) {
                         // If the model had an issue downloading, log the error
                         Log.e(TAG, "Issue downloading new model", e);
+                    }
+                });
+    }
+
+
+    /**
+     * Given a text view and text to translate, translate the text and put it into
+     * The text view
+     * @param view A text view to add text to
+     * @param text The text to translate and put into the view
+     */
+    public void addText(TextView view, String text) {
+        // Translate teh text
+        translator.translate(text)
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        // If the translation succeeds, put the text in the view
+                        view.setText(s);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // If the translation does not succeed, log it and
+                        // put the untranslated text in the view
+                        Log.e(TAG, "Error translating text", e);
+                        view.setText(text);
                     }
                 });
     }

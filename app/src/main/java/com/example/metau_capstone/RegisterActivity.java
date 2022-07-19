@@ -20,6 +20,8 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -35,6 +37,10 @@ public class RegisterActivity extends AppCompatActivity {
     EditText etPassword2_reg;
     Spinner spLanguages;
     Button btnRegister;
+
+    // Used to keep track of the indices
+    Integer[] idx;
+    Integer[] idx_rev;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +64,38 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
 
         // Add options to the language dropdown
+
+        // Get all the items in the dictionary
         String[] languages = new String[translationManager.langEncodings.size()];
         Object[] keys = translationManager.langEncodings.keySet().toArray();
+        idx = new Integer[keys.length];
+        for (int i = 0; i < idx.length; i++) {
+            idx[i] = i;
+        }
+
+        // Sort the languages in alphabetical order and get the indices
+        // for that order
+        Arrays.sort(idx, new Comparator<Integer>() {
+            @Override public int compare(final Integer o1, final Integer o2) {
+                return ((String)keys[o1]).compareTo((String)keys[o2]);
+            }
+        });
+        idx_rev = new Integer[idx.length];
+        for (int i = 0; i < idx.length; i++) {
+            idx_rev[idx[i]] = i;
+        }
+
+        // Add each item to the spinner while finding the index of English
         int engLoc = 0;
         for (int i = 0; i < languages.length; i++) {
-            String s = (String)keys[i];
+            String s = (String)keys[idx[i]];
             if (Objects.equals(s, "English")) {
                 engLoc = i;
             }
             languages[i] = s + " (" + translationManager.langTrans.get(s) + ")";
         }
+
+        // Create the adapter for the spinner and add english as the starting language
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, languages);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -108,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("useAI", true);
                     user.put("friendable", true);
                     user.put("darkMode", false);
-                    user.put("lang", translationManager.langEncodings.get(translationManager.langEncodings.keySet().toArray()[(int)spLanguages.getSelectedItemId()]));
+                    user.put("lang", translationManager.langEncodings.get(translationManager.langEncodings.keySet().toArray()[idx[(int)spLanguages.getSelectedItemId()]]));
 
                     // Sign the user up
                     user.signUpInBackground(new SignUpCallback() {
