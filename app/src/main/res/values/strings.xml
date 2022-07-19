@@ -19,6 +19,7 @@
     <!-- Main/Home -->
     <string name="promptBefore">Click on the cookie below to get your fortune!</string>
     <string name="promptAfter">"Here's your fortune!"</string>
+    <string name="homePrompt">Time Until Next Fortune</string>
 
     <!-- Friends List -->
     <string name="noFriends">No friends :(\nAdd some with the search tab!</string>

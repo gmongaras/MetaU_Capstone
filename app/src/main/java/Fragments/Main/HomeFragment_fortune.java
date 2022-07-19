@@ -26,6 +26,7 @@ import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.WakefulReceiver;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseRelation;
@@ -69,6 +70,8 @@ public class HomeFragment_fortune extends Fragment {
     // Pytorch model
     Module module;
 
+    translationManager manager;
+
     // Input tensor
     Tensor inputTensor;
 
@@ -109,7 +112,12 @@ public class HomeFragment_fortune extends Fragment {
         tvTextPrompt = view.findViewById(R.id.tvTextPrompt);
         avCookie = view.findViewById(R.id.avCookie);
         avCookie.setClickable(true);
-        //ivFortune = view.findViewById(R.id.ivFortune);
+
+        // Get the translation manager
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
+        // Set the initial text
+        manager.addText(tvTextPrompt, R.string.promptBefore, requireContext());
 
         // Create the animations
         fadeIn.setDuration(1200);
@@ -230,8 +238,8 @@ public class HomeFragment_fortune extends Fragment {
                         tvTextPrompt.setAnimation(fadeIn);
 
                         // Change the displayed text
-                        tvTextPrompt.setText(R.string.promptAfter);
-                        tvFortuneText.setText(fortune);
+                        manager.addText(tvTextPrompt, R.string.promptAfter, requireContext());
+                        manager.addText(tvFortuneText, fortune);
                     }
 
                     @Override

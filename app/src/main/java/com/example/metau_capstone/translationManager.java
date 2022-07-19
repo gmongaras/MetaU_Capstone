@@ -3,6 +3,7 @@ package com.example.metau_capstone;
 
 import static java.util.Map.entry;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -18,7 +19,9 @@ import com.google.mlkit.nl.translate.Translation;
 import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
 
+import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -584,6 +587,19 @@ public class translationManager {
     }
 
 
+
+    /**
+     * Given a text view and the id of a string resource to translate, translate the
+     * text and put it into the text view
+     * @param view A text view to add text to
+     * @param textId The string id of the text to translate
+     * @param context Context used to get the string
+     */
+    public void addText(TextView view, int textId, Context context) {
+        addText(view, context.getString(textId));
+    }
+
+
     /**
      * Given a text view and text to translate, translate the text and put it into
      * The text view
@@ -591,7 +607,17 @@ public class translationManager {
      * @param text The text to translate and put into the view
      */
     public void addText(TextView view, String text) {
-        // Translate teh text
+        // If the language is english, don't worry about
+        // translating
+        if (Objects.equals(lang, "en")) {
+            view.setText(text);
+            return;
+        }
+
+        // Remove all text currently in the view
+        //view.setText("");
+
+        // Translate the text
         translator.translate(text)
                 .addOnSuccessListener(new OnSuccessListener<String>() {
                     @Override

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.translation.TranslationManager;
 import android.widget.FrameLayout;
 
 import com.example.metau_capstone.offlineDB.FortuneDB;
@@ -61,10 +62,15 @@ public class MainActivity extends AppCompatActivity {
     int curPosX = 0;
     boolean hasMoved = false;
 
+    translationManager manger;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Get the translation manager and set the language
+        manger = new translationManager(ParseUser.getCurrentUser().getString("lang"));
 
         // When the user logs in, change themes to dark or light mode
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
