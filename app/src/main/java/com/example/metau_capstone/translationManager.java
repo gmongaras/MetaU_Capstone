@@ -6,11 +6,13 @@ import static java.util.Map.entry;
 import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.tabs.TabLayout;
 import com.google.mlkit.common.model.DownloadConditions;
 import com.google.mlkit.common.model.RemoteModelManager;
 import com.google.mlkit.nl.translate.TranslateLanguage;
@@ -636,4 +638,113 @@ public class translationManager {
                     }
                 });
     }
+
+
+    /**
+     * Given a Tab and text to translate, translate the text and put it into
+     * The text view in the tab
+     * @param tab A tab to add text to
+     * @param text The text to translate and put into the view
+     */
+    public void addText(TabLayout.Tab tab, String text) {
+        // If the language is english, don't worry about
+        // translating
+        if (Objects.equals(lang, "en")) {
+            tab.setText(text);
+            return;
+        }
+
+        // Translate the text
+        translator.translate(text)
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        // If the translation succeeds, put the text in the view
+                        tab.setText(s);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // If the translation does not succeed, log it and
+                        // put the untranslated text in the view
+                        Log.e(TAG, "Error translating text", e);
+                        tab.setText(text);
+                    }
+                });
+    }
+
+
+    /**
+     * Given context and text to translate, translate the text and display a toast
+     * @param context The context to display the toast with
+     * @param text The text to translate and put in the toast
+     */
+    public void createToast(Context context, String text) {
+        // If the language is english, don't worry about
+        // translating
+        if (Objects.equals(lang, "en")) {
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Translate the text
+        translator.translate(text)
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        // If the translation succeeds, show the translated toast
+                        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // If the translation does not succeed, log it and
+                        // show the toast in english
+                        Log.e(TAG, "Error translating text", e);
+                        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    /**
+     * Class used to handle callbacks to know when text has been translated
+     */
+    public interface onCompleteListener {
+        void onComplete(String text);
+    }
+    /**
+     * Given text to translate, translate the text and return the translated text
+     * @param text The text to translate
+     */
+    public void getText(String text, onCompleteListener listener) {
+        // If the language is english, don't worry about
+        // translating
+        if (Objects.equals(lang, "en")) {
+            listener.onComplete(text);
+            return;
+        }
+
+        // Translate the text
+        translator.translate(text)
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        // If the translation succeeds, return the translated text
+                        listener.onComplete(s);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // If the translation does not succeed, log it and
+                        // return the english text
+                        Log.e(TAG, "Error translating text", e);
+                        listener.onComplete(text);
+                    }
+                });
+    }
+
 }

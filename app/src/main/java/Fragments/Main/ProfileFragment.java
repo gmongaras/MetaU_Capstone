@@ -24,6 +24,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -42,6 +43,7 @@ import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.Profile.ProfileCollectionAdapter;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.parse.FindCallback;
@@ -76,6 +78,8 @@ public class ProfileFragment extends Fragment {
     ViewPager2 pagerProfile;
     ProfileCollectionAdapter profileCollectionAdapter;
 
+    translationManager manager;
+
     // The user to load data for
     private static final String ARG_USER = "user";
     private ParseUser user;
@@ -88,6 +92,13 @@ public class ProfileFragment extends Fragment {
     // 4 - Logged in user blocked by other user
     private static final String ARG_MODE = "mode";
     private int mode;
+
+    // Translated strings for Yes and No
+    String YesTrans;
+    String NoTrans;
+
+    // Theme colors
+    int textColor;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -128,6 +139,31 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Get the translation manager
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
+        // Get translations for yes and no
+        manager.getText("Yes", new translationManager.onCompleteListener() {
+            @Override
+            public void onComplete(String text) {
+                YesTrans = text;
+            }
+        });
+        manager.getText("No", new translationManager.onCompleteListener() {
+            @Override
+            public void onComplete(String text) {
+                NoTrans = text;
+            }
+        });
+
+        // Get the main theme text color
+        int colorId = androidx.constraintlayout.widget.R.attr.textFillColor;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            final TypedValue value = new TypedValue();
+            requireActivity().getTheme().resolveAttribute(colorId, value, true);
+            textColor = value.data;
+        }
 
         // Get the elements
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
@@ -208,7 +244,8 @@ public class ProfileFragment extends Fragment {
             ivOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(requireContext(), "Settings unavailable offline", Toast.LENGTH_SHORT).show();
+                    manager.createToast(requireContext(), "Settings unavailable offline");
+                    //Toast.makeText(requireContext(), "Settings unavailable offline", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -277,10 +314,16 @@ public class ProfileFragment extends Fragment {
 
         // Initialize the tab layout on top of the pager
         tlProfile = view.findViewById(R.id.tlProfile);
-        tlProfile.addTab(tlProfile.newTab().setText("Fortune List"));
-        tlProfile.addTab(tlProfile.newTab().setText("Text Search"));
-        tlProfile.addTab(tlProfile.newTab().setText("Location Search"));
-        tlProfile.addTab(tlProfile.newTab().setText("Liked List"));
+        TabLayout.Tab tmp;
+        tmp = tlProfile.newTab();
+        manager.addText(tmp, "Fortune List");
+        tlProfile.addTab(tmp);
+        tmp = tlProfile.newTab(); manager.addText(tmp, "Text Search");
+        tlProfile.addTab(tmp);
+        tmp = tlProfile.newTab(); manager.addText(tmp, "Location Search");
+        tlProfile.addTab(tmp);
+        tmp = tlProfile.newTab(); manager.addText(tmp, "Liked List");
+        tlProfile.addTab(tmp);
         tlProfile.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -322,53 +365,65 @@ public class ProfileFragment extends Fragment {
 
     // Inflate and show the current user popup menu in the top right
     private void showUserMenu(View v) {
-        // Show the popup menu
-        Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
-        PopupMenu popup = new PopupMenu(wrapper, v);
-        popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.settings), "Settings"));
-        popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.logout), "Logout"));
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.menu_profile_options, popup.getMenu());
-        popup.show();
-
-        // Add an on click listener for the menu items
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        // Translate the necessary text
+        manager.getText("Settings", new translationManager.onCompleteListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                // If the settings item is clicked, go to the users settings
-                if (item.getItemId() == 1) {
-                    // Setup the fragment switch
-                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+            public void onComplete(String settings) {
+                manager.getText("Logout", new translationManager.onCompleteListener() {
+                    @Override
+                    public void onComplete(String logout) {
+                        // Show the popup menu
+                        Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
+                        PopupMenu popup = new PopupMenu(wrapper, v);
+                        popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.settings), settings));
+                        popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.logout), logout));
+                        MenuInflater inflater = popup.getMenuInflater();
+                        inflater.inflate(R.menu.menu_profile_options, popup.getMenu());
+                        popup.show();
 
-                    // Go to the settings fragment
-                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                    SettingsFragment settingsFragment = SettingsFragment.newInstance();
+                        // Add an on click listener for the menu items
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                // If the settings item is clicked, go to the users settings
+                                if (item.getItemId() == 1) {
+                                    // Setup the fragment switch
+                                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
-                    ft.replace(R.id.flContainer, settingsFragment);
-                    ft.commit();
+                                    // Go to the settings fragment
+                                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                                    SettingsFragment settingsFragment = SettingsFragment.newInstance();
 
-                    return true;
-                }
+                                    ft.replace(R.id.flContainer, settingsFragment);
+                                    ft.commit();
 
-                // If the item is logout, log the user out
-                if (item.getItemId() == 2) {
-                    // Log the user out
-                    Toast.makeText(v.getContext(), "Logging out..", Toast.LENGTH_SHORT).show();
-                    ParseUser.logOutInBackground();
+                                    return true;
+                                }
 
-                    // Exit this fragment
-                    requireActivity().finishAffinity();
+                                // If the item is logout, log the user out
+                                if (item.getItemId() == 2) {
+                                    // Log the user out
+                                    manager.createToast(requireContext(), "Logging out...");
+                                    ParseUser.logOutInBackground();
 
-                    // Go back to the main page
-                    Intent i = new Intent(v.getContext(), LoginActivity.class);
-                    startActivity(i);
+                                    // Exit this fragment
+                                    requireActivity().finishAffinity();
 
-                    return true;
-                }
+                                    // Go back to the main page
+                                    Intent i = new Intent(v.getContext(), LoginActivity.class);
+                                    startActivity(i);
 
-                return false;
+                                    return true;
+                                }
+
+                                return false;
+                            }
+                        });
+                    }
+                });
             }
         });
+
     }
 
 
@@ -376,180 +431,250 @@ public class ProfileFragment extends Fragment {
 
     // Inflate and show the friend popup menu in the top right
     private void showFriendMenu(View v) {
-        // Show the popup menu
-        Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
-        PopupMenu popup = new PopupMenu(wrapper, v);
-        MenuInflater inflater = popup.getMenuInflater();
-        popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.unfriend), "Unfriend"));
-        popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));
-        inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
-        popup.show();
-
-        // Add an on click listener for the menu items
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        // Translate the necessary text
+        manager.getText("Remove Friend", new translationManager.onCompleteListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                // If the item is unfriend, unfriend the user
-                if (item.getItemId() == 1) {
-                    // Display an alert dialog to make the user confirm they
-                    // want to unfriend that user
-                    new AlertDialog.Builder(requireContext())
-                            .setTitle("Unfriend")
-                            .setMessage("Are you sure you want to unfriend " + tvUsername.getText().toString() + "?")
+            public void onComplete(String unfriend) {
+                manager.getText("Block", new translationManager.onCompleteListener() {
+                    @Override
+                    public void onComplete(String block) {
+                        // Show the popup menu
+                        Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
+                        PopupMenu popup = new PopupMenu(wrapper, v);
+                        MenuInflater inflater = popup.getMenuInflater();
+                        popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.unfriend), unfriend));
+                        popup.getMenu().add(0, 2, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), block));
+                        inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
+                        popup.show();
 
-                            // If the user clicks yes, unfriend this friend
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    unfriend();
+                        // Get more translations
+                        manager.getText("Are you sure you want to unfriend " + tvUsername.getText().toString() + "?", new translationManager.onCompleteListener() {
+                            @Override
+                            public void onComplete(String unfriendMsg) {
+                                manager.getText("Are you sure you want to block " + tvUsername.getText().toString() + "? Blocking will also unfriend the other user and will remove all liked fortunes between both users", new translationManager.onCompleteListener() {
+                                    @Override
+                                    public void onComplete(String blockMsg) {
+                                        // Add an on click listener for the menu items
+                                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                            @Override
+                                            public boolean onMenuItemClick(MenuItem item) {
+                                                // If the item is unfriend, unfriend the user
+                                                if (item.getItemId() == 1) {
+                                                    // Display an alert dialog to make the user confirm they
+                                                    // want to unfriend that user
+                                                    AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                                                            .setTitle(unfriend)
+                                                            .setMessage(unfriendMsg)
 
-                                    // Go back to the friends fragment
-                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-                                    ft.replace(R.id.flContainer, FriendsFragment.newInstance(0));
-                                    ft.commit();
+                                                            // If the user clicks yes, unfriend this friend
+                                                            .setPositiveButton(YesTrans, new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    unfriend();
 
-                                }
-                            })
+                                                                    // Go back to the friends fragment
+                                                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                                                                    ft.replace(R.id.flContainer, FriendsFragment.newInstance(0));
+                                                                    ft.commit();
 
-                            // If the user clicks no, do nothing
-                            .setNegativeButton("No", null)
-                            .show();
+                                                                }
+                                                            })
 
-                    return true;
-                }
+                                                            // If the user clicks no, do nothing
+                                                            .setNegativeButton(NoTrans, null)
+                                                            .show();
 
-                // If the item is block, block the friend
-                if (item.getItemId() == 2) {
-                    // Display an alert dialog to make the user confirm they
-                    // want to block the other user
-                    new AlertDialog.Builder(requireContext())
-                            .setTitle("Unfriend")
-                            .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "? Blocking will also unfriend the other user and will remove all liked fortunes between both users")
+                                                    // Change the color of the buttons
+                                                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
+                                                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
 
-                            // If the user clicks yes, block this friend
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    blockFriend();
+                                                    return true;
+                                                }
 
-                                    // Go back to the friends fragment
-                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-                                    ft.replace(R.id.flContainer, FriendsFragment.newInstance(0));
-                                    ft.commit();
+                                                // If the item is block, block the friend
+                                                if (item.getItemId() == 2) {
+                                                    // Display an alert dialog to make the user confirm they
+                                                    // want to block the other user
+                                                    AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                                                            .setTitle(block)
+                                                            .setMessage(blockMsg)
 
-                                }
-                            })
+                                                            // If the user clicks yes, block this friend
+                                                            .setPositiveButton(YesTrans, new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    blockFriend();
 
-                            // If the user clicks no, do nothing
-                            .setNegativeButton("No", null)
-                            .show();
+                                                                    // Go back to the friends fragment
+                                                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                                                                    ft.replace(R.id.flContainer, FriendsFragment.newInstance(0));
+                                                                    ft.commit();
 
-                    return true;
-                }
+                                                                }
+                                                            })
 
-                return false;
+                                                            // If the user clicks no, do nothing
+                                                            .setNegativeButton(NoTrans, null)
+                                                            .show();
+
+                                                    // Change the color of the buttons
+                                                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
+                                                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
+
+                                                    return true;
+                                                }
+
+                                                return false;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+
+
+
+                    }
+                });
             }
         });
+
+
     }
 
 
 
     // Inflate and show the other user popup menu in the top right
     private void showOtherUserMenu(View v) {
-        // Is the user blocked?
-        ParseRelation<ParseUser> rel = ParseUser.getCurrentUser().getRelation("Blocked");
-        ParseQuery<ParseUser> query = rel.getQuery();
-        query.whereEqualTo("objectId", user.getObjectId());
-        query.findInBackground(new FindCallback<ParseUser>() {
+        // Get the needed translations
+        manager.getText("Blocked", new translationManager.onCompleteListener() {
             @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                // If the objects list has an item in it, the other user is blocked,
-                // otherwise the other user is not blocked
-                boolean blocked = false;
-                if (objects.size() != 0) {
-                    blocked = true;
-                }
-
-
-                // Show the popup menu
-                Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
-                PopupMenu popup = new PopupMenu(wrapper, v);
-                MenuInflater inflater = popup.getMenuInflater();
-                if (blocked == false) {
-                    popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Block"));
-                }
-                else {
-                    popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), "Unblock"));
-                }
-                inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
-                popup.show();
-
-                // Add an on click listener for the menu items
-                boolean finalBlocked = blocked;
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public void onComplete(String block) {
+                manager.getText("Unblock", new translationManager.onCompleteListener() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem item) {
+                    public void onComplete(String unblock) {
                         // Is the user blocked?
-                        if (finalBlocked) {
-                            // If the item is unblock, unblock the user
-                            if (item.getItemId() == 1) {
-                                // Show a prompt to confirm if the user wants to unblock the other user
-                                new AlertDialog.Builder(requireContext())
-                                        .setTitle("Unblock this user?")
-                                        .setMessage("Are you sure you want to unblock " + tvUsername.getText().toString() + "?")
+                        ParseRelation<ParseUser> rel = ParseUser.getCurrentUser().getRelation("Blocked");
+                        ParseQuery<ParseUser> query = rel.getQuery();
+                        query.whereEqualTo("objectId", user.getObjectId());
+                        query.findInBackground(new FindCallback<ParseUser>() {
+                            @Override
+                            public void done(List<ParseUser> objects, ParseException e) {
+                                // If the objects list has an item in it, the other user is blocked,
+                                // otherwise the other user is not blocked
+                                boolean blocked = false;
+                                if (objects.size() != 0) {
+                                    blocked = true;
+                                }
 
-                                        // If the user clicks yes, unblock the user
-                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                                // Show the popup menu
+                                Context wrapper = new ContextThemeWrapper(getContext(), R.style.PopupStyle);
+                                PopupMenu popup = new PopupMenu(wrapper, v);
+                                MenuInflater inflater = popup.getMenuInflater();
+                                if (blocked == false) {
+                                    popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), block));
+                                }
+                                else {
+                                    popup.getMenu().add(0, 1, 1, menuIconWithText(getResources().getDrawable(R.drawable.block), unblock));
+                                }
+                                inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
+                                popup.show();
+
+
+                                // Get more translations
+                                boolean finalBlocked = blocked;
+                                manager.getText("Are you sure you want to unblock " + tvUsername.getText().toString() + "?", new translationManager.onCompleteListener() {
+                                    @Override
+                                    public void onComplete(String unblockTxt) {
+                                        manager.getText("Are you sure you want to block " + tvUsername.getText().toString() + "?\nBlocking will remove all liked fortunes between both users.", new translationManager.onCompleteListener() {
                                             @Override
-                                            public void onClick(DialogInterface dialog, int which) {
+                                            public void onComplete(String blockTxt) {
 
-                                                // unblock the user
-                                                unblock();
+                                                // Add an on click listener for the menu items
+                                                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                                    @Override
+                                                    public boolean onMenuItemClick(MenuItem item) {
+                                                        // Is the user blocked?
+                                                        if (finalBlocked) {
+                                                            // If the item is unblock, unblock the user
+                                                            if (item.getItemId() == 1) {
+                                                                // Show a prompt to confirm if the user wants to unblock the other user
+                                                                AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                                                                        .setTitle(unblock)
+                                                                        .setMessage(unblockTxt)
 
+                                                                        // If the user clicks yes, unblock the user
+                                                                        .setPositiveButton(YesTrans, new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                                                // unblock the user
+                                                                                unblock();
+
+                                                                            }
+                                                                        })
+
+                                                                        // If the user clicks no, do nothing
+                                                                        .setNegativeButton(NoTrans, null)
+                                                                        .show();
+
+                                                                // Change the color of the buttons
+                                                                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
+                                                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
+
+                                                                return true;
+                                                            }
+
+                                                            return false;
+                                                        }
+                                                        else {
+                                                            // If the item is block, block the user
+                                                            if (item.getItemId() == 1) {
+                                                                // Show a prompt to confirm if the user wants to block the other user
+                                                                AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                                                                        .setTitle(block)
+                                                                        .setMessage(blockTxt)
+
+                                                                        // If the user clicks yes, block the user
+                                                                        .setPositiveButton(YesTrans, new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                                                // Block the user
+                                                                                block();
+
+                                                                            }
+                                                                        })
+
+                                                                        // If the user clicks no, do nothing
+                                                                        .setNegativeButton(NoTrans, null)
+                                                                        .show();
+
+                                                                // Change the color of the buttons
+                                                                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
+                                                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
+
+                                                                return true;
+                                                            }
+
+                                                            return false;
+                                                        }
+                                                    }
+
+
+                                                });
                                             }
-                                        })
+                                        });
+                                    }
+                                });
 
-                                        // If the user clicks no, do nothing
-                                        .setNegativeButton("No", null)
-                                        .show();
 
-                                return true;
                             }
-
-                            return false;
-                        }
-                        else {
-                            // If the item is block, block the user
-                            if (item.getItemId() == 1) {
-                                // Show a prompt to confirm if the user wants to block the other user
-                                new AlertDialog.Builder(requireContext())
-                                        .setTitle("Block this user?")
-                                        .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "?\nBlocking will remove all liked fortunes between both users.")
-
-                                        // If the user clicks yes, block the user
-                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                                // Block the user
-                                                block();
-
-                                            }
-                                        })
-
-                                        // If the user clicks no, do nothing
-                                        .setNegativeButton("No", null)
-                                        .show();
-
-                                return true;
-                            }
-
-                            return false;
-                        }
+                        });
                     }
-
-
                 });
+
             }
         });
     }
@@ -569,7 +694,7 @@ public class ProfileFragment extends Fragment {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Unable to unfriend user", e);
-                    Toast.makeText(requireContext(), "Unable to unfriend user", Toast.LENGTH_SHORT).show();
+                    manager.createToast(requireContext(), "Unable to unfriend user");
                     return;
                 }
 
@@ -587,9 +712,9 @@ public class ProfileFragment extends Fragment {
                         }
                         else {
                             try {
-                                Toast.makeText(requireActivity(), "User unfriended", Toast.LENGTH_SHORT).show();
+                                manager.createToast(requireContext(), "User unfriended");
                             } catch (Exception e2) {
-                                Log.e(TAG, "Page unloaded before unfriending", e);
+                                Log.e(TAG, "Page unloaded before unfriending", e2);
                             }
                         }
                     }
@@ -602,28 +727,43 @@ public class ProfileFragment extends Fragment {
 
     // Block a friend
     private void blockFriend() {
-        // Show a prompt to confirm if the user wants to block a friend
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Block this user?")
-                .setMessage("Are you sure you want to block " + tvUsername.getText().toString() + "?\nBlocking will also unfriend them and remove all liked fortunes between you two.")
-
-                // If the user clicks yes, block this friend
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        // Get the needed translations
+        manager.getText("Block this friend?", new translationManager.onCompleteListener() {
+            @Override
+            public void onComplete(String title) {
+                manager.getText("Are you sure you want to block " + tvUsername.getText().toString() + "?\nBlocking will also unfriend them and remove all liked fortunes between you two.", new translationManager.onCompleteListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onComplete(String text) {
+                        // Show a prompt to confirm if the user wants to block a friend
+                        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                                .setTitle(title)
+                                .setMessage(text)
 
-                        // Unfriend the user
-                        unfriend();
+                                // If the user clicks yes, block this friend
+                                .setPositiveButton(YesTrans, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                        // Block the user
-                        block();
+                                        // Unfriend the user
+                                        unfriend();
 
+                                        // Block the user
+                                        block();
+
+                                    }
+                                })
+
+                                // If the user clicks no, do nothing
+                                .setNegativeButton(NoTrans, null)
+                                .show();
+
+                        // Change the color of the buttons
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
                     }
-                })
-
-                // If the user clicks no, do nothing
-                .setNegativeButton("No", null)
-                .show();
+                });
+            }
+        });
     }
 
 
@@ -695,7 +835,7 @@ public class ProfileFragment extends Fragment {
                                                 public void done(ParseException e) {
                                                     // When the users have been updated,
                                                     // notify the user
-                                                    Toast.makeText(requireContext(), "User blocked", Toast.LENGTH_SHORT).show();
+                                                    manager.createToast(requireContext(), "User blocked");
 
                                                     // Setup the fragment switch
                                                     FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
@@ -717,7 +857,7 @@ public class ProfileFragment extends Fragment {
                     });
                 }
                 else {
-                    Toast.makeText(requireContext(), "Unable to block user", Toast.LENGTH_SHORT).show();
+                    manager.createToast(requireContext(), "Unable to block user");
                 }
             }
         });
@@ -738,7 +878,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(requireContext(), "User unblocked", Toast.LENGTH_SHORT).show();
+                    manager.createToast(requireContext(), "User unblocked");
 
                     // Go back to the friend fragment
 
@@ -754,7 +894,7 @@ public class ProfileFragment extends Fragment {
                     ft.commit();
                 }
                 else {
-                    Toast.makeText(requireContext(), "Unable to unblock user", Toast.LENGTH_SHORT).show();
+                    manager.createToast(requireContext(), "Unable to unblock user");
                 }
             }
         });
@@ -769,7 +909,7 @@ public class ProfileFragment extends Fragment {
 
         // If the user sent back an image
         if ((data != null) && requestCode == 21) {
-            Toast.makeText(getContext(), "Uploading image...", Toast.LENGTH_SHORT).show();
+            manager.createToast(requireContext(), "Uploading image...");
 
             // Get the URI of the image
             Uri photoUri = data.getData();
@@ -803,18 +943,18 @@ public class ProfileFragment extends Fragment {
                                             .circleCrop()
                                             .into(ivProfileImage);
 
-                                    Toast.makeText(getContext(), "Upload Success!", Toast.LENGTH_SHORT).show();
+                                    manager.createToast(requireContext(), "Upload Success!");
                                 }
                                 else {
                                     Log.e(TAG, "File upload issue", e);
-                                    Toast.makeText(getContext(), "Upload Failed :(", Toast.LENGTH_SHORT).show();
+                                    manager.createToast(requireContext(), "Upload Failed :(");
                                 }
                             }
                         });
                     }
                     else {
                         Log.e(TAG, "File Save Issue", e);
-                        Toast.makeText(getContext(), "Upload Failed :(", Toast.LENGTH_SHORT).show();
+                        manager.createToast(requireContext(), "Upload Failed :(");
                     }
                 }
             });
