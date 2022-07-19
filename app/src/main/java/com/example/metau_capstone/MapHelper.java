@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.SystemClock;
@@ -32,6 +33,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -106,7 +108,7 @@ public class MapHelper {
         else {
             if (errorText != null) {
                 errorText.setVisibility(View.VISIBLE);
-                errorText.setText(R.string.mapError);
+                (new translationManager(ParseUser.getCurrentUser().getString("lang"))).addText(errorText, R.string.mapError, context);
             }
         }
     }

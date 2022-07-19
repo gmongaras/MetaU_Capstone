@@ -1,5 +1,6 @@
 package Fragments.Main;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -26,6 +27,7 @@ import com.parse.ParseUser;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 
 import Fragments.Profile.ProfileList;
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import Fragments.Main.FriendsFragment;
@@ -67,6 +69,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Set the apps language so that the map can be loaded in
+        // teh correct language
+        String languageToLoad = ParseUser.getCurrentUser().getString("lang");
+        if (languageToLoad == null) {
+            languageToLoad = "en";
+        }
+        Locale locale = new Locale.Builder().setLanguage(languageToLoad).build();
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+
         super.onCreate(savedInstanceState);
 
         // Get the translation manager and set the language
