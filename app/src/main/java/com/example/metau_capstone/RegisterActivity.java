@@ -9,8 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -26,17 +29,14 @@ public class RegisterActivity extends AppCompatActivity {
     EditText etUsername_reg;
     EditText etPassword_reg;
     EditText etPassword2_reg;
+    Spinner spLanguages;
     Button btnRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            setTheme(R.style.Theme_DarkMode); //when dark mode is enabled, we use the dark theme
-        } else {
-            setTheme(R.style.Theme_DarkMode);  //default app theme
-        }
+        setTheme(R.style.Theme_LightMode);  //default app theme
         setContentView(R.layout.activity_register);
 
         try {
@@ -50,7 +50,11 @@ public class RegisterActivity extends AppCompatActivity {
         etUsername_reg = findViewById(R.id.etUsername_reg);
         etPassword_reg = findViewById(R.id.etPassword_reg);
         etPassword2_reg = findViewById(R.id.etPassword2_reg);
+        spLanguages = findViewById(R.id.spLanguages);
         btnRegister = findViewById(R.id.btnRegister);
+
+        // Add options to the language dropdown
+        ;
 
         // Put an onClick listener to the button
         btnRegister.setOnClickListener(new View.OnClickListener() {

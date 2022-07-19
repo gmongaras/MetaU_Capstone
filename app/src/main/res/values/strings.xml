@@ -11,6 +11,7 @@
     <string name="subBtn">Log In</string>
     <string name="regBtn">New here? Register</string>
     <string name="regBtn2">Register</string>
+    <string name="langOptions">Language: </string>
 
     <!-- Maps -->
     <string name="mapError">Unable to load map. Does this phone have Google Play support?</string>
