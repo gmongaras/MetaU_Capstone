@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -17,6 +19,8 @@ import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.Objects;
 
 /**
  ** This class is used to manage the Register Activity (activity_register.xml)
@@ -54,7 +58,21 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
 
         // Add options to the language dropdown
-        ;
+        String[] languages = new String[translationManager.langEncodings.size()];
+        Object[] keys = translationManager.langEncodings.keySet().toArray();
+        int engLoc = 0;
+        for (int i = 0; i < languages.length; i++) {
+            String s = (String)keys[i];
+            if (Objects.equals(s, "English")) {
+                engLoc = i;
+            }
+            languages[i] = s + " (" + translationManager.langTrans.get(s) + ")";
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, languages);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spLanguages.setAdapter(adapter);
+        spLanguages.setSelection(engLoc, false);
 
         // Put an onClick listener to the button
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("useAI", true);
                     user.put("friendable", true);
                     user.put("darkMode", false);
+                    user.put("lang", translationManager.langEncodings.get(translationManager.langEncodings.keySet().toArray()[(int)spLanguages.getSelectedItemId()]));
 
                     // Sign the user up
                     user.signUpInBackground(new SignUpCallback() {
