@@ -1,0 +1,114 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 8,
+    "identityHash": "76a73c6aaa3e5777a492edc8e52c6929",
+    "entities": [
+      {
+        "tableName": "FortuneDB",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`fortId` INTEGER PRIMARY KEY AUTOINCREMENT, `date` INTEGER, `message` TEXT, `Lat_` REAL NOT NULL, `Long_` REAL NOT NULL, `liked` INTEGER NOT NULL, `likeCt` INTEGER NOT NULL, `likedFort` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "fortId",
+            "columnName": "fortId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "message",
+            "columnName": "message",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "Lat_",
+            "columnName": "Lat_",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Long_",
+            "columnName": "Long_",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "liked",
+            "columnName": "liked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "likeCt",
+            "columnName": "likeCt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "likedFort",
+            "columnName": "likedFort",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "fortId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "userSettingsDB",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`setId` INTEGER PRIMARY KEY AUTOINCREMENT, `state` INTEGER NOT NULL, `stateStr` TEXT, `tag` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "setId",
+            "columnName": "setId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stateStr",
+            "columnName": "stateStr",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "setId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '76a73c6aaa3e5777a492edc8e52c6929')"
+    ]
+  }
+}

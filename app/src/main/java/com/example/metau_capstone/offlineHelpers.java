@@ -98,7 +98,29 @@ public class offlineHelpers {
                                         } catch (ParseException e) {
                                             setting.state = false;
                                         }
+                                        setting.stateStr = "";
                                         setting.tag = "darkMode";
+
+                                        // Get the database DOA
+                                        final userSettingsDao settingsDao = ((databaseApp) context.getApplicationContext()).getDatabase().userSettingsDAO();
+
+                                        // Add the new state to the database
+                                        settingsDao.addSetting(setting);
+                                    }
+                                });
+
+                                // Set the user's preferred language
+                                AsyncTask.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        userSettingsDB setting = new userSettingsDB();
+                                        try {
+                                            setting.stateStr = ParseUser.getCurrentUser().fetch().getString("lang");
+                                        } catch (ParseException e) {
+                                            setting.stateStr = "en";
+                                        }
+                                        setting.state = true;
+                                        setting.tag = "lang";
 
                                         // Get the database DOA
                                         final userSettingsDao settingsDao = ((databaseApp) context.getApplicationContext()).getDatabase().userSettingsDAO();

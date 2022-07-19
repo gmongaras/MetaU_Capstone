@@ -21,4 +21,8 @@ public interface userSettingsDao {
     // Get the dark mode setting from the database
     @Query("SELECT * FROM userSettingsDB WHERE tag = 'darkMode'")
     public List<userSettingsDB> getDarkMode();
+
+    // Get the language setting from the database
+    @Query("SELECT * FROM userSettingsDB WHERE tag = 'lang'")
+    public List<userSettingsDB> getLang();
 }
