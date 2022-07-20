@@ -19,7 +19,6 @@
         android:closeIcon="@drawable/close"
         android:goIcon="@drawable/go_icon"
         android:inputType="text"
-        android:queryHint="Search friends by username"
         android:saveEnabled="true"
         android:searchIcon="@drawable/search"
         android:voiceIcon="@drawable/voice"
@@ -47,14 +46,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/alertFriendsSearch"
         android:textColor="?textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/rvFriends_search"
         app:layout_constraintEnd_toEndOf="@+id/rvFriends_search"
         app:layout_constraintStart_toStartOf="@+id/rvFriends_search"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/alertFriendsSearch" />
 
     <TextView
         android:id="@+id/tvPrompt"
@@ -63,26 +62,26 @@
         android:layout_marginStart="100dp"
         android:layout_marginEnd="100dp"
         android:gravity="center_horizontal"
-        android:text="@string/promptFriendsSearch"
         android:textColor="?textFillColor"
         android:textSize="20sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/rvFriends_search"
         app:layout_constraintStart_toStartOf="@+id/rvFriends_search"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/promptFriendsSearch" />
 
     <TextView
         android:id="@+id/tv_notOnine_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/offlineFriendsSearch"
         android:textColor="?textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/offlineFriendsSearch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
