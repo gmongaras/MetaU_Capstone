@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         Locale locale = new Locale.Builder().setLanguage(languageToLoad).build();
         Locale.setDefault(locale);
         Configuration config = new Configuration();
+        config.setLayoutDirection(new Locale("en"));
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
