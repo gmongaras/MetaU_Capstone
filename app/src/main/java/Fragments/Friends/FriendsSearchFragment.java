@@ -228,15 +228,21 @@ public class FriendsSearchFragment extends Fragment {
                     // Set the querying state to true
                     querying = true;
 
-                    // Reset the skip value
-                    skipVal = 0;
+                    // Translate the text to english
+                    manager.getTextRev(text, new translationManager.onCompleteListener() {
+                        @Override
+                        public void onComplete(String translated) {
+                            // Reset the skip value
+                            skipVal = 0;
 
-                    // Reset the list
-                    Users.clear();
-                    adapter.notifyDataSetChanged();
+                            // Reset the list
+                            Users.clear();
+                            adapter.notifyDataSetChanged();
 
-                    // Query for the username
-                    queryUsers(text);
+                            // Query for the username
+                            queryUsers(translated);
+                        }
+                    });
 
                     return true;
                 }
@@ -280,8 +286,10 @@ public class FriendsSearchFragment extends Fragment {
         // Search for the given username
         queries.add(ParseQuery.getQuery(ParseUser.class).whereEqualTo("username", queryText));
         queries.add(ParseQuery.getQuery(ParseUser.class).whereStartsWith("username", queryText.substring(0, 1)));
+        queries.add(ParseQuery.getQuery(ParseUser.class).whereStartsWith("username", queryText.toLowerCase().substring(0, 1)));
         queries.add(ParseQuery.getQuery(ParseUser.class).whereContains("username", queryText));
         queries.add(ParseQuery.getQuery(ParseUser.class).whereContains("username", queryText.trim()));
+        queries.add(ParseQuery.getQuery(ParseUser.class).whereContains("username", queryText.trim().toLowerCase()));
         if (queryText.trim().length() > 0) {
             queries.add(ParseQuery.getQuery(ParseUser.class).whereStartsWith("username", queryText.trim().substring(0, 1)));
         }

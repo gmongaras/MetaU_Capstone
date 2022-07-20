@@ -51,6 +51,7 @@ The project requires Android 21 or above to run and uses the following packages:
 - androidx.swiperefreshlayout:swiperefreshlayout: 1.1.0
 - androidx.room:room-runtime:2.4.2
 - com.google.mlkit:translate:17.0.0
+- com.google.android.gms:play-services-mlkit-language-id:17.0.0-beta1
 
 Additionally, the following permissions are used:
 - ACCESS_NETWORK_STATE

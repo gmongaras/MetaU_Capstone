@@ -264,15 +264,21 @@ public class ProfileSearchText extends Fragment {
                     // Set the querying state to true
                     querying = true;
 
-                    // Reset the skip value
-                    skipVal = 0;
+                    // Translate the text to english
+                    manager.getTextRev(text, new translationManager.onCompleteListener() {
+                        @Override
+                        public void onComplete(String translated) {
+                            // Reset the skip value
+                            skipVal = 0;
 
-                    // Reset the list
-                    Fortunes.clear();
-                    adapter.notifyDataSetChanged();
+                            // Reset the list
+                            Fortunes.clear();
+                            adapter.notifyDataSetChanged();
 
-                    // Query the text
-                    queryFortunes(text);
+                            // Query for the username
+                            queryFortunes(translated);
+                        }
+                    });
 
                     return true;
                 }
@@ -309,6 +315,10 @@ public class ProfileSearchText extends Fragment {
         for (int i = 0; i < queryWordsClean.length; i++) {
             queryWordsClean[i] = queryWordsClean[i].trim();
         }
+        String[] queryWordsCleanLower = queryWords.clone();
+        for (int i = 0; i < queryWordsCleanLower.length; i++) {
+            queryWordsCleanLower[i] = queryWordsCleanLower[i].trim().toLowerCase();
+        }
 
         // Search for the given text using multiple queries
         queries.add(ParseQuery.getQuery(Fortune.class).whereContains("message", queryText));
@@ -318,6 +328,11 @@ public class ProfileSearchText extends Fragment {
             }
         }
         for (String s : queryWordsClean) {
+            if (s.length() > 0) {
+                queries.add(ParseQuery.getQuery(Fortune.class).whereContains("message", s));
+            }
+        }
+        for (String s : queryWordsCleanLower) {
             if (s.length() > 0) {
                 queries.add(ParseQuery.getQuery(Fortune.class).whereContains("message", s));
             }

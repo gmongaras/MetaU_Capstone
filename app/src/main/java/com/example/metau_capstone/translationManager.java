@@ -22,6 +22,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.mlkit.common.model.DownloadConditions;
 import com.google.mlkit.common.model.RemoteModelManager;
+import com.google.mlkit.nl.languageid.LanguageIdentification;
+import com.google.mlkit.nl.languageid.LanguageIdentificationOptions;
+import com.google.mlkit.nl.languageid.LanguageIdentifier;
 import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.TranslateRemoteModel;
 import com.google.mlkit.nl.translate.Translation;
@@ -746,8 +749,9 @@ public class translationManager {
         void onComplete(String text);
     }
     /**
-     * Given text to translate, translate the text and return the translated text
+     * Given english text to translate, translate the text and return the translated text
      * @param text The text to translate
+     * @param listener Lister looking for completion of the translation
      */
     public void getText(String text, onCompleteListener listener) {
         // If the language is english, don't worry about
@@ -759,6 +763,81 @@ public class translationManager {
 
         // Translate the text
         translator.translate(text)
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        // If the translation succeeds, return the translated text
+                        listener.onComplete(s);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // If the translation does not succeed, log it and
+                        // return the english text
+                        Log.e(TAG, "Error translating text", e);
+                        listener.onComplete(text);
+                    }
+                });
+    }
+
+
+    /**
+     * Given non-english text to translate, translate the text and return the translated text
+     * @param text The text to translate
+     * @param listener Lister looking for completion of the translation
+     */
+    public void getTextRev(String text, onCompleteListener listener) {
+        // If the language is english, don't worry about
+        // translating
+        if (Objects.equals(lang, "en")) {
+            listener.onComplete(text);
+            return;
+        }
+
+        // Get the predicted language of the text.
+        LanguageIdentifier languageIdentifier = LanguageIdentification.getClient(
+                new LanguageIdentificationOptions.Builder()
+                        .setConfidenceThreshold(0.35f)
+                        .build());
+        languageIdentifier.identifyLanguage(text)
+                .addOnSuccessListener(
+                        new OnSuccessListener<String>() {
+                            @Override
+                            public void onSuccess(@Nullable String languageCode) {
+                                // If the language is unknown or not english, translate it
+                                // to english as if it were a non english string
+                                if (languageCode.equals("und") || !languageCode.equals("en")) {
+                                    getTextRev_helper(text, listener);
+                                }
+                                // If the language is english, then don't translate the
+                                // text
+                                else {
+                                    listener.onComplete(text);
+                                }
+                            }
+                        })
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // If an error occurs, translate the text as if
+                                // it is not english
+                                getTextRev_helper(text, listener);
+                            }
+                        });
+
+    }
+
+    /**
+     * Helper method for getTextRev which takes text and a listener
+     * and calls back the listener with the translated string
+     * @param text The text to translate
+     * @param listener Lister looking for completion of the translation
+     */
+    public void getTextRev_helper(String text, onCompleteListener listener) {
+        // Translate the text
+        translatorRev.translate(text)
                 .addOnSuccessListener(new OnSuccessListener<String>() {
                     @Override
                     public void onSuccess(String s) {
