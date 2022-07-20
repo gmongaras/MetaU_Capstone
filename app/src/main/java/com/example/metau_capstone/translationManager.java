@@ -45,16 +45,11 @@ public class translationManager {
      */
     public static final Map<String, String> langEncodings = Map.<String, String>ofEntries(
             entry("Afrikaans", "af"),
-            entry("Amharic", "am"), //
             entry("Arabic", "ar"),
-            entry("Azerbaijani", "az"), //
             entry("Belarusian", "be"),
             entry("Bulgarian", "bg"),
             entry("Bengali", "bn"),
-            entry("Bosnian", "bs"), //
             entry("Catalan", "ca"),
-            entry("Cebuano", "ceb"), //
-            entry("Corsican", "co"), //
             entry("Czech", "cs"),
             entry("Welsh", "cy"),
             entry("Danish", "da"),
@@ -64,89 +59,49 @@ public class translationManager {
             entry("Esperanto", "eo"),
             entry("Spanish", "es"),
             entry("Estonian", "et"),
-            entry("Basque", "eu"), //
             entry("Persian", "fa"),
             entry("Finnish", "fi"),
-            entry("Filipino", "fil"), //
             entry("French", "fr"),
-            entry("Western Frisian", "fy"), //
             entry("Irish", "ga"),
-            entry("Scots Gaelic", "gd"), //
             entry("Galician", "gl"),
             entry("Gujarati", "gu"),
-            entry("Hausa", "ha"), //
-            entry("Hawaiian", "haw"), //
             entry("Hebrew", "he"),
             entry("Hindi", "hi"),
-            entry("Hmong", "hmn"), //
             entry("Croatian", "hr"),
             entry("Haitian", "ht"),
             entry("Hungarian", "hu"),
-            entry("Armenian", "hy"), //
             entry("Indonesian", "id"),
-            entry("Igbo", "ig"), //
-            entry("Icelandic", "is"), //
+            entry("Icelandic", "is"),
             entry("Italian", "it"),
             entry("Japanese", "ja"),
-            entry("Javanese", "jv"), //
             entry("Georgian", "ka"),
-            entry("Kazakh", "kk"), //
-            entry("Khmer", "km"), //
             entry("Kannada", "kn"),
             entry("Korean", "ko"),
-            entry("Kurdish", "ku"), //
-            entry("Kyrgyz", "ky"), //
-            entry("Latin", "la"), //
-            entry("Luxembourgish", "lb"), //
-            entry("Lao", "lo"), //
             entry("Lithuanian", "lt"),
             entry("Latvian", "lv"),
-            entry("Malagasy", "mg"), //
-            entry("Maori", "mi"), //
             entry("Macedonian", "mk"),
-            entry("Malayalam", "ml"), //
-            entry("Mongolian", "mn"), //
             entry("Marathi", "mr"),
             entry("Malay", "ms"),
             entry("Maltese", "mt"),
-            entry("Burmese", "my"), //
-            entry("Nepali", "ne"), //
             entry("Dutch", "nl"),
             entry("Norwegian", "no"),
-            entry("Nyanja", "ny"), //
-            entry("Punjabi", "pa"), //
             entry("Polish", "pl"),
-            entry("Pashto", "ps"), //
             entry("Portuguese", "pt"),
             entry("Romanian", "ro"),
             entry("Russian", "ru"),
-            entry("Sindhi", "sd"), //
-            entry("Sinhala", "si"), //
             entry("Slovak", "sk"),
             entry("Slovenian", "sl"),
-            entry("Samoan", "sm"), //
-            entry("Shona", "sn"), //
-            entry("Somali", "so"), //
             entry("Albanian", "sq"),
-            entry("Serbian", "sr"), //
-            entry("Sesotho", "st"), //
-            entry("Sundanese", "su"), //
             entry("Swedish", "sv"),
             entry("Swahili", "sw"),
             entry("Tamil", "ta"),
             entry("Telugu", "te"),
-            entry("Tajik", "tg"), //
             entry("Thai", "th"),
             entry("Turkish", "tr"),
             entry("Ukrainian", "uk"),
             entry("Urdu", "ur"),
-            entry("Uzbek", "uz"), //
             entry("Vietnamese", "vi"),
-            entry("Xhosa", "xh"), //
-            entry("Yiddish", "yi"), //
-            entry("Yoruba", "yo"), //
-            entry("Chinese (Traditional)", "zh"),
-            entry("Zulu", "zu") //
+            entry("Chinese (Traditional)", "zh")
     );
 
 
@@ -155,16 +110,11 @@ public class translationManager {
      */
     public static final Map<String, String> langEncodingsRev = Map.<String, String>ofEntries(
             entry("af", "Afrikaans"),
-            entry("am", "Amharic"),
             entry("ar", "Arabic"),
-            entry("az", "Azerbaijani"),
             entry("be", "Belarusian"),
             entry("bg", "Bulgarian"),
             entry("bn", "Bengali"),
-            entry("bs", "Bosnian"),
             entry("ca", "Catalan"),
-            entry("ceb", "Cebuano"),
-            entry("co", "Corsican"),
             entry("cs", "Czech"),
             entry("cy", "Welsh"),
             entry("da", "Danish"),
@@ -174,89 +124,50 @@ public class translationManager {
             entry("eo", "Esperanto"),
             entry("es", "Spanish"),
             entry("et", "Estonian"),
-            entry("eu", "Basque"),
             entry("fa", "Persian"),
             entry("fi", "Finnish"),
-            entry("fil", "Filipino"),
             entry("fr", "French"),
-            entry("fy", "Western Frisian"),
             entry("ga", "Irish"),
-            entry("gd", "Scots Gaelic"),
             entry("gl", "Galician"),
             entry("gu", "Gujarati"),
-            entry("ha", "Hausa"),
-            entry("haw", "Hawaiian"),
             entry("he", "Hebrew"),
             entry("hi", "Hindi"),
-            entry("hmn", "Hmong"),
             entry("hr", "Croatian"),
             entry("ht", "Haitian"),
             entry("hu", "Hungarian"),
-            entry("hy", "Armenian"),
             entry("id", "Indonesian"),
-            entry("ig", "Igbo"),
             entry("is", "Icelandic"),
             entry("it", "Italian"),
             entry("ja", "Japanese"),
-            entry("jv", "Javanese"),
             entry("ka", "Georgian"),
-            entry("kk", "Kazakh"),
-            entry("km", "Khmer"),
             entry("kn", "Kannada"),
             entry("ko", "Korean"),
-            entry("ku", "Kurdish"),
-            entry("ky", "Kyrgyz"),
-            entry("la", "Latin"),
-            entry("lb", "Luxembourgish"),
-            entry("lo", "Lao"),
             entry("lt", "Lithuanian"),
             entry("lv", "Latvian"),
-            entry("mg", "Malagasy"),
-            entry("mi", "Maori"),
             entry("mk", "Macedonian"),
             entry("ml", "Malayalam"),
-            entry("mn", "Mongolian"),
             entry("mr", "Marathi"),
             entry("ms", "Malay"),
             entry("mt", "Maltese"),
-            entry("my", "Burmese"),
-            entry("ne", "Nepali"),
             entry("nl", "Dutch"),
             entry("no", "Norwegian"),
-            entry("ny", "Nyanja"),
-            entry("pa", "Punjabi"),
             entry("pl", "Polish"),
-            entry("ps", "Pashto"),
             entry("pt", "Portuguese"),
             entry("ro", "Romanian"),
             entry("ru", "Russian"),
-            entry("sd", "Sindhi"),
-            entry("si", "Sinhala"),
             entry("sk", "Slovak"),
             entry("sl", "Slovenian"),
-            entry("sm", "Samoan"),
-            entry("sn", "Shona"),
-            entry("so", "Somali"),
             entry("sq", "Albanian"),
-            entry("sr", "Serbian"),
-            entry("st", "Sesotho"),
-            entry("su", "Sundanese"),
             entry("sv", "Swedish"),
             entry("sw", "Swahili"),
             entry("ta", "Tamil"),
             entry("te", "Telugu"),
-            entry("tg", "Tajik"),
             entry("th", "Thai"),
             entry("tr", "Turkish"),
             entry("uk", "Ukrainian"),
             entry("ur", "Urdu"),
-            entry("uz", "Uzbek"),
             entry("vi", "Vietnamese"),
-            entry("xh", "Xhosa"),
-            entry("yi", "Yiddish"),
-            entry("yo", "Yoruba"),
-            entry("zh", "Chinese (Traditional)"),
-            entry("zu", "Zulu")
+            entry("zh", "Chinese (Traditional)")
     );
 
 
@@ -265,16 +176,11 @@ public class translationManager {
      */
     public static final Map<String, Boolean> langRev = Map.<String, Boolean>ofEntries(
             entry("Afrikaans", false),
-            entry("Amharic", false),
             entry("Arabic", true),
-            entry("Azerbaijani", false),
             entry("Belarusian", false),
             entry("Bulgarian", false),
             entry("Bengali", false),
-            entry("Bosnian", false),
             entry("Catalan", false),
-            entry("Cebuano", false),
-            entry("Corsican", false),
             entry("Czech", false),
             entry("Welsh", false),
             entry("Danish", false),
@@ -284,89 +190,49 @@ public class translationManager {
             entry("Esperanto", false),
             entry("Spanish", false),
             entry("Estonian", false),
-            entry("Basque", false),
             entry("Persian", true),
             entry("Finnish", false),
-            entry("Filipino", false),
             entry("French", false),
-            entry("Western Frisian", false),
             entry("Irish", false),
-            entry("Scots Gaelic", false),
             entry("Galician", false),
             entry("Gujarati", false),
-            entry("Hausa", false),
-            entry("Hawaiian", false),
             entry("Hebrew", true),
             entry("Hindi", false),
-            entry("Hmong", false),
             entry("Croatian", false),
             entry("Haitian", false),
             entry("Hungarian", false),
-            entry("Armenian", false),
             entry("Indonesian", false),
-            entry("Igbo", false),
             entry("Icelandic", false),
             entry("Italian", false),
             entry("Japanese", false),
-            entry("Javanese", false),
             entry("Georgian", false),
-            entry("Kazakh", false),
-            entry("Khmer", false),
             entry("Kannada", false),
             entry("Korean", false),
-            entry("Kurdish", false),
-            entry("Kyrgyz", false),
-            entry("Latin", false),
-            entry("Luxembourgish", false),
-            entry("Lao", false),
             entry("Lithuanian", false),
             entry("Latvian", false),
-            entry("Malagasy", false),
-            entry("Maori", false),
             entry("Macedonian", false),
-            entry("Malayalam", false),
-            entry("Mongolian", false),
             entry("Marathi", false),
             entry("Malay", false),
             entry("Maltese", false),
-            entry("Burmese", false),
-            entry("Nepali", false),
             entry("Dutch", false),
             entry("Norwegian", false),
-            entry("Nyanja", false),
-            entry("Punjabi", false),
             entry("Polish", false),
-            entry("Pashto", true),
             entry("Portuguese", false),
             entry("Romanian", false),
             entry("Russian", false),
-            entry("Sindhi", true),
-            entry("Sinhala", false),
             entry("Slovak", false),
             entry("Slovenian", false),
-            entry("Samoan", false),
-            entry("Shona", false),
-            entry("Somali", false),
             entry("Albanian", false),
-            entry("Serbian", false),
-            entry("Sesotho", false),
-            entry("Sundanese", false),
             entry("Swedish", false),
             entry("Swahili", false),
             entry("Tamil", false),
             entry("Telugu", false),
-            entry("Tajik", false),
             entry("Thai", false),
             entry("Turkish", false),
             entry("Ukrainian", false),
             entry("Urdu", true),
-            entry("Uzbek", false),
             entry("Vietnamese", false),
-            entry("Xhosa", false),
-            entry("Yiddish", true),
-            entry("Yoruba", false),
-            entry("Chinese (Traditional)", false),
-            entry("Zulu", false)
+            entry("Chinese (Traditional)", false)
     );
 
 
@@ -375,16 +241,11 @@ public class translationManager {
      */
     public static final Map<String, String> langTrans = Map.<String, String>ofEntries(
             entry("Afrikaans", "Afrikaans"),
-            entry("Amharic", "አማርኛ"),
             entry("Arabic", "عربي"),
-            entry("Azerbaijani", "Azərbaycan"),
             entry("Belarusian", "беларускі"),
             entry("Bulgarian", "български"),
             entry("Bengali", "বাংলা"),
-            entry("Bosnian", "bosanski"),
             entry("Catalan", "català"),
-            entry("Cebuano", "Cebuano"),
-            entry("Corsican", "Corsu"),
             entry("Czech", "čeština"),
             entry("Welsh", "Cymraeg"),
             entry("Danish", "dansk"),
@@ -394,89 +255,49 @@ public class translationManager {
             entry("Esperanto", "Esperanto"),
             entry("Spanish", "Español"),
             entry("Estonian", "eesti keel"),
-            entry("Basque", "euskara"),
             entry("Persian", "فارسی"),
             entry("Finnish", "Suomalainen"),
-            entry("Filipino", "Filipino"),
             entry("French", "Français"),
-            entry("Western Frisian", "Westerfrysk"),
             entry("Irish", "Gaeilge"),
-            entry("Scots Gaelic", "Gàidhlig na h-Alba"),
             entry("Galician", "galego"),
             entry("Gujarati", "ગુજરાતી"),
-            entry("Hausa", "Hausa"),
-            entry("Hawaiian", "ʻŌlelo Hawaiʻi"),
             entry("Hebrew", "עִברִית"),
             entry("Hindi", "हिन्दी"),
-            entry("Hmong", "Hmoob"),
             entry("Croatian", "Croatiang"),
             entry("Haitian", "ayisyen"),
             entry("Hungarian", "Magyar"),
-            entry("Armenian", "հայերեն"),
             entry("Indonesian", "bahasa Indonesia"),
-            entry("Igbo", "Igbo"),
             entry("Icelandic", "íslenskur"),
             entry("Italian", "Italiano"),
             entry("Japanese", "日本"),
-            entry("Javanese", "basa jawa"),
             entry("Georgian", "ქართული"),
-            entry("Kazakh", "қазақ"),
-            entry("Khmer", "ខ្មែរ"),
             entry("Kannada", "ಕನ್ನಡ"),
             entry("Korean", "한국인"),
-            entry("Kurdish", "Kurdî"),
-            entry("Kyrgyz", "Кыргызча"),
-            entry("Latin", "Latinus"),
-            entry("Luxembourgish", "lëtzebuergesch"),
-            entry("Lao", "ພາສາລາວ"),
             entry("Lithuanian", "lietuvių"),
             entry("Latvian", "latviski"),
-            entry("Malagasy", "Malagasy"),
-            entry("Maori", "Maori"),
             entry("Macedonian", "македонски"),
-            entry("Malayalam", "മലയാളം"),
-            entry("Mongolian", "Монгол"),
             entry("Marathi", "मराठी"),
             entry("Malay", "Melayu"),
             entry("Maltese", "Malti"),
-            entry("Burmese", "မြန်မာ"),
-            entry("Nepali", "नेपाली"),
             entry("Dutch", "Nederlands"),
             entry("Norwegian", "norsk"),
-            entry("Nyanja", "Nyanja"),
-            entry("Punjabi", "ਪੰਜਾਬੀ"),
             entry("Polish", "Polski"),
-            entry("Pashto", "پښتو"),
             entry("Portuguese", "Português"),
             entry("Romanian", "Română"),
             entry("Russian", "Русский"),
-            entry("Sindhi", "سنڌي"),
-            entry("Sinhala", "සිංහල"),
             entry("Slovak", "slovenský"),
             entry("Slovenian", "Slovenščina"),
-            entry("Samoan", "Samoa"),
-            entry("Shona", "Shona"),
-            entry("Somali", "Soomaali"),
             entry("Albanian", "shqiptare"),
-            entry("Serbian", "Српски"),
-            entry("Sesotho", "Sesotho"),
-            entry("Sundanese", "basa Sunda"),
             entry("Swedish", "svenska"),
             entry("Swahili", "kiswahili"),
             entry("Tamil", "தமிழ்"),
             entry("Telugu", "తెలుగు"),
-            entry("Tajik", "тоҷикӣ"),
             entry("Thai", "ไทย"),
             entry("Turkish", "Türk"),
             entry("Ukrainian", "українська"),
             entry("Urdu", "اردو"),
-            entry("Uzbek", "o'zbek"),
             entry("Vietnamese", "Tiếng Việt"),
-            entry("Xhosa", "isiXhosa"),
-            entry("Yiddish", "יידיש"),
-            entry("Yoruba", "Yoruba"),
-            entry("Chinese (Traditional)", "中國人"),
-            entry("Zulu", "Zulu")
+            entry("Chinese (Traditional)", "中國人")
     );
 
     // English translation string
@@ -485,11 +306,14 @@ public class translationManager {
     // Current language to translate to
     public String lang;
 
-    // The actual translator used to translate strings
+    // The actual translator used to translate strings from english -> language
     private Translator translator;
 
+    // The actual translator used to translate strings from language -> english
+    private Translator translatorRev;
+
     // Manages downloaded models
-    private RemoteModelManager modelManager;
+    private final RemoteModelManager modelManager;
 
 
     /**
@@ -530,12 +354,20 @@ public class translationManager {
      * @param listener (Optional) A callback listener to know when the language has been changed
      */
     public void setLanguage(String language, @Nullable onLanguageSetListener listener) {
-        // Create the new translator
+
+        // Create the new translator from english -> language
         TranslatorOptions options = new TranslatorOptions.Builder()
                 .setSourceLanguage(english)
                 .setTargetLanguage(language)
                 .build();
         translator = Translation.getClient(options);
+
+        // Create the new translator from language -> english
+        TranslatorOptions optionsRev = new TranslatorOptions.Builder()
+                .setSourceLanguage(language)
+                .setTargetLanguage(english)
+                .build();
+        translatorRev = Translation.getClient(optionsRev);
 
         // Download the new model if needed and have a callback
         // when the model is done downloading
@@ -579,7 +411,7 @@ public class translationManager {
                                 }
                             });
 
-                            // Download the new model
+                            // Download the new model from english -> language
                             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -603,9 +435,38 @@ public class translationManager {
                                                 public void onFailure(@NonNull Exception e) {
                                                     // If the model had an issue downloading, log the error
                                                     Log.e(TAG, "Issue downloading new model", e);
+                                                    lang = english;
                                                     if (listener != null) {
                                                         listener.onLanguageSet();
                                                     }
+                                                }
+                                            });
+                                }
+                            }, 1);
+
+
+                            // Download the new model from language -> english
+                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    DownloadConditions conditions = new DownloadConditions.Builder()
+                                            .requireWifi()
+                                            .build();
+                                    translatorRev.downloadModelIfNeeded(conditions)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    // When the model has been downloaded, log it and save the
+                                                    // new language
+                                                    Log.i(TAG, "Reversed Model downloaded");
+                                                    lang = language;
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    // If the model had an issue downloading, log the error
+                                                    Log.e(TAG, "Issue downloading new reversed model", e);
+                                                    lang = english;
                                                 }
                                             });
                                 }
