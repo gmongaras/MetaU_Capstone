@@ -226,7 +226,13 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.pbLoading).setVisibility(View.VISIBLE);
 
         // Create a new translation manager object
-        translationManager manager = new translationManager(ParseUser.getCurrentUser().getString("lang"), new translationManager.onLanguageSetListener() {
+        String language = null;
+        try {
+            language = ParseUser.getCurrentUser().fetch().getString("lang");
+        } catch (ParseException e) {
+            language = ParseUser.getCurrentUser().getString("lang");
+        }
+        translationManager manager = new translationManager(language, new translationManager.onLanguageSetListener() {
             @Override
             public void onLanguageSet() {
                 // Change if the user is in dark or light mode

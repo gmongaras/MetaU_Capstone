@@ -4,6 +4,9 @@ package com.example.metau_capstone;
 import static java.util.Map.entry;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -42,115 +45,108 @@ public class translationManager {
      */
     public static final Map<String, String> langEncodings = Map.<String, String>ofEntries(
             entry("Afrikaans", "af"),
-            entry("Amharic", "am"),
+            entry("Amharic", "am"), //
             entry("Arabic", "ar"),
-            entry("Arabic (Latin)", "ar-Latn"),
-            entry("Azerbaijani", "az"),
+            entry("Azerbaijani", "az"), //
             entry("Belarusian", "be"),
             entry("Bulgarian", "bg"),
-            entry("Bulgarian (Latin)", "bg-Latn"),
             entry("Bengali", "bn"),
-            entry("Bosnian", "bs"),
+            entry("Bosnian", "bs"), //
             entry("Catalan", "ca"),
-            entry("Cebuano", "ceb"),
-            entry("Corsican", "co"),
+            entry("Cebuano", "ceb"), //
+            entry("Corsican", "co"), //
             entry("Czech", "cs"),
             entry("Welsh", "cy"),
             entry("Danish", "da"),
             entry("German", "de"),
             entry("Greek", "el"),
-            entry("Greek (Latin)", "el-Latn"),
             entry("English", "en"),
             entry("Esperanto", "eo"),
             entry("Spanish", "es"),
             entry("Estonian", "et"),
-            entry("Basque", "eu"),
+            entry("Basque", "eu"), //
             entry("Persian", "fa"),
             entry("Finnish", "fi"),
-            entry("Filipino", "fil"),
+            entry("Filipino", "fil"), //
             entry("French", "fr"),
-            entry("Western Frisian", "fy"),
+            entry("Western Frisian", "fy"), //
             entry("Irish", "ga"),
-            entry("Scots Gaelic", "gd"),
+            entry("Scots Gaelic", "gd"), //
             entry("Galician", "gl"),
             entry("Gujarati", "gu"),
-            entry("Hausa", "ha"),
-            entry("Hawaiian", "haw"),
+            entry("Hausa", "ha"), //
+            entry("Hawaiian", "haw"), //
             entry("Hebrew", "he"),
             entry("Hindi", "hi"),
-            entry("Hindi (Latin)", "hi-Latn"),
-            entry("Hmong", "hmn"),
+            entry("Hmong", "hmn"), //
             entry("Croatian", "hr"),
             entry("Haitian", "ht"),
             entry("Hungarian", "hu"),
-            entry("Armenian", "hy"),
+            entry("Armenian", "hy"), //
             entry("Indonesian", "id"),
-            entry("Igbo", "ig"),
-            entry("Icelandic", "is"),
+            entry("Igbo", "ig"), //
+            entry("Icelandic", "is"), //
             entry("Italian", "it"),
             entry("Japanese", "ja"),
-            entry("Japanese (Latin)", "ja-Latn"),
-            entry("Javanese", "jv"),
+            entry("Javanese", "jv"), //
             entry("Georgian", "ka"),
-            entry("Kazakh", "kk"),
-            entry("Khmer", "km"),
+            entry("Kazakh", "kk"), //
+            entry("Khmer", "km"), //
             entry("Kannada", "kn"),
             entry("Korean", "ko"),
-            entry("Kurdish", "ku"),
-            entry("Kyrgyz", "ky"),
-            entry("Latin", "la"),
-            entry("Luxembourgish", "lb"),
-            entry("Lao", "lo"),
+            entry("Kurdish", "ku"), //
+            entry("Kyrgyz", "ky"), //
+            entry("Latin", "la"), //
+            entry("Luxembourgish", "lb"), //
+            entry("Lao", "lo"), //
             entry("Lithuanian", "lt"),
             entry("Latvian", "lv"),
-            entry("Malagasy", "mg"),
-            entry("Maori", "mi"),
+            entry("Malagasy", "mg"), //
+            entry("Maori", "mi"), //
             entry("Macedonian", "mk"),
-            entry("Malayalam", "ml"),
-            entry("Mongolian", "mn"),
+            entry("Malayalam", "ml"), //
+            entry("Mongolian", "mn"), //
             entry("Marathi", "mr"),
             entry("Malay", "ms"),
             entry("Maltese", "mt"),
-            entry("Burmese", "my"),
-            entry("Nepali", "ne"),
+            entry("Burmese", "my"), //
+            entry("Nepali", "ne"), //
             entry("Dutch", "nl"),
             entry("Norwegian", "no"),
-            entry("Nyanja", "ny"),
-            entry("Punjabi", "pa"),
+            entry("Nyanja", "ny"), //
+            entry("Punjabi", "pa"), //
             entry("Polish", "pl"),
-            entry("Pashto", "ps"),
+            entry("Pashto", "ps"), //
             entry("Portuguese", "pt"),
             entry("Romanian", "ro"),
             entry("Russian", "ru"),
-            entry("Russian (Latin)", "ru-Latn"),
-            entry("Sindhi", "sd"),
-            entry("Sinhala", "si"),
+            entry("Sindhi", "sd"), //
+            entry("Sinhala", "si"), //
             entry("Slovak", "sk"),
             entry("Slovenian", "sl"),
-            entry("Samoan", "sm"),
-            entry("Shona", "sn"),
-            entry("Somali", "so"),
+            entry("Samoan", "sm"), //
+            entry("Shona", "sn"), //
+            entry("Somali", "so"), //
             entry("Albanian", "sq"),
-            entry("Serbian", "sr"),
-            entry("Sesotho", "st"),
-            entry("Sundanese", "su"),
+            entry("Serbian", "sr"), //
+            entry("Sesotho", "st"), //
+            entry("Sundanese", "su"), //
             entry("Swedish", "sv"),
             entry("Swahili", "sw"),
             entry("Tamil", "ta"),
             entry("Telugu", "te"),
-            entry("Tajik", "tg"),
+            entry("Tajik", "tg"), //
             entry("Thai", "th"),
             entry("Turkish", "tr"),
             entry("Ukrainian", "uk"),
             entry("Urdu", "ur"),
-            entry("Uzbek", "uz"),
+            entry("Uzbek", "uz"), //
             entry("Vietnamese", "vi"),
-            entry("Xhosa", "xh"),
-            entry("Yiddish", "yi"),
-            entry("Yoruba", "yo"),
+            entry("Xhosa", "xh"), //
+            entry("Yiddish", "yi"), //
+            entry("Yoruba", "yo"), //
             entry("Chinese (Traditional)", "zh"),
-            entry("Chinese (Simplified)", "zh-Latn"),
-            entry("Zulu", "zu")
+            entry("Zulu", "zu") //
     );
 
 
@@ -161,11 +157,9 @@ public class translationManager {
             entry("af", "Afrikaans"),
             entry("am", "Amharic"),
             entry("ar", "Arabic"),
-            entry("ar-Latn", "Arabic (Latin)"),
             entry("az", "Azerbaijani"),
             entry("be", "Belarusian"),
             entry("bg", "Bulgarian"),
-            entry("bg-Latn", "Bulgarian (Latin)"),
             entry("bn", "Bengali"),
             entry("bs", "Bosnian"),
             entry("ca", "Catalan"),
@@ -176,7 +170,6 @@ public class translationManager {
             entry("da", "Danish"),
             entry("de", "German"),
             entry("el", "Greek"),
-            entry("el-Latn", "Greek (Latin)"),
             entry("en", "English"),
             entry("eo", "Esperanto"),
             entry("es", "Spanish"),
@@ -195,7 +188,6 @@ public class translationManager {
             entry("haw", "Hawaiian"),
             entry("he", "Hebrew"),
             entry("hi", "Hindi"),
-            entry("hi-Latn", "Hindi (Latin)"),
             entry("hmn", "Hmong"),
             entry("hr", "Croatian"),
             entry("ht", "Haitian"),
@@ -206,7 +198,6 @@ public class translationManager {
             entry("is", "Icelandic"),
             entry("it", "Italian"),
             entry("ja", "Japanese"),
-            entry("ja-Latn", "Japanese (Latin)"),
             entry("jv", "Javanese"),
             entry("ka", "Georgian"),
             entry("kk", "Kazakh"),
@@ -239,7 +230,6 @@ public class translationManager {
             entry("pt", "Portuguese"),
             entry("ro", "Romanian"),
             entry("ru", "Russian"),
-            entry("ru-Latn", "Russian (Latin)"),
             entry("sd", "Sindhi"),
             entry("si", "Sinhala"),
             entry("sk", "Slovak"),
@@ -266,7 +256,6 @@ public class translationManager {
             entry("yi", "Yiddish"),
             entry("yo", "Yoruba"),
             entry("zh", "Chinese (Traditional)"),
-            entry("zh-Latn", "Chinese (Simplified)"),
             entry("zu", "Zulu")
     );
 
@@ -278,11 +267,9 @@ public class translationManager {
             entry("Afrikaans", false),
             entry("Amharic", false),
             entry("Arabic", true),
-            entry("Arabic (Latin)", true),
             entry("Azerbaijani", false),
             entry("Belarusian", false),
             entry("Bulgarian", false),
-            entry("Bulgarian (Latin)", false),
             entry("Bengali", false),
             entry("Bosnian", false),
             entry("Catalan", false),
@@ -293,7 +280,6 @@ public class translationManager {
             entry("Danish", false),
             entry("German", false),
             entry("Greek", false),
-            entry("Greek (Latin)", false),
             entry("English", false),
             entry("Esperanto", false),
             entry("Spanish", false),
@@ -312,7 +298,6 @@ public class translationManager {
             entry("Hawaiian", false),
             entry("Hebrew", true),
             entry("Hindi", false),
-            entry("Hindi (Latin)", false),
             entry("Hmong", false),
             entry("Croatian", false),
             entry("Haitian", false),
@@ -323,7 +308,6 @@ public class translationManager {
             entry("Icelandic", false),
             entry("Italian", false),
             entry("Japanese", false),
-            entry("Japanese (Latin)", false),
             entry("Javanese", false),
             entry("Georgian", false),
             entry("Kazakh", false),
@@ -356,7 +340,6 @@ public class translationManager {
             entry("Portuguese", false),
             entry("Romanian", false),
             entry("Russian", false),
-            entry("Russian (Latin)", false),
             entry("Sindhi", true),
             entry("Sinhala", false),
             entry("Slovak", false),
@@ -383,7 +366,6 @@ public class translationManager {
             entry("Yiddish", true),
             entry("Yoruba", false),
             entry("Chinese (Traditional)", false),
-            entry("Chinese (Simplified)", false),
             entry("Zulu", false)
     );
 
@@ -395,11 +377,9 @@ public class translationManager {
             entry("Afrikaans", "Afrikaans"),
             entry("Amharic", "አማርኛ"),
             entry("Arabic", "عربي"),
-            entry("Arabic (Latin)", "العربية (اللاتينية)"),
             entry("Azerbaijani", "Azərbaycan"),
             entry("Belarusian", "беларускі"),
             entry("Bulgarian", "български"),
-            entry("Bulgarian (Latin)", "български (латиница)"),
             entry("Bengali", "বাংলা"),
             entry("Bosnian", "bosanski"),
             entry("Catalan", "català"),
@@ -410,7 +390,6 @@ public class translationManager {
             entry("Danish", "dansk"),
             entry("German", "Deutsch"),
             entry("Greek", "Ελληνικά"),
-            entry("Greek (Latin)", "Ελληνικά (Λατινικά)"),
             entry("English", "English"),
             entry("Esperanto", "Esperanto"),
             entry("Spanish", "Español"),
@@ -429,7 +408,6 @@ public class translationManager {
             entry("Hawaiian", "ʻŌlelo Hawaiʻi"),
             entry("Hebrew", "עִברִית"),
             entry("Hindi", "हिन्दी"),
-            entry("Hindi (Latin)", "हिंदी (लैटिन)"),
             entry("Hmong", "Hmoob"),
             entry("Croatian", "Croatiang"),
             entry("Haitian", "ayisyen"),
@@ -440,7 +418,6 @@ public class translationManager {
             entry("Icelandic", "íslenskur"),
             entry("Italian", "Italiano"),
             entry("Japanese", "日本"),
-            entry("Japanese (Latin)", "日本語（ラテン）"),
             entry("Javanese", "basa jawa"),
             entry("Georgian", "ქართული"),
             entry("Kazakh", "қазақ"),
@@ -473,7 +450,6 @@ public class translationManager {
             entry("Portuguese", "Português"),
             entry("Romanian", "Română"),
             entry("Russian", "Русский"),
-            entry("Russian (Latin)", "русский (латиница)"),
             entry("Sindhi", "سنڌي"),
             entry("Sinhala", "සිංහල"),
             entry("Slovak", "slovenský"),
@@ -500,7 +476,6 @@ public class translationManager {
             entry("Yiddish", "יידיש"),
             entry("Yoruba", "Yoruba"),
             entry("Chinese (Traditional)", "中國人"),
-            entry("Chinese (Simplified)", "中国人"),
             entry("Zulu", "Zulu")
     );
 
@@ -517,12 +492,6 @@ public class translationManager {
     private RemoteModelManager modelManager;
 
 
-    /**
-     * Class used to handle callbacks to know when the manager is setup
-     */
-    public interface onSetupListener {
-        void onSetup();
-    }
     /**
      * Given an initial language to translate to, setup the class to
      * easily translate any string
@@ -561,28 +530,6 @@ public class translationManager {
      * @param listener (Optional) A callback listener to know when the language has been changed
      */
     public void setLanguage(String language, @Nullable onLanguageSetListener listener) {
-        // If the language is not null, delete the old model
-        if (lang != null) {
-            // Delete the old model
-            TranslateRemoteModel modelToDel =
-                    new TranslateRemoteModel.Builder(lang).build();
-            modelManager.deleteDownloadedModel(modelToDel)
-                    .addOnSuccessListener(new OnSuccessListener() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            // Log that the model has been deleted
-                            Log.i(TAG, "Model deleted");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Log that the model has not been deleted
-                            Log.e(TAG, "MIssue deleteing model", e);
-                        }
-                    });
-        }
-
         // Create the new translator
         TranslatorOptions options = new TranslatorOptions.Builder()
                 .setSourceLanguage(english)
@@ -599,38 +546,71 @@ public class translationManager {
                         // If the mode is downloaded, send back the callback
                         if (aBoolean) {
                             if (listener != null) {
+                                lang = language;
                                 listener.onLanguageSet();
                             }
                         }
                         // If the model is not downloaded, download it, then send
                         // the callback
                         else {
+
+                            // If a new model needs to be downloaded, delete any old models
+                            // in the background
+                            AsyncTask.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    for (String l : TranslateLanguage.getAllLanguages()) {
+                                        // If the string is the current model, don't delete it
+                                        if (Objects.equals(l, lang)) {
+                                            continue;
+                                        }
+
+                                        TranslateRemoteModel modelToDel =
+                                                new TranslateRemoteModel.Builder(l).build();
+                                        modelManager.deleteDownloadedModel(modelToDel)
+                                                .addOnSuccessListener(new OnSuccessListener() {
+                                                    @Override
+                                                    public void onSuccess(Object o) {
+                                                        // Log that the model has been deleted
+                                                        Log.i(TAG, "Model deleted");
+                                                    }
+                                                });
+                                    }
+                                }
+                            });
+
                             // Download the new model
-                            DownloadConditions conditions = new DownloadConditions.Builder()
-                                    .requireWifi()
-                                    .build();
-                            translator.downloadModelIfNeeded(conditions)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            // When the model has been downloaded, log it and save the
-                                            // new language
-                                            Log.i(TAG, "Model downloaded");
-                                            lang = language;
-                                            if (listener != null) {
-                                                listener.onLanguageSet();
-                                            }
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            // If the model had an issue downloading, log the error
-                                            Log.e(TAG, "Issue downloading new model", e);
-                                            if (listener != null) {
-                                                listener.onLanguageSet();
-                                            }
-                                        }
-                                    });
+                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    DownloadConditions conditions = new DownloadConditions.Builder()
+                                            .requireWifi()
+                                            .build();
+                                    translator.downloadModelIfNeeded(conditions)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    // When the model has been downloaded, log it and save the
+                                                    // new language
+                                                    Log.i(TAG, "Model downloaded");
+                                                    lang = language;
+                                                    if (listener != null) {
+                                                        listener.onLanguageSet();
+                                                    }
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    // If the model had an issue downloading, log the error
+                                                    Log.e(TAG, "Issue downloading new model", e);
+                                                    if (listener != null) {
+                                                        listener.onLanguageSet();
+                                                    }
+                                                }
+                                            });
+                                }
+                            }, 1);
+
                         }
                     }
                 });

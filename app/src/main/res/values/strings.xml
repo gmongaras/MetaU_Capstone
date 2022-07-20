@@ -58,10 +58,11 @@
     <string name="searchBarPrompt">Search friends by username</string>
 
     <!-- Settings -->
-    <string name="restartApp">Note: Restart the app to change the app style</string>
+    <string name="restartApp">Note: Restart the app to change the app style or language</string>
     <string name="profileSettings">Profile Settings</string>
     <string name="changePFP">Change Profile Picture</string>
     <string name="darkMode">Use dark mode?</string>
+    <string name="languagePrompt">Language: </string>
 
     <string name="otherSettings">Other User Settings</string>
     <string name="otherFriends">Allow other users to friend you</string>
