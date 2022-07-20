@@ -99,6 +99,12 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottomNav);
         flContainer = findViewById(R.id.flContainer);
 
+        // Change the bottom navigation text
+        manger.addText(bottomNav.getMenu().getItem(0), (String)bottomNav.getMenu().getItem(0).getTitle());
+        manger.addText(bottomNav.getMenu().getItem(1), (String)bottomNav.getMenu().getItem(0).getTitle());
+        manger.addText(bottomNav.getMenu().getItem(2), (String)bottomNav.getMenu().getItem(0).getTitle());
+        manger.addText(bottomNav.getMenu().getItem(3), (String)bottomNav.getMenu().getItem(0).getTitle());
+
         // Hide the action bar
         try {
             getSupportActionBar().hide();

@@ -5,6 +5,7 @@ import static java.util.Map.entry;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -788,6 +789,41 @@ public class translationManager {
                         // put the untranslated text in the view
                         Log.e(TAG, "Error translating text", e);
                         button.setText(text);
+                    }
+                });
+    }
+
+
+    /**
+     * Given a Menu Item and text to translate, translate the text and put it into
+     * The text view in the menu item
+     * @param item A menu item to add text to
+     * @param text The text to translate and put into the view
+     */
+    public void addText(MenuItem item, String text) {
+        // If the language is english, don't worry about
+        // translating
+        if (Objects.equals(lang, "en")) {
+            item.setTitle(text);
+            return;
+        }
+
+        // Translate the text
+        translator.translate(text)
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        // If the translation succeeds, put the text in the view
+                        item.setTitle(s);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // If the translation does not succeed, log it and
+                        // put the untranslated text in the view
+                        Log.e(TAG, "Error translating text", e);
+                        item.setTitle(text);
                     }
                 });
     }

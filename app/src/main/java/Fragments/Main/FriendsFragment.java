@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 
 import com.example.metau_capstone.Friends.FriendCollectionAdapter;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.translationManager;
 import com.google.android.material.tabs.TabLayout;
+import com.parse.ParseUser;
 
 /**
  * This class is used to manage the Friends List Fragment
@@ -38,6 +40,8 @@ public class FriendsFragment extends Fragment {
     // Page to load when initialized
     private static final String ARG_PAGE = "page";
     private int page;
+
+    translationManager manager;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -77,6 +81,8 @@ public class FriendsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
         // Get the elements in the view
         tlFriends = view.findViewById(R.id.tlFriends);
         pagerFriends = view.findViewById(R.id.pagerFriends);
@@ -93,45 +99,57 @@ public class FriendsFragment extends Fragment {
         pagerFriends.setAdapter(friendCollectionAdapter);
 
         // Initialize the tab layout on top of the pager
-        tlFriends.addTab(tlFriends.newTab().setText("Friends").setIcon(R.drawable.friends_list));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            final TypedValue value = new TypedValue ();
-            getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorSecondary, value, true);
-            tlFriends.getTabAt(0).getIcon().setTint(value.data);
-        }
-        tlFriends.addTab(tlFriends.newTab().setText("Requests").setIcon(R.drawable.friend_request));
-        tlFriends.addTab(tlFriends.newTab().setText("Search").setIcon(R.drawable.search));
-        tlFriends.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        manager.getText("Friends", new translationManager.onCompleteListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                final TypedValue value = new TypedValue ();
-                getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorSecondary, value, true);
-                tab.getIcon().setTint(value.data);
+            public void onComplete(String text) {
+                TabLayout.Tab tmp;
+                tmp = tlFriends.newTab().setIcon(R.drawable.friends_list).setText(text);
+                tlFriends.addTab(tmp);
+                tmp = tlFriends.newTab().setIcon(R.drawable.friend_request);
+                manager.addText(tmp, "Requests");
+                tlFriends.addTab(tmp);
+                tmp = tlFriends.newTab().setIcon(R.drawable.search);
+                manager.addText(tmp, "Search");
+                tlFriends.addTab(tmp);
+                tlFriends.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        final TypedValue value = new TypedValue ();
+                        getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorSecondary, value, true);
+                        tab.getIcon().setTint(value.data);
 
-                pagerFriends.setCurrentItem(tab.getPosition());
-            }
+                        pagerFriends.setCurrentItem(tab.getPosition());
+                    }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                final TypedValue value = new TypedValue ();
-                getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorTertiary, value, true);
-                tab.getIcon().setTint(value.data);
-            }
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+                        final TypedValue value = new TypedValue ();
+                        getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorTertiary, value, true);
+                        tab.getIcon().setTint(value.data);
+                    }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
 
+                    }
+                });
+                pagerFriends.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        tlFriends.selectTab(tlFriends.getTabAt(position));
+                    }
+                });
+
+                // Set the default page
+                tlFriends.selectTab(tlFriends.getTabAt(page));
+                pagerFriends.setCurrentItem(page, false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    final TypedValue value = new TypedValue ();
+                    getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorSecondary, value, true);
+                    tlFriends.getTabAt(page).getIcon().setTint(value.data);
+                }
             }
         });
-        pagerFriends.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                tlFriends.selectTab(tlFriends.getTabAt(position));
-            }
-        });
-
-        // Set the default page
-        pagerFriends.setCurrentItem(page, false);
     }
 
 
