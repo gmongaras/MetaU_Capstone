@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -516,11 +517,18 @@ public class translationManager {
 
 
     /**
+     * Class used to handle callbacks to know when the manager is setup
+     */
+    public interface onSetupListener {
+        void onSetup();
+    }
+    /**
      * Given an initial language to translate to, setup the class to
      * easily translate any string
      * @param language A string which is the language to translate from English to
+     * @param listener A callback listener to know when the manager has been setup
      */
-    public translationManager(String language) {
+    public translationManager(String language, onLanguageSetListener... listener) {
         // Store the English language string for later use
         english = TranslateLanguage.ENGLISH;
 
@@ -530,15 +538,28 @@ public class translationManager {
         // Set the current language as null and setup the new
         // language
         lang = null;
-        setLanguage(language);
+        if (listener.length != 0) {
+            setLanguage(language, listener[0]);
+        }
+        else {
+            setLanguage(language, null);
+        }
     }
 
+
+    /**
+     * Class used to handle callbacks to know when the language has been changed
+     */
+    public interface onLanguageSetListener {
+        void onLanguageSet();
+    }
     /**
      * Given a new language, delete the old model and download a new model
      * for later use
      * @param language A string which is the language to translate from English to
+     * @param listener (Optional) A callback listener to know when the language has been changed
      */
-    public void setLanguage(String language) {
+    public void setLanguage(String language, @Nullable onLanguageSetListener listener) {
         // If the language is not null, delete the old model
         if (lang != null) {
             // Delete the old model
@@ -568,26 +589,51 @@ public class translationManager {
                 .build();
         translator = Translation.getClient(options);
 
-        // Download the new model if needed
-        DownloadConditions conditions = new DownloadConditions.Builder()
-                .requireWifi()
-                .build();
-        translator.downloadModelIfNeeded(conditions)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        // Download the new model if needed and have a callback
+        // when the model is done downloading
+        modelManager.isModelDownloaded(new TranslateRemoteModel.Builder(language).build())
+                .addOnSuccessListener(new OnSuccessListener<Boolean>() {
                     @Override
-                    public void onSuccess(Void unused) {
-                        // When the model has been downloaded, log it and save the
-                        // new language
-                        Log.i(TAG, "Model downloaded");
-                        lang = language;
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // If the model had an issue downloading, log the error
-                        Log.e(TAG, "Issue downloading new model", e);
+                    public void onSuccess(Boolean aBoolean) {
+                        // If the mode is downloaded, send back the callback
+                        if (aBoolean) {
+                            if (listener != null) {
+                                listener.onLanguageSet();
+                            }
+                        }
+                        // If the model is not downloaded, download it, then send
+                        // the callback
+                        else {
+                            // Download the new model
+                            DownloadConditions conditions = new DownloadConditions.Builder()
+                                    .requireWifi()
+                                    .build();
+                            translator.downloadModelIfNeeded(conditions)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            // When the model has been downloaded, log it and save the
+                                            // new language
+                                            Log.i(TAG, "Model downloaded");
+                                            lang = language;
+                                            if (listener != null) {
+                                                listener.onLanguageSet();
+                                            }
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // If the model had an issue downloading, log the error
+                                            Log.e(TAG, "Issue downloading new model", e);
+                                            if (listener != null) {
+                                                listener.onLanguageSet();
+                                            }
+                                        }
+                                    });
+                        }
                     }
                 });
+
     }
 
 

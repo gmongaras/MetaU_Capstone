@@ -363,7 +363,7 @@ public class SettingsFragment extends Fragment {
      */
     public void translateText(String language) {
         if (!Objects.equals(language, manager.lang)) {
-            manager.setLanguage(language);
+            manager.setLanguage(language, null);
         }
         manager.addText(tvProfileSettings, R.string.profileSettings, requireContext());
         manager.addText(tvChangePFP, R.string.changePFP, requireContext());

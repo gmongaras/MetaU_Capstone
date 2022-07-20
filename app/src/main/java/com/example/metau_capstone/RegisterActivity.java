@@ -2,8 +2,12 @@ package com.example.metau_capstone;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,8 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.metau_capstone.offlineDB.databaseApp;
 import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.parse.ParseException;
@@ -102,6 +108,22 @@ public class RegisterActivity extends AppCompatActivity {
         spLanguages.setAdapter(adapter);
         spLanguages.setSelection(engLoc, false);
 
+        // Set the spinner text color
+        View v = spLanguages.getSelectedView();
+        ((TextView)v).setTextColor(ContextCompat.getColor(RegisterActivity.this, R.color.black));
+        spLanguages.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                View v = spLanguages.getSelectedView();
+                ((TextView)view).setTextColor(ContextCompat.getColor(RegisterActivity.this, R.color.black));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
+
         // Put an onClick listener to the button
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +160,15 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("darkMode", false);
                     user.put("lang", translationManager.langEncodings.get(translationManager.langEncodings.keySet().toArray()[idx[(int)spLanguages.getSelectedItemId()]]));
 
+                    // Hide all views
+                    etUsername_reg.setVisibility(View.INVISIBLE); etUsername_reg.setClickable(false);
+                    etPassword_reg.setVisibility(View.INVISIBLE); etPassword_reg.setClickable(false);
+                    etPassword2_reg.setVisibility(View.INVISIBLE); etPassword2_reg.setClickable(false);
+                    ConstraintLayout clRegister = findViewById(R.id.clRegister);
+                    clRegister.setVisibility(View.INVISIBLE); clRegister.setClickable(false);
+                    btnRegister.setVisibility(View.INVISIBLE); btnRegister.setClickable(false);
+                    findViewById(R.id.pbRegister).setVisibility(View.VISIBLE);
+
                     // Sign the user up
                     user.signUpInBackground(new SignUpCallback() {
                         @Override
@@ -151,9 +182,16 @@ public class RegisterActivity extends AppCompatActivity {
                                     (new offlineHelpers()).createDatabase(RegisterActivity.this);
                                 }
 
-                                // Go to the main page
-                                Intent i = new Intent(RegisterActivity.this, MainActivity.class);
-                                startActivity(i);
+                                // Create a new translation manager object
+                                translationManager manager = new translationManager(ParseUser.getCurrentUser().getString("lang"), new translationManager.onLanguageSetListener() {
+                                    @Override
+                                    public void onLanguageSet() {
+                                        // When the language is set, go to the main activity
+                                        Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                });
                             }
                             else {
                                 Log.e(TAG, "Unable to register user", e);
