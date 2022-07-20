@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.translationManager;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -46,6 +47,8 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
     Context context;
 
+    translationManager manager;
+
 
     /**
      * Initialize the adapter
@@ -58,6 +61,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         this.requests = users;
         this.fragmentManager = fragmentManager;
         this.context = context;
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
     }
 
 
@@ -95,6 +99,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         Button btnDeclineRequest;
         Button btnRequestAccepted;
         Button btnRequestDeclined;
+        TextView tvNumForts;
 
         // Store the friend as a part of this item view
 
@@ -114,7 +119,15 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             btnDeclineRequest = itemView.findViewById(R.id.btnDeclineRequest);
             btnRequestAccepted = itemView.findViewById(R.id.btnRequestAccepted);
             btnRequestDeclined = itemView.findViewById(R.id.btnRequestDeclined);
+            tvNumForts = itemView.findViewById(R.id.tvNumForts);
             friending = false;
+
+            // Translate any text
+            manager.addText(tvNumForts, R.string.numForts, context);
+            manager.addText(btnAcceptRequest, R.string.requestAccept, context);
+            manager.addText(btnDeclineRequest, R.string.requestDecline, context);
+            manager.addText(btnRequestAccepted, R.string.requestAccepted, context);
+            manager.addText(btnRequestDeclined, R.string.requestDeclined, context);
         }
 
         // Given a Friend (ParseUser), bind data to this object
@@ -144,7 +157,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             query.findInBackground(new FindCallback<Fortune>() {
                 @Override
                 public void done(List<Fortune> objects, ParseException e) {
-                    tvFriendFortuneCt_request.setText(String.valueOf(objects.size()));
+                    manager.addText(tvFriendFortuneCt_request, String.valueOf(objects.size()));
                 }
             });
 
@@ -231,10 +244,10 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
                 public void done(ParseException e) {
                     if (e != null) {
                         Log.e(TAG, "Unable to friend user", e);
-                        Toast.makeText(context, "Unable to friend user", Toast.LENGTH_SHORT).show();
+                        manager.createToast(context, "Unable to friend user");
                     }
                     else {
-                        Toast.makeText(context, "User friended!", Toast.LENGTH_SHORT).show();
+                        manager.createToast(context, "User friended!");
                     }
                 }
             });
@@ -302,7 +315,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
                                         Log.e(TAG, "Unable to save accepted request to queue", e);
                                     }
                                     else {
-                                        Toast.makeText(context, "User friended!", Toast.LENGTH_SHORT).show();
+                                        manager.createToast(context, "User friended");
                                         btnRequestAccepted.setVisibility(View.VISIBLE);
                                     }
                                 }
@@ -323,7 +336,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
                                         Log.e(TAG, "Unable to save rejected request to queue", e);
                                     }
                                     else {
-                                        Toast.makeText(context, "Request declined", Toast.LENGTH_SHORT).show();
+                                        manager.createToast(context, "Request declined");
                                         btnRequestDeclined.setVisibility(View.VISIBLE);
                                     }
                                 }

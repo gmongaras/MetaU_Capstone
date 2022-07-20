@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.translationManager;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -39,6 +40,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     Context context;
 
+    translationManager manager;
+
     /**
      * Initialize the adapter
      * @param friends A list of ParseUser objects which we want to initialize the
@@ -50,6 +53,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         this.friends = friends;
         this.fragmentManager = fragmentManager;
         this.context = context;
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
     }
 
     @NonNull
@@ -98,6 +102,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         ImageView ivFriend;
         TextView tvFriendUsername;
         TextView tvFriendFortuneCt;
+        TextView tvNumFortsList;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -106,6 +111,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             ivFriend = itemView.findViewById(R.id.ivFriend);
             tvFriendUsername = itemView.findViewById(R.id.tvFriendUsername);
             tvFriendFortuneCt = itemView.findViewById(R.id.tvFriendFortuneCt);
+            tvNumFortsList = itemView.findViewById(R.id.tvNumForts);
+
+            // Translate the text in the elements
+            manager.addText(tvNumFortsList, R.string.numForts, context);
         }
 
         // Given a Friend (ParseUser), bind data to this object
@@ -132,7 +141,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             query.findInBackground(new FindCallback<Fortune>() {
                 @Override
                 public void done(List<Fortune> objects, ParseException e) {
-                    tvFriendFortuneCt.setText(String.valueOf(objects.size()));
+                    manager.addText(tvFriendFortuneCt, String.valueOf(objects.size()));
                 }
             });
         }

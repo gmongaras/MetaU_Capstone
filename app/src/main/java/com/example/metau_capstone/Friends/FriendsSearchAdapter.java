@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.translationManager;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -59,6 +60,8 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
     int tertiaryColor;
     int colorRed;
 
+    translationManager manager;
+
     /**
      * Initialize the adapter
      * @param users A list of ParseUser objects which we want to initialize the
@@ -70,6 +73,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         this.users = users;
         this.fragmentManager = fragmentManager;
         this.context = context;
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
     }
 
     @NonNull
@@ -163,7 +167,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
                 // Setup the fragment switch
                 FragmentTransaction ft = fragmentManager.beginTransaction();
 
-                // Create the fragment with paramters
+                // Create the fragment with parameters
                 ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
                 ProfileFragment fragmentProfile = ProfileFragment.newInstance(friend, holder.mode);
 
@@ -198,6 +202,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
         ImageView ivFriend_search;
         TextView tvFriendUsername_search;
         TextView tvFriendFortuneCt_search;
+        TextView tvNumForts;
         Button btnState;
 
         // The current user
@@ -229,10 +234,14 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             tvFriendUsername_search = itemView.findViewById(R.id.tvFriendUsername_search);
             tvFriendFortuneCt_search = itemView.findViewById(R.id.tvFriendFortuneCt_search);
             btnState = itemView.findViewById(R.id.btnState);
+            tvNumForts = itemView.findViewById(R.id.tvNumForts);
             friending = false;
 
             // Get the current user
             curUser = ParseUser.getCurrentUser();
+
+            // Translate the text
+            manager.addText(tvNumForts, R.string.numForts, context);
         }
 
         // Given a Friend (ParseUser), bind data to this object
@@ -264,7 +273,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             query.findInBackground(new FindCallback<Fortune>() {
                 @Override
                 public void done(List<Fortune> objects, ParseException e) {
-                    tvFriendFortuneCt_search.setText(String.valueOf(objects.size()));
+                    manager.addText(tvFriendFortuneCt_search, String.valueOf(objects.size()));
                 }
             });
 
@@ -502,8 +511,8 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             }
 
             // Show the button
+            manager.addText(btnState, text);
             btnState.setBackgroundColor(color);
-            btnState.setText(text);
             btnState.setTextColor(textColor);
             btnState.setVisibility(View.VISIBLE);
 

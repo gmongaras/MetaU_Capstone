@@ -39,24 +39,24 @@
         tools:text="username" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tvNumForts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        android:text="@string/numForts"
         android:textColor="?textFillColor"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
-        app:layout_constraintTop_toBottomOf="@+id/tvFriendUsername_search" />
+        app:layout_constraintTop_toBottomOf="@+id/tvFriendUsername_search"
+        tools:text="@string/numForts" />
 
     <TextView
         android:id="@+id/tvFriendFortuneCt_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?textFillColor"
-        app:layout_constraintBottom_toBottomOf="@+id/textView3"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="@+id/textView3"
+        app:layout_constraintBottom_toBottomOf="@+id/tvNumForts"
+        app:layout_constraintStart_toEndOf="@+id/tvNumForts"
+        app:layout_constraintTop_toTopOf="@+id/tvNumForts"
         tools:text="10" />
 
     <Button
@@ -70,7 +70,7 @@
         android:textSize="10sp"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_search"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/tvNumForts"
         tools:text="This is a button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

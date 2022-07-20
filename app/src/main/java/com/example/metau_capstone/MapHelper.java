@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
@@ -94,7 +95,8 @@ public class MapHelper {
 
 
             // Load in all the fortunes as pins into the map
-            if (user != null) {
+            // if th user is online
+            if (user != null && ((new offlineHelpers()).isNetworkAvailable(context))) {
                 loadPins(user);
             }
 
@@ -158,7 +160,8 @@ public class MapHelper {
             public void done(List<Fortune> objects, ParseException e) {
                 // If an error occurred, show an error message
                 if (e != null) {
-                    Toast.makeText(context, "Unable to load in fortunes", Toast.LENGTH_SHORT).show();
+                    (new translationManager(ParseUser.getCurrentUser().getString("lang"))).createToast(context, "Unable to load map");
+                    Log.e("MapHelper", "Unable to load in fortunes", e);
                     return;
                 }
 
