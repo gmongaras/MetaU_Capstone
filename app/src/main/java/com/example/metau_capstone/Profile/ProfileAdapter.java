@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.dateFormatter;
+import com.example.metau_capstone.translationManager;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -65,6 +66,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     // Used to convert the date
     dateFormatter df = new dateFormatter();
 
+    translationManager manager_T;
+
     /**
      * Initialize the adapter
      * @param fortunes A list of fortunes to initialize the list with
@@ -79,6 +82,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         this.context = context;
         fragmentManager = manager;
         this.mode = mode;
+
+        // Get the translation manager
+        manager_T = new translationManager(ParseUser.getCurrentUser().getString("lang"));
 
         // Get all liked fortunes from this user
         ParseRelation<Fortune> likedRel = ParseUser.getCurrentUser().getRelation("liked");
@@ -167,13 +173,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             changing = false;
 
             // Get the date in the proper form and set it
-            tvDate.setText(df.toMonthDay(fortune.getCreatedAt()));
+            manager_T.addText(tvDate, df.toMonthDay(fortune.getCreatedAt()));
 
             String message = fortune.getMessage();
             if (message.length() > 50) {
                 message = message.substring(0, 50) + "...";
             }
-            tvFortune.setText(message);
+            manager_T.addText(tvFortune, message);
 
 
             // If the liked list is null, get the list

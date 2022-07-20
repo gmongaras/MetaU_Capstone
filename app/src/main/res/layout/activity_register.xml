@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,15 +15,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="5dp"
+        android:backgroundTint="?attr/backgroundColor"
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:backgroundTint="?attr/backgroundColor"
         android:textColor="?attr/textFillColor"
-        android:textColorHint="?attr/textOutlineColor"/>
+        android:textColorHint="?attr/textOutlineColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etPassword_reg"
@@ -30,14 +34,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
+        android:backgroundTint="?attr/backgroundColor"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        tools:inputType="textPassword"
-        android:backgroundTint="?attr/backgroundColor"
         android:textColor="?attr/textFillColor"
-        android:textColorHint="?attr/textOutlineColor"/>
+        android:textColorHint="?attr/textOutlineColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etUsername_reg"
+        tools:inputType="textPassword" />
 
     <EditText
         android:id="@+id/etPassword2_reg"
@@ -45,22 +52,76 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
+        android:backgroundTint="?attr/backgroundColor"
         android:ems="10"
-        android:hint="password again"
+        android:hint="@string/passwordAgain"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        tools:inputType="textPassword"
-        android:backgroundTint="?attr/backgroundColor"
         android:textColor="?attr/textFillColor"
-        android:textColorHint="?attr/textOutlineColor"/>
+        android:textColorHint="?attr/textOutlineColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword_reg"
+        tools:inputType="textPassword" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword2_reg">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spLanguages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="@color/black"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvLangOptions"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvLangOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="@string/langOptions"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:text="Register"
+        android:backgroundTint="?attr/colorSecondary"
+        android:text="@string/regBtn2"
         android:textColor="?attr/textColorSearchUrl"
-        android:backgroundTint="?attr/colorSecondary"/>
-</LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clRegister" />
+
+    <ProgressBar
+        android:id="@+id/pbRegister"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

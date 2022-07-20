@@ -26,6 +26,7 @@ import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.Profile.ProfileAdapter;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.google.android.material.color.MaterialColors;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -58,6 +59,7 @@ public class ProfileSearchText extends Fragment {
     TextView tvNoAccessText;
     TextView tvBlocked1_text;
     TextView tvBlocked2_text;
+    TextView tvNotOnline_text;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -84,6 +86,8 @@ public class ProfileSearchText extends Fragment {
 
     // Text from the query
     String queryText;
+
+    translationManager manager;
 
     public ProfileSearchText() {
         // Required empty public constructor
@@ -124,16 +128,38 @@ public class ProfileSearchText extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get all elements in the view
+        svProfileSearchText = view.findViewById(R.id.svProfileSearchText);
+        int id = svProfileSearchText.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        tvProfileSearchText = svProfileSearchText.findViewById(id);
+        rvProfileSearchText = view.findViewById(R.id.rvProfileSearchText);
+        tvNoResultsText = view.findViewById(R.id.tvNoResultsText);
+        tvSearchTextPrompt = view.findViewById(R.id.tvSearchTextPrompt);
+        pbProfileSearchText = view.findViewById(R.id.pbProfileSearchText);
+        tvNoAccessText = view.findViewById(R.id.tvNoAccessText);
+        tvBlocked1_text = view.findViewById(R.id.tvBlocked1_text);
+        tvBlocked2_text = view.findViewById(R.id.tvBlocked2_text);
+        tvNotOnline_text = view.findViewById(R.id.tvNotOnline_text);
+
+        // Get the translations manager
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
+        // Translate all text
+        manager.addHint(tvProfileSearchText, getString(R.string.searchBarPrompt));
+        manager.addText(tvNoResultsText, R.string.noResultsProfile, requireContext());
+        manager.addText(tvSearchTextPrompt, R.string.searchTextPrompt, requireContext());
+        manager.addText(tvNoAccessText, R.string.noAccessProfile, requireContext());
+        manager.addText(tvBlocked1_text, R.string.blocked1, requireContext());
+        manager.addText(tvBlocked2_text, R.string.blocked2, requireContext());
+        manager.addText(tvNotOnline_text, R.string.offlineProfileSearch, requireContext());
+
         // If the user is offline, show some text
         if (!(new offlineHelpers()).isNetworkAvailable(requireContext())) {
-            view.findViewById(R.id.pbProfileSearchText).setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.tvSearchTextPrompt).setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.tvNotOnline_text).setVisibility(View.VISIBLE);
+            pbProfileSearchText.setVisibility(View.INVISIBLE);
+            tvSearchTextPrompt.setVisibility(View.INVISIBLE);
+            tvNotOnline_text.setVisibility(View.VISIBLE);
             return;
         }
-
-        // Get the search text prompt
-        tvSearchTextPrompt = view.findViewById(R.id.tvSearchTextPrompt);
 
         // Should the user have search access?
         boolean access = true;
@@ -183,14 +209,6 @@ public class ProfileSearchText extends Fragment {
         }
 
         skipVal = 0;
-
-        // Get the elements
-        svProfileSearchText = view.findViewById(R.id.svProfileSearchText);
-        rvProfileSearchText = view.findViewById(R.id.rvProfileSearchText);
-        tvNoResultsText = view.findViewById(R.id.tvNoResultsText);
-        pbProfileSearchText = view.findViewById(R.id.pbProfileSearchText);
-        int id = svProfileSearchText.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-        tvProfileSearchText = svProfileSearchText.findViewById(id);
 
         // Change how the search view looks based on the style
         tvProfileSearchText.setHintTextColor(MaterialColors.getColor(requireContext(), androidx.constraintlayout.widget.R.attr.textOutlineColor, Color.BLACK));
@@ -246,15 +264,21 @@ public class ProfileSearchText extends Fragment {
                     // Set the querying state to true
                     querying = true;
 
-                    // Reset the skip value
-                    skipVal = 0;
+                    // Translate the text to english
+                    manager.getTextRev(text, new translationManager.onCompleteListener() {
+                        @Override
+                        public void onComplete(String translated) {
+                            // Reset the skip value
+                            skipVal = 0;
 
-                    // Reset the list
-                    Fortunes.clear();
-                    adapter.notifyDataSetChanged();
+                            // Reset the list
+                            Fortunes.clear();
+                            adapter.notifyDataSetChanged();
 
-                    // Query the text
-                    queryFortunes(text);
+                            // Query for the username
+                            queryFortunes(translated);
+                        }
+                    });
 
                     return true;
                 }
@@ -291,6 +315,10 @@ public class ProfileSearchText extends Fragment {
         for (int i = 0; i < queryWordsClean.length; i++) {
             queryWordsClean[i] = queryWordsClean[i].trim();
         }
+        String[] queryWordsCleanLower = queryWords.clone();
+        for (int i = 0; i < queryWordsCleanLower.length; i++) {
+            queryWordsCleanLower[i] = queryWordsCleanLower[i].trim().toLowerCase();
+        }
 
         // Search for the given text using multiple queries
         queries.add(ParseQuery.getQuery(Fortune.class).whereContains("message", queryText));
@@ -300,6 +328,11 @@ public class ProfileSearchText extends Fragment {
             }
         }
         for (String s : queryWordsClean) {
+            if (s.length() > 0) {
+                queries.add(ParseQuery.getQuery(Fortune.class).whereContains("message", s));
+            }
+        }
+        for (String s : queryWordsCleanLower) {
             if (s.length() > 0) {
                 queries.add(ParseQuery.getQuery(Fortune.class).whereContains("message", s));
             }

@@ -50,14 +50,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You do not have access\nto this user's map data"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/profileMap"
         app:layout_constraintEnd_toEndOf="@+id/profileMap"
         app:layout_constraintStart_toStartOf="@+id/profileMap"
-        app:layout_constraintTop_toTopOf="@+id/profileMap" />
+        app:layout_constraintTop_toTopOf="@+id/profileMap"
+        tools:text="@string/noAccessMap" />
 
     <ImageView
         android:id="@+id/ivLike"

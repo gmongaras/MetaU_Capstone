@@ -65,4 +65,8 @@ dependencies {
     // Room for simple persistence with an ORM
     implementation "androidx.room:room-runtime:2.4.2"
     annotationProcessor "androidx.room:room-compiler:2.4.2"
+
+    // Used for translation
+    implementation 'com.google.mlkit:translate:17.0.0'
+    implementation 'com.google.android.gms:play-services-mlkit-language-id:17.0.0-beta1'
 }

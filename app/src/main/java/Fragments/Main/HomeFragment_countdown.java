@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.translation.TranslationManager;
 import android.widget.TextView;
 
 import com.example.metau_capstone.Fortune;
@@ -22,6 +23,7 @@ import com.example.metau_capstone.offlineDB.FortuneDB;
 import com.example.metau_capstone.offlineDB.FortuneDao;
 import com.example.metau_capstone.offlineDB.databaseApp;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -47,6 +49,8 @@ public class HomeFragment_countdown extends Fragment {
     long hours;
     long minutes;
     long seconds;
+
+    translationManager manager;
 
     private static final String TAG = "HomeFragment_countdown";
 
@@ -84,6 +88,13 @@ public class HomeFragment_countdown extends Fragment {
 
         // Get the elements in the view
         tvCountdown = view.findViewById(R.id.tvCountdown);
+        tvHomePrompt = view.findViewById(R.id.tvHomePrompt);
+
+        // Get the translation manager
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
+        // Set the text as translated text
+        manager.addText(tvHomePrompt, R.string.homePrompt, this.requireContext());
 
         // If the user is offline, load the timer offline
         if (!(new offlineHelpers().isNetworkAvailable(requireContext()))) {
@@ -119,7 +130,7 @@ public class HomeFragment_countdown extends Fragment {
                         public void run() {
                             tvOffline = view.findViewById(R.id.tvOffline);
                             tvOffline.setVisibility(View.VISIBLE);
-                            tvOffline.setText(noLoad);
+                            manager.addText(tvOffline, noLoad);
                         }
                     });
                     return;
@@ -140,7 +151,7 @@ public class HomeFragment_countdown extends Fragment {
                         public void run() {
                             tvOffline = view.findViewById(R.id.tvOffline);
                             tvOffline.setVisibility(View.VISIBLE);
-                            tvOffline.setText(timeUp);
+                            manager.addText(tvOffline, timeUp);
                         }
                     });
                 }
@@ -179,7 +190,8 @@ public class HomeFragment_countdown extends Fragment {
                                     }
 
                                     // Display the new time left
-                                    tvCountdown.setText(h + ":" + m + ":" + s);
+                                    manager.addText(tvCountdown, h + ":" + m + ":" + s);
+                                    //tvCountdown.setText(h + ":" + m + ":" + s);
                                 }
 
                                 // When the timer is finished, show a text prompt
@@ -193,7 +205,7 @@ public class HomeFragment_countdown extends Fragment {
                                             tvHomePrompt.setVisibility(View.INVISIBLE);
                                             tvCountdown.setVisibility(View.INVISIBLE);
                                             tvOffline.setVisibility(View.VISIBLE);
-                                            tvOffline.setText(timeUp);
+                                            manager.addText(tvOffline, timeUp);
                                         }
                                     }
                                 }
@@ -283,7 +295,8 @@ public class HomeFragment_countdown extends Fragment {
                             }
 
                             // Display the new time left
-                            tvCountdown.setText(h + ":" + m + ":" + s);
+                            manager.addText(tvCountdown, h + ":" + m + ":" + s);
+                            //tvCountdown.setText(h + ":" + m + ":" + s);
                         }
 
                         // When the timer is finished, switch to the fortune page

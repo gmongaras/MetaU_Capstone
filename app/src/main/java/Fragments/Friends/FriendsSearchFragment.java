@@ -24,6 +24,7 @@ import com.example.metau_capstone.EndlessRecyclerViewScrollListener;
 import com.example.metau_capstone.Friends.FriendsSearchAdapter;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.google.android.material.color.MaterialColors;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -56,6 +57,7 @@ public class FriendsSearchFragment extends Fragment {
     RecyclerView rvFriends_search;
     TextView tvPrompt;
     ProgressBar pbFriends;
+    TextView tv_notOnine_search;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -66,6 +68,8 @@ public class FriendsSearchFragment extends Fragment {
 
     // Current user logged in
     ParseUser user;
+
+    translationManager manager;
 
     // True if users are being queried, false otherwise
     boolean querying = false;
@@ -99,15 +103,6 @@ public class FriendsSearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // If the user is offline, show a message
-        if (!(new offlineHelpers()).isNetworkAvailable(requireContext())) {
-            view.findViewById(R.id.tv_notOnine_search).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.tvPrompt).setVisibility(View.INVISIBLE);
-            return;
-        }
-
-        skipVal = 0;
-
         // Get the elements in the view
         tvAlert = view.findViewById(R.id.tvAlert);
         svFriends_search = view.findViewById(R.id.svProfileSearchText);
@@ -116,6 +111,25 @@ public class FriendsSearchFragment extends Fragment {
         rvFriends_search = view.findViewById(R.id.rvFriends_search);
         tvPrompt = view.findViewById(R.id.tvPrompt);
         pbFriends = requireActivity().findViewById(R.id.pbFriends);
+        tv_notOnine_search = view.findViewById(R.id.tv_notOnine_search);
+
+        // Get the translation manager
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
+        // Translate any elements with text
+        manager.addText(tvAlert, R.string.alertFriendsSearch, requireContext());
+        manager.addText(tvPrompt, R.string.promptFriendsSearch, requireContext());
+        manager.addText(tv_notOnine_search, R.string.offlineFriendsSearch, requireContext());
+        manager.addHint(tvSearchFriends_search, "Search friends by username");
+
+        // If the user is offline, show a message
+        if (!(new offlineHelpers()).isNetworkAvailable(requireContext())) {
+            view.findViewById(R.id.tv_notOnine_search).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.tvPrompt).setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        skipVal = 0;
 
         // Change how the search view looks based on the style
         tvSearchFriends_search.setHintTextColor(MaterialColors.getColor(requireContext(), androidx.constraintlayout.widget.R.attr.textOutlineColor, Color.BLACK));
@@ -214,15 +228,21 @@ public class FriendsSearchFragment extends Fragment {
                     // Set the querying state to true
                     querying = true;
 
-                    // Reset the skip value
-                    skipVal = 0;
+                    // Translate the text to english
+                    manager.getTextRev(text, new translationManager.onCompleteListener() {
+                        @Override
+                        public void onComplete(String translated) {
+                            // Reset the skip value
+                            skipVal = 0;
 
-                    // Reset the list
-                    Users.clear();
-                    adapter.notifyDataSetChanged();
+                            // Reset the list
+                            Users.clear();
+                            adapter.notifyDataSetChanged();
 
-                    // Query for the username
-                    queryUsers(text);
+                            // Query for the username
+                            queryUsers(translated);
+                        }
+                    });
 
                     return true;
                 }
@@ -266,8 +286,10 @@ public class FriendsSearchFragment extends Fragment {
         // Search for the given username
         queries.add(ParseQuery.getQuery(ParseUser.class).whereEqualTo("username", queryText));
         queries.add(ParseQuery.getQuery(ParseUser.class).whereStartsWith("username", queryText.substring(0, 1)));
+        queries.add(ParseQuery.getQuery(ParseUser.class).whereStartsWith("username", queryText.toLowerCase().substring(0, 1)));
         queries.add(ParseQuery.getQuery(ParseUser.class).whereContains("username", queryText));
         queries.add(ParseQuery.getQuery(ParseUser.class).whereContains("username", queryText.trim()));
+        queries.add(ParseQuery.getQuery(ParseUser.class).whereContains("username", queryText.trim().toLowerCase()));
         if (queryText.trim().length() > 0) {
             queries.add(ParseQuery.getQuery(ParseUser.class).whereStartsWith("username", queryText.trim().substring(0, 1)));
         }

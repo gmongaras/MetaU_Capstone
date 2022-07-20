@@ -17,7 +17,6 @@
         android:closeIcon="@drawable/close"
         android:goIcon="@drawable/go_icon"
         android:inputType="text"
-        android:queryHint="Search friends by username"
         android:saveEnabled="true"
         android:searchIcon="@drawable/search"
         android:voiceIcon="@drawable/voice"
@@ -41,27 +40,27 @@
         android:id="@+id/tvNoResultsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No results for query"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/svProfileSearchText" />
+        app:layout_constraintTop_toTopOf="@+id/svProfileSearchText"
+        tools:text="@string/noResultsProfile" />
 
     <TextView
         android:id="@+id/tvSearchTextPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Use the search bar above to\nsearch for fortunes by text!"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/rvProfileSearchText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/rvProfileSearchText"
-        app:layout_constraintTop_toTopOf="@+id/svProfileSearchText" />
+        app:layout_constraintTop_toTopOf="@+id/svProfileSearchText"
+        tools:text="@string/searchTextPrompt" />
 
     <ProgressBar
         android:id="@+id/pbProfileSearchText"
@@ -79,54 +78,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You do not have access\nto this user's fortunes"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/noAccessProfile" />
 
     <TextView
         android:id="@+id/tvBlocked1_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You blocked this user and cannot\nsee their information. Unblock this\nuser to see their info."
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/blocked1" />
 
     <TextView
         android:id="@+id/tvBlocked2_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You have been blocked by the\nother user and cannot see their info."
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/blocked2" />
 
     <TextView
         android:id="@+id/tvNotOnline_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cannot search fortunes when offline"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/svProfileSearchText" />
+        app:layout_constraintTop_toTopOf="@+id/svProfileSearchText"
+        tools:text="@string/offlineProfileSearch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

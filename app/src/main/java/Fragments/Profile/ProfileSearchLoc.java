@@ -23,6 +23,7 @@ import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.Profile.ProfileAdapter;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -57,6 +58,7 @@ public class ProfileSearchLoc extends Fragment {
     TextView tvNoAccessLoc;
     TextView tvBlocked1_loc;
     TextView tvBlocked2_loc;
+    TextView tvNotOnline_loc;
 
     // Recycler view stuff
     LinearLayoutManager layoutManager;
@@ -84,6 +86,8 @@ public class ProfileSearchLoc extends Fragment {
     // Text from the query
     LatLng queryLoc;
     int queryDist;
+
+    translationManager manager;
 
     public ProfileSearchLoc() {
         // Required empty public constructor
@@ -124,16 +128,40 @@ public class ProfileSearchLoc extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get the elements in the view
+        rvProfileSearchLoc = view.findViewById(R.id.rvProfileSearchLoc);
+        tvNoResultsLoc = view.findViewById(R.id.tvNoResultsLoc);
+        tvSearchLocPrompt = view.findViewById(R.id.tvSearchLocPrompt);
+        pbProfileSearchLoc = view.findViewById(R.id.pbProfileSearchLoc);
+        svProfileSearchLat = view.findViewById(R.id.svProfileSearchLat);
+        svProfileSearchLng = view.findViewById(R.id.svProfileSearchLng);
+        svProfileSearchDist = view.findViewById(R.id.svProfileSearchDist);
+        tvNoAccessLoc = view.findViewById(R.id.tvNoAccessLoc);
+        tvBlocked1_loc = view.findViewById(R.id.tvBlocked1_loc);
+        tvBlocked2_loc = view.findViewById(R.id.tvBlocked2_loc);
+        tvNotOnline_loc = view.findViewById(R.id.tvNotOnline_loc);
+
+        // Get the translation manager
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
+        // Translate the text
+        manager.addText(tvNoResultsLoc, R.string.noResultsProfile, requireContext());
+        manager.addText(tvSearchLocPrompt, R.string.searchLocPrompt, requireContext());
+        manager.addHint(svProfileSearchLat, "Latitude");
+        manager.addHint(svProfileSearchLng, "Longitude");
+        manager.addHint(svProfileSearchDist, "Distance (mi)");
+        manager.addText(tvNoAccessLoc, R.string.noAccessProfile, requireContext());
+        manager.addText(tvBlocked1_loc, R.string.blocked1, requireContext());
+        manager.addText(tvBlocked2_loc, R.string.blocked2, requireContext());
+        manager.addText(tvNotOnline_loc, R.string.offlineProfileSearch, requireContext());
+
         // If the user is offline, show some text
         if (!(new offlineHelpers()).isNetworkAvailable(requireContext())) {
-            view.findViewById(R.id.tvSearchLocPrompt).setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.pbProfileSearchLoc).setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.tvNotOnline_loc).setVisibility(View.VISIBLE);
+            tvSearchLocPrompt.setVisibility(View.INVISIBLE);
+            pbProfileSearchLoc.setVisibility(View.INVISIBLE);
+            tvNotOnline_loc.setVisibility(View.VISIBLE);
             return;
         }
-
-        // Get the search text prompt
-        tvSearchLocPrompt = view.findViewById(R.id.tvSearchLocPrompt);
 
         // Should the user have search access?
         boolean access = true;
@@ -183,15 +211,6 @@ public class ProfileSearchLoc extends Fragment {
         }
 
         skipVal = 0;
-
-        // Get the elements
-        svProfileSearchLat = view.findViewById(R.id.svProfileSearchLat);
-        svProfileSearchLng = view.findViewById(R.id.svProfileSearchLng);
-        svProfileSearchDist = view.findViewById(R.id.svProfileSearchDist);
-        rvProfileSearchLoc = view.findViewById(R.id.rvProfileSearchLoc);
-        tvNoResultsLoc = view.findViewById(R.id.tvNoResultsLoc);
-        tvSearchLocPrompt = view.findViewById(R.id.tvSearchLocPrompt);
-        pbProfileSearchLoc = view.findViewById(R.id.pbProfileSearchLoc);
 
         // Initialize the fortunes
         Fortunes = new ArrayList<>();
@@ -307,15 +326,15 @@ public class ProfileSearchLoc extends Fragment {
 
         // If the fields are empty, handle the issue
         if (Lat_str.isEmpty()) {
-            Toast.makeText(requireContext(), "Latitude input cannot be empty", Toast.LENGTH_SHORT).show();
+            manager.createToast(requireContext(), "Latitude input cannot be empty");
             return;
         }
         if (Lng_str.isEmpty()) {
-            Toast.makeText(requireContext(), "Longitude input cannot be empty", Toast.LENGTH_SHORT).show();
+            manager.createToast(requireContext(), "Longitude input cannot be empty");
             return;
         }
         if (Dist_str.isEmpty()) {
-            Toast.makeText(requireContext(), "Distance input cannot be empty", Toast.LENGTH_SHORT).show();
+            manager.createToast(requireContext(), "Distance input cannot be empty");
             return;
         }
 
@@ -327,21 +346,21 @@ public class ProfileSearchLoc extends Fragment {
             Dist = Integer.parseInt(Dist_str);
         }
         catch (Exception e) {
-            Toast.makeText(requireContext(), "Distance must be less than " + String.valueOf(Integer.MAX_VALUE), Toast.LENGTH_SHORT).show();
+            manager.createToast(requireContext(), "Distance must be less than " + String.valueOf(Integer.MAX_VALUE));
             return;
         }
 
         // If the input is too large or too small, handle the issue
         if (Lat < -90 || Lat > 90) {
-            Toast.makeText(requireContext(), "Latitude must be between -90 and 90", Toast.LENGTH_SHORT).show();
+            manager.createToast(requireContext(), "Latitude must be between -90 and 90");
             return;
         }
         if (Lng < -180 || Lng > 180) {
-            Toast.makeText(requireContext(), "Longitude must be between -180 and 180", Toast.LENGTH_SHORT).show();
+            manager.createToast(requireContext(), "Longitude must be between -180 and 180");
             return;
         }
         if (Dist <= 0) {
-            Toast.makeText(requireContext(), "Distance must be greater than 0", Toast.LENGTH_SHORT).show();
+            manager.createToast(requireContext(), "Distance must be greater than 0");
             return;
         }
 

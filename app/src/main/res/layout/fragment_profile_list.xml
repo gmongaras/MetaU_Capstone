@@ -22,54 +22,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You do not have access\nto this user's fortunes"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/noAccessProfile" />
 
     <TextView
         android:id="@+id/tvBlocked1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You blocked this user and cannot\nsee their information. Unblock this\nuser to see their info."
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/blocked1" />
 
     <TextView
         android:id="@+id/tvBlocked2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You have been blocked by the\nother user and cannot see their info."
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/blocked2" />
 
     <TextView
         android:id="@+id/tvNoFortunes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You currently have no fortunes"
         android:textColor="?attr/textFillColor"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/noFortunes" />
 </androidx.constraintlayout.widget.ConstraintLayout>

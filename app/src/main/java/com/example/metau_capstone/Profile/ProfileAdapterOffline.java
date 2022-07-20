@@ -21,6 +21,7 @@ import com.example.metau_capstone.R;
 import com.example.metau_capstone.dateFormatter;
 import com.example.metau_capstone.offlineDB.FortuneDB;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -59,6 +60,8 @@ public class ProfileAdapterOffline extends RecyclerView.Adapter<ProfileAdapterOf
     // Used to work with offline data
     offlineHelpers h;
 
+    translationManager manager_T;
+
     /**
      * Initialize the adapter
      * @param fortunes A list of FortuneDB objects to initialize the list with
@@ -72,6 +75,9 @@ public class ProfileAdapterOffline extends RecyclerView.Adapter<ProfileAdapterOf
         this.user = user;
         this.context = context;
         fragmentManager = manager;
+
+        // Get the translation manager
+        manager_T = new translationManager(ParseUser.getCurrentUser().getString("lang"));
 
         df = new dateFormatter();
         h = new offlineHelpers();
@@ -142,14 +148,14 @@ public class ProfileAdapterOffline extends RecyclerView.Adapter<ProfileAdapterOf
             this.fortune = fortune;
 
             // Get the date in the proper form and set it
-            tvDate.setText(df.toMonthDay(h.toDate(fortune.date)));
+            manager_T.addText(tvDate, df.toMonthDay(h.toDate(fortune.date)));
 
             // Get the message
             String message = fortune.message;
             if (message.length() > 50) {
                 message = message.substring(0, 50) + "...";
             }
-            tvFortune.setText(message);
+            manager_T.addText(tvFortune, message);
 
             // Is the fortune liked?
             if (fortune.liked) {

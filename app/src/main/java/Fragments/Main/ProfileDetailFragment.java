@@ -22,6 +22,7 @@ import com.example.metau_capstone.Fortune;
 import com.example.metau_capstone.MapHelper;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.dateFormatter;
+import com.example.metau_capstone.translationManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -85,6 +86,8 @@ public class ProfileDetailFragment extends Fragment {
     // Used to load date information
     dateFormatter df = new dateFormatter();
 
+    translationManager manager;
+
     public ProfileDetailFragment() {
         // Required empty public constructor
     }
@@ -136,6 +139,9 @@ public class ProfileDetailFragment extends Fragment {
         // Should the user have map access?
         boolean access = true;
 
+        // Get the translation manager
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
         // If the mode is 1 (friend), check if the user has access
         if (mode == 1) {
             // If the user doesn't allow friends to see their map, set
@@ -162,10 +168,14 @@ public class ProfileDetailFragment extends Fragment {
         ivShare = view.findViewById(R.id.ivShare);
         tvLikeCt = view.findViewById(R.id.tvLikeCt);
         ivBack = view.findViewById(R.id.ivBack);
+        tvNoAccessMap = view.findViewById(R.id.tvNoAccessMap);
+
+        // Translate any static text
+        manager.addText(tvNoAccessMap, R.string.noAccessMap, requireContext());
 
         // Get the fortune information and store it
-        tvDate_detail.setText(df.toMonthDayTime(fortune.getCreatedAt()));
-        tvFortune_detail.setText(fortune.getMessage());
+        manager.addText(tvDate_detail, df.toMonthDayTime(fortune.getCreatedAt()));
+        manager.addText(tvFortune_detail, fortune.getMessage());
 
         // If the user doesn't have access to the fortunes, display a message
         // and hide the map
@@ -228,7 +238,7 @@ public class ProfileDetailFragment extends Fragment {
 
 
                 // Set the number of likes for the fortune
-                tvLikeCt.setText(String.valueOf(fortune.getLikeCt()));
+                manager.addText(tvLikeCt, String.valueOf(fortune.getLikeCt()));
 
 
                 // Add an onClick listener to the like button
@@ -260,7 +270,7 @@ public class ProfileDetailFragment extends Fragment {
                                 // the image
                                 if (e != null) {
                                     Log.e(TAG, "Unable to like/unlike fortune", e);
-                                    Toast.makeText(requireContext(), "Unable to like/unlike fortune", Toast.LENGTH_SHORT).show();
+                                    manager.createToast(requireContext(), "Unable to like/unlike fortune");
 
                                     // Liking is no longer happening
                                     liking = false;
@@ -287,7 +297,7 @@ public class ProfileDetailFragment extends Fragment {
                                         // If an error occured, don't change the like count
                                         if (e != null) {
                                             Log.e(TAG, "Unable to change like count", e);
-                                            Toast.makeText(requireContext(), "Unable to change like count", Toast.LENGTH_SHORT).show();
+                                            manager.createToast(requireContext(), "Unable to change like count");
                                         }
 
                                         // Change the image of the like button
@@ -300,7 +310,7 @@ public class ProfileDetailFragment extends Fragment {
 
 
                                         // Change the like count
-                                        tvLikeCt.setText(String.valueOf(finalCt));
+                                        manager.addText(tvLikeCt, String.valueOf(finalCt));
 
                                         // Change the liked state
                                         liked = !liked;
@@ -336,14 +346,27 @@ public class ProfileDetailFragment extends Fragment {
                     whoTxt = "someone got";
                 }
 
-                Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                sendIntent.setType("text/plain");
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Check ou this fortune " + whoTxt + " from a Fortune Cookie app:\n" + tvFortune_detail.getText());
 
-                sendIntent.putExtra(Intent.EXTRA_TITLE, "Check out this fortune " + whoTxt);
+                // Create an intent after translating the sentences
+                String finalWhoTxt = whoTxt;
+                manager.getText("Check out this fortune " + whoTxt + " from a Fortune Cookie app:\n" + tvFortune_detail.getText(), new translationManager.onCompleteListener() {
+                    @Override
+                    public void onComplete(String text) {
+                        manager.getText("Check out this fortune " + finalWhoTxt, new translationManager.onCompleteListener() {
+                            @Override
+                            public void onComplete(String title) {
+                                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                                sendIntent.setType("text/plain");
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, text);
 
-                // Show the Sharesheet
-                startActivity(Intent.createChooser(sendIntent, null));
+                                sendIntent.putExtra(Intent.EXTRA_TITLE, title);
+
+                                // Show the Sharesheet
+                                startActivity(Intent.createChooser(sendIntent, null));
+                            }
+                        });
+                    }
+                });
             }
         });
 

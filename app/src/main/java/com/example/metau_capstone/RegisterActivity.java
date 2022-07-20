@@ -2,18 +2,33 @@ package com.example.metau_capstone;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.metau_capstone.offlineDB.databaseApp;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
 
 /**
  ** This class is used to manage the Register Activity (activity_register.xml)
@@ -26,17 +41,18 @@ public class RegisterActivity extends AppCompatActivity {
     EditText etUsername_reg;
     EditText etPassword_reg;
     EditText etPassword2_reg;
+    Spinner spLanguages;
     Button btnRegister;
+
+    // Used to keep track of the indices
+    Integer[] idx;
+    Integer[] idx_rev;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            setTheme(R.style.Theme_DarkMode); //when dark mode is enabled, we use the dark theme
-        } else {
-            setTheme(R.style.Theme_DarkMode);  //default app theme
-        }
+        setTheme(R.style.Theme_LightMode);  //default app theme
         setContentView(R.layout.activity_register);
 
         try {
@@ -50,7 +66,63 @@ public class RegisterActivity extends AppCompatActivity {
         etUsername_reg = findViewById(R.id.etUsername_reg);
         etPassword_reg = findViewById(R.id.etPassword_reg);
         etPassword2_reg = findViewById(R.id.etPassword2_reg);
+        spLanguages = findViewById(R.id.spLanguages);
         btnRegister = findViewById(R.id.btnRegister);
+
+        // Add options to the language dropdown
+
+        // Get all the items in the dictionary
+        String[] languages = new String[translationManager.langEncodings.size()];
+        Object[] keys = translationManager.langEncodings.keySet().toArray();
+        idx = new Integer[keys.length];
+        for (int i = 0; i < idx.length; i++) {
+            idx[i] = i;
+        }
+
+        // Sort the languages in alphabetical order and get the indices
+        // for that order
+        Arrays.sort(idx, new Comparator<Integer>() {
+            @Override public int compare(final Integer o1, final Integer o2) {
+                return ((String)keys[o1]).compareTo((String)keys[o2]);
+            }
+        });
+        idx_rev = new Integer[idx.length];
+        for (int i = 0; i < idx.length; i++) {
+            idx_rev[idx[i]] = i;
+        }
+
+        // Add each item to the spinner while finding the index of English
+        int engLoc = 0;
+        for (int i = 0; i < languages.length; i++) {
+            String s = (String)keys[idx[i]];
+            if (Objects.equals(s, "English")) {
+                engLoc = i;
+            }
+            languages[i] = s + " (" + translationManager.langTrans.get(s) + ")";
+        }
+
+        // Create the adapter for the spinner and add english as the starting language
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, languages);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spLanguages.setAdapter(adapter);
+        spLanguages.setSelection(engLoc, false);
+
+        // Set the spinner text color
+        View v = spLanguages.getSelectedView();
+        ((TextView)v).setTextColor(ContextCompat.getColor(RegisterActivity.this, R.color.black));
+        spLanguages.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                View v = spLanguages.getSelectedView();
+                ((TextView)view).setTextColor(ContextCompat.getColor(RegisterActivity.this, R.color.black));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
 
         // Put an onClick listener to the button
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +158,16 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("useAI", true);
                     user.put("friendable", true);
                     user.put("darkMode", false);
+                    user.put("lang", translationManager.langEncodings.get(translationManager.langEncodings.keySet().toArray()[idx[(int)spLanguages.getSelectedItemId()]]));
+
+                    // Hide all views
+                    etUsername_reg.setVisibility(View.INVISIBLE); etUsername_reg.setClickable(false);
+                    etPassword_reg.setVisibility(View.INVISIBLE); etPassword_reg.setClickable(false);
+                    etPassword2_reg.setVisibility(View.INVISIBLE); etPassword2_reg.setClickable(false);
+                    ConstraintLayout clRegister = findViewById(R.id.clRegister);
+                    clRegister.setVisibility(View.INVISIBLE); clRegister.setClickable(false);
+                    btnRegister.setVisibility(View.INVISIBLE); btnRegister.setClickable(false);
+                    findViewById(R.id.pbRegister).setVisibility(View.VISIBLE);
 
                     // Sign the user up
                     user.signUpInBackground(new SignUpCallback() {
@@ -94,9 +176,22 @@ public class RegisterActivity extends AppCompatActivity {
                             if (e == null) {
                                 Toast.makeText(RegisterActivity.this, "User Registered!", Toast.LENGTH_SHORT).show();
 
-                                // Go to the main page
-                                Intent i = new Intent(RegisterActivity.this, MainActivity.class);
-                                startActivity(i);
+                                // Create a database when the user logs in and save it to
+                                // the user's phone for offline loading, if the user is online
+                                if (new offlineHelpers().isNetworkAvailable(RegisterActivity.this)) {
+                                    (new offlineHelpers()).createDatabase(RegisterActivity.this);
+                                }
+
+                                // Create a new translation manager object
+                                translationManager manager = new translationManager(ParseUser.getCurrentUser().getString("lang"), new translationManager.onLanguageSetListener() {
+                                    @Override
+                                    public void onLanguageSet() {
+                                        // When the language is set, go to the main activity
+                                        Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                });
                             }
                             else {
                                 Log.e(TAG, "Unable to register user", e);

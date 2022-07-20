@@ -17,22 +17,30 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.LoginActivity;
 import com.example.metau_capstone.R;
+import com.example.metau_capstone.RegisterActivity;
+import com.example.metau_capstone.translationManager;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -44,6 +52,7 @@ import com.parse.SaveCallback;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -70,12 +79,29 @@ public class SettingsFragment extends Fragment {
     SwitchCompat swPushNotif;
     Button btnLocPerm;
     Button btnDeleteAccount;
+    TextView tvProfileSettings;
+    TextView tvRestartApp;
+    TextView tvChangePFP;
+    TextView tvOtherSettings;
+    TextView tvAppSettings;
+    TextView tvLocAccess;
+    TextView tvLanguagePrompt;
+    Spinner spLanguage;
 
     // The current parse user
     ParseUser user;
 
     // Is a switch being changed?
     boolean changing;
+
+    translationManager manager;
+
+    // Theme colors
+    int textColor;
+
+    // Used to keep track of indices in the languages spinner
+    Integer[] idx;
+    Integer[] idx_rev;
 
     // Map from element ID to Parse columns name
     Map<Integer, String> idToString = Map.of(
@@ -113,6 +139,9 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get the translation manager
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
         // Get the elements
         ivChangePFP = view.findViewById(R.id.ivChangePFP);
         swFriendable = view.findViewById(R.id.swFriendable);
@@ -125,6 +154,25 @@ public class SettingsFragment extends Fragment {
         swPushNotif = view.findViewById(R.id.swPushNotif);
         btnLocPerm = view.findViewById(R.id.btnLocPerm);
         btnDeleteAccount = view.findViewById(R.id.btnDeleteAccount);
+        tvProfileSettings = view.findViewById(R.id.tvProfileSettings);
+        tvRestartApp = view.findViewById(R.id.tvRestartApp);
+        tvChangePFP = view.findViewById(R.id.tvChangePFP);
+        tvOtherSettings = view.findViewById(R.id.tvOtherSettings);
+        tvAppSettings = view.findViewById(R.id.tvAppSettings);
+        tvLocAccess = view.findViewById(R.id.tvLocAccess);
+        spLanguage = view.findViewById(R.id.spLanguage);
+        tvLanguagePrompt = view.findViewById(R.id.tvLanguagePrompt);
+
+        // Get the main theme text color
+        int colorId = androidx.constraintlayout.widget.R.attr.textFillColor;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            final TypedValue value = new TypedValue();
+            requireActivity().getTheme().resolveAttribute(colorId, value, true);
+            textColor = value.data;
+        }
+
+        // Translate all text in the fragment
+        translateText();
 
         changing = false;
 
@@ -136,13 +184,101 @@ public class SettingsFragment extends Fragment {
             user = ParseUser.getCurrentUser();
         }
 
+        // Add options to the language dropdown
+        // Get all the items in the dictionary
+        String[] languages = new String[translationManager.langEncodings.size()];
+        Object[] keys = translationManager.langEncodings.keySet().toArray();
+        idx = new Integer[keys.length];
+        for (int i = 0; i < idx.length; i++) {
+            idx[i] = i;
+        }
+        // Sort the languages in alphabetical order and get the indices
+        // for that order
+        Arrays.sort(idx, new Comparator<Integer>() {
+            @Override public int compare(final Integer o1, final Integer o2) {
+                return ((String)keys[o1]).compareTo((String)keys[o2]);
+            }
+        });
+        idx_rev = new Integer[idx.length];
+        for (int i = 0; i < idx.length; i++) {
+            idx_rev[idx[i]] = i;
+        }
+        // Add each item to the spinner while finding the index of the current language
+        int langLoc = 0;
+        String lang = user.getString("lang");
+        for (int i = 0; i < languages.length; i++) {
+            String s = (String)keys[idx[i]];
+            if (Objects.equals(translationManager.langEncodings.get(s), lang)) {
+                langLoc = i;
+            }
+            languages[i] = s + " (" + translationManager.langTrans.get(s) + ")";
+        }
+        // Create the adapter for the spinner and add english as the starting language
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(requireContext(),
+                android.R.layout.simple_spinner_item, languages);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spLanguage.setAdapter(adapter);
+        spLanguage.setSelection(langLoc, false);
+        // Set the spinner text color
+        View v = spLanguage.getSelectedView();
+        ((TextView)v).setTextColor(textColor);
+
+
+
+        // When a new item is selected in the languages, change the
+        // stored language
+        spLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Error handling
+                if (changing) {
+                    return;
+                }
+                changing = true;
+                spLanguage.setClickable(false);
+
+                // Change the text color
+                View v = spLanguage.getSelectedView();
+                ((TextView)view).setTextColor(textColor);
+
+                // Get the selected language
+                String newLang = (String)translationManager.langEncodings.values().toArray()[idx[position]];
+
+                // Get the string from the database and change it
+                user.put("lang", newLang);
+
+                // Save the user
+                user.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        // Log a failure and notify the user
+                        if (e != null) {
+                            Log.e(TAG, "Unable to save language selection", e);
+                            manager.createToast(requireContext(), "Unable to save language selection");
+
+                            changing = false;
+                            spLanguage.setClickable(true);
+                            return;
+                        }
+
+                        // If there was a success, do nothing
+                        changing = false;
+                        spLanguage.setClickable(true);
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
+
+
         // Store the user image
         ParseFile pic = user.getParseFile("profilePic");
         if (pic == null) {
-            Glide.with(view.getContext())
-                    .load(R.drawable.default_pfp)
-                    .circleCrop()
-                    .into(ivChangePFP);
+            ivChangePFP.setImageResource(R.drawable.default_pfp);
         }
         else {
             Glide.with(view.getContext())
@@ -232,7 +368,7 @@ public class SettingsFragment extends Fragment {
                             1);
                 }
                 else {
-                    Toast.makeText(requireContext(), "Already granted permission!", Toast.LENGTH_SHORT).show();
+                    manager.createToast(requireContext(), "Already granted permission!");
                 }
                 
                 // Make the button clickable again
@@ -272,31 +408,81 @@ public class SettingsFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
-        // When the delete account button is clicked display a prompt to delete
-        // the users account
-        btnDeleteAccount.setOnClickListener(new View.OnClickListener() {
+
+        // Get the needed translations
+        manager.getText("Delete account?", new translationManager.onCompleteListener() {
             @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(requireContext())
-                        .setTitle("Delete account?")
-                        .setMessage("Are you sure you want to delete your account? All data will be lost.")
-
-
-                        // Positive message meaning the user is absolutely sure
-                        // they want to delete their account
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onComplete(String title) {
+                manager.getText("Are you sure you want to delete your account? All data will be lost.", new translationManager.onCompleteListener() {
+                    @Override
+                    public void onComplete(String message) {
+                        manager.getText("Yes", new translationManager.onCompleteListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deleteAccount();
-                            }
-                        })
+                            public void onComplete(String Yes) {
+                                manager.getText("No", new translationManager.onCompleteListener() {
+                                    @Override
+                                    public void onComplete(String No) {
+                                        // When the delete account button is clicked display a prompt to delete
+                                        // the users account
+                                        btnDeleteAccount.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                                                        .setTitle(title)
+                                                        .setMessage(message)
 
-                        // Negative message meaning the user doesn't want to delete their
-                        // account
-                        .setNegativeButton("No", null)
-                        .show();
+
+                                                        // Positive message meaning the user is absolutely sure
+                                                        // they want to delete their account
+                                                        .setPositiveButton(Yes, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                deleteAccount();
+                                                            }
+                                                        })
+
+                                                        // Negative message meaning the user doesn't want to delete their
+                                                        // account
+                                                        .setNegativeButton(No, null)
+                                                        .show();
+
+                                                // Change the color of the buttons
+                                                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
+                                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
         });
+    }
+
+
+    /**
+     * Translate all text in the view given the language to translate to
+     */
+    public void translateText() {
+        manager.addText(tvProfileSettings, R.string.profileSettings, requireContext());
+        manager.addText(tvChangePFP, R.string.changePFP, requireContext());
+        manager.addText(swDarkMode, R.string.darkMode, requireContext());
+        manager.addText(tvRestartApp, R.string.restartApp, requireContext());
+        manager.addText(tvOtherSettings, R.string.otherSettings, requireContext());
+        manager.addText(swFriendable, R.string.otherFriends, requireContext());
+        manager.addText(swShowFortunesFriends, R.string.friendFortunes, requireContext());
+        manager.addText(swShowFortunesUsers, R.string.userFortunes, requireContext());
+        manager.addText(swShowMapFriends, R.string.mapFriends, requireContext());
+        manager.addText(swShowMapUsers, R.string.userFriends, requireContext());
+        manager.addText(tvAppSettings, R.string.appSettings, requireContext());
+        manager.addText(swGenerateMode, R.string.generateAI, requireContext());
+        manager.addText(swPushNotif, R.string.pushNotif, requireContext());
+        manager.addText(tvLocAccess, R.string.locAccess, requireContext());
+        manager.addText(btnLocPerm, R.string.givePerm, requireContext());
+        manager.addText(btnDeleteAccount, R.string.deleteAcct, requireContext());
+        manager.addText(tvLanguagePrompt, R.string.languagePrompt, requireContext());
     }
 
 
@@ -341,7 +527,7 @@ public class SettingsFragment extends Fragment {
                         // message
                         if (e != null) {
                             Log.e(TAG, "Unable to delete user", e);
-                            Toast.makeText(requireContext(), "Unable to delete account", Toast.LENGTH_SHORT).show();
+                            manager.createToast(requireContext(), "Unable to delete account");
                             changing = false;
                             return;
                         }
@@ -351,7 +537,7 @@ public class SettingsFragment extends Fragment {
                         ParseUser.logOutInBackground();
 
                         // Show a success message
-                        Toast.makeText(requireContext(), "Account deleted", Toast.LENGTH_SHORT).show();
+                        manager.createToast(requireContext(), "Account deleted");
 
                         // Switch to the login activity
                         Intent i = new Intent(requireContext(), LoginActivity.class);
@@ -393,7 +579,7 @@ public class SettingsFragment extends Fragment {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Unable to change switch", e);
-                    Toast.makeText(requireContext(), "Unable to change setting", Toast.LENGTH_SHORT).show();
+                    manager.createToast(requireContext(), "Unable to change setting");
 
                     // Change the switch
                     Switch.setChecked(state);
@@ -437,7 +623,7 @@ public class SettingsFragment extends Fragment {
 
         // If the user sent back an image
         if ((data != null) && requestCode == 21) {
-            Toast.makeText(getContext(), "Uploading image...", Toast.LENGTH_SHORT).show();
+            manager.createToast(requireContext(), "Uploading image...");
 
             // Get the URI of the image
             Uri photoUri = data.getData();
@@ -471,18 +657,18 @@ public class SettingsFragment extends Fragment {
                                             .circleCrop()
                                             .into(ivChangePFP);
 
-                                    Toast.makeText(getContext(), "Upload Success!", Toast.LENGTH_SHORT).show();
+                                    manager.createToast(requireContext(), "Upload Success!");
                                 }
                                 else {
                                     Log.e(TAG, "File upload issue", e);
-                                    Toast.makeText(getContext(), "Upload Failed :(", Toast.LENGTH_SHORT).show();
+                                    manager.createToast(requireContext(), "Upload Failed :(");
                                 }
                             }
                         });
                     }
                     else {
                         Log.e(TAG, "File Save Issue", e);
-                        Toast.makeText(getContext(), "Upload Failed :(", Toast.LENGTH_SHORT).show();
+                        manager.createToast(requireContext(), "Upload Failed :(");
                     }
                 }
             });

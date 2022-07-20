@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.translation.TranslationManager;
 import android.widget.FrameLayout;
 
 import com.example.metau_capstone.offlineDB.FortuneDB;
@@ -20,6 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import Fragments.Main.FriendsFragment;
@@ -61,10 +64,29 @@ public class MainActivity extends AppCompatActivity {
     int curPosX = 0;
     boolean hasMoved = false;
 
+    translationManager manger;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Set the apps language so that the map can be loaded in
+        // teh correct language
+        String languageToLoad = ParseUser.getCurrentUser().getString("lang");
+        if (languageToLoad == null) {
+            languageToLoad = "en";
+        }
+        Locale locale = new Locale.Builder().setLanguage(languageToLoad).build();
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLayoutDirection(new Locale("en"));
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+
         super.onCreate(savedInstanceState);
+
+        // Get the translation manager and set the language
+        manger = new translationManager(ParseUser.getCurrentUser().getString("lang"));
 
         // When the user logs in, change themes to dark or light mode
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
@@ -77,6 +99,12 @@ public class MainActivity extends AppCompatActivity {
         // Get the elements
         bottomNav = findViewById(R.id.bottomNav);
         flContainer = findViewById(R.id.flContainer);
+
+        // Change the bottom navigation text
+        manger.addText(bottomNav.getMenu().getItem(0), (String)bottomNav.getMenu().getItem(0).getTitle());
+        manger.addText(bottomNav.getMenu().getItem(1), (String)bottomNav.getMenu().getItem(0).getTitle());
+        manger.addText(bottomNav.getMenu().getItem(2), (String)bottomNav.getMenu().getItem(0).getTitle());
+        manger.addText(bottomNav.getMenu().getItem(3), (String)bottomNav.getMenu().getItem(0).getTitle());
 
         // Hide the action bar
         try {

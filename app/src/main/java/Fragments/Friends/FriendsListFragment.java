@@ -23,6 +23,7 @@ import com.example.metau_capstone.Friends.Friend_queue;
 import com.example.metau_capstone.Friends.FriendsAdapter;
 import com.example.metau_capstone.R;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -53,6 +54,7 @@ public class FriendsListFragment extends Fragment {
 
     // Elements in the view
     TextView tvNoFriends;
+    TextView tv_notOnine_list;
     RecyclerView rvFriends;
     ProgressBar pbFriends;
 
@@ -66,6 +68,8 @@ public class FriendsListFragment extends Fragment {
 
     // Current user logged in
     ParseUser user;
+
+    translationManager manager;
 
     public FriendsListFragment() {
         // Required empty public constructor
@@ -92,17 +96,25 @@ public class FriendsListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get the manager for translation
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
+        // Get the elements
+        rvFriends = view.findViewById(R.id.rvFriendRequests);
+        tvNoFriends = view.findViewById(R.id.tvNoFriends);
+        tv_notOnine_list = view.findViewById(R.id.tv_notOnine_list);
+        pbFriends = requireActivity().findViewById(R.id.pbFriends);
+        swipeContainer = view.findViewById(R.id.srlList);
+
+        // Translate any text in the views
+        manager.addText(tvNoFriends, R.string.noFriends, requireContext());
+        manager.addText(tv_notOnine_list, R.string.offlineFriends, requireContext());
+
         // If the user is offline, show a message
         if (!(new offlineHelpers()).isNetworkAvailable(requireContext())) {
             view.findViewById(R.id.tv_notOnine_list).setVisibility(View.VISIBLE);
             return;
         }
-
-        // Get the elements
-        rvFriends = view.findViewById(R.id.rvFriendRequests);
-        tvNoFriends = view.findViewById(R.id.tvNoFriends);
-        pbFriends = requireActivity().findViewById(R.id.pbFriends);
-        swipeContainer = view.findViewById(R.id.srlList);
 
 
 

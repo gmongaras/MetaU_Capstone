@@ -18,5 +18,7 @@ public class userSettingsDB {
     @ColumnInfo
     public boolean state;
     @ColumnInfo
+    public String stateStr;
+    @ColumnInfo
     public String tag;
 }

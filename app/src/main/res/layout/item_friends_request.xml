@@ -39,24 +39,24 @@
         tools:text="username" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tvNumForts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        android:text="Number of fortunes: "
         android:textColor="?textFillColor"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_request"
-        app:layout_constraintTop_toBottomOf="@+id/tvFriendUsername_request" />
+        app:layout_constraintTop_toBottomOf="@+id/tvFriendUsername_request"
+        tools:text="@string/numForts" />
 
     <TextView
         android:id="@+id/tvFriendFortuneCt_request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?textFillColor"
-        app:layout_constraintBottom_toBottomOf="@+id/textView3"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="@+id/textView3"
+        app:layout_constraintBottom_toBottomOf="@+id/tvNumForts"
+        app:layout_constraintStart_toEndOf="@+id/tvNumForts"
+        app:layout_constraintTop_toTopOf="@+id/tvNumForts"
         tools:text="10" />
 
     <Button
@@ -66,12 +66,12 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/black"
-        android:text="Accept Request"
+        android:text="@string/requestAccept"
         android:textColor="@color/white"
         android:textSize="10sp"
         android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_request"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNumForts" />
 
     <Button
         android:id="@+id/btnDeclineRequest"
@@ -80,12 +80,12 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/darker_red"
-        android:text="Decline Request"
+        android:text="@string/requestDecline"
         android:textColor="@color/white"
         android:textSize="10sp"
         android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/btnAcceptRequest"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNumForts" />
 
     <Button
         android:id="@+id/btnRequestAccepted"
@@ -94,12 +94,12 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/light_grey"
-        android:text="Friend Added!"
+        android:text="@string/requestAccepted"
         android:textColor="@color/black"
         android:textSize="10sp"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_request"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNumForts" />
 
     <Button
         android:id="@+id/btnRequestDeclined"
@@ -108,11 +108,11 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/light_grey"
-        android:text="Request declined"
+        android:text="@string/requestDeclined"
         android:textColor="@color/black"
         android:textSize="10sp"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ivFriend_request"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNumForts" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

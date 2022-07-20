@@ -23,6 +23,7 @@ import com.example.metau_capstone.offlineDB.FortuneDB;
 import com.example.metau_capstone.offlineDB.FortuneDao;
 import com.example.metau_capstone.offlineDB.databaseApp;
 import com.example.metau_capstone.offlineHelpers;
+import com.example.metau_capstone.translationManager;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -71,6 +72,8 @@ public class ProfileLikedFragment extends Fragment {
     // In offline mode, have the first batch of fortunes been loaded?
     boolean loadedSome;
 
+    translationManager manager;
+
     public ProfileLikedFragment() {
         // Required empty public constructor
     }
@@ -110,14 +113,28 @@ public class ProfileLikedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get the translation manager
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
+
+        // Get the elements in the view
+        rvProfileLiked = view.findViewById(R.id.rvProfileLiked);
+        tvBlockedLiked2 = view.findViewById(R.id.tvBlockedLiked2);
+        tvBlockedLiked1 = view.findViewById(R.id.tvBlockedLiked1);
+        tvNoAccess_liked = view.findViewById(R.id.tvNoAccess_liked);
+        tvNoLiked = view.findViewById(R.id.tvNoLiked);
+
+        // Translate any text
+        manager.addText(tvBlockedLiked2, R.string.blocked2, requireContext());
+        manager.addText(tvBlockedLiked1, R.string.blocked1, requireContext());
+        manager.addText(tvNoAccess_liked, R.string.noAccessProfile, requireContext());
+        manager.addText(tvNoLiked, R.string.noLiked, requireContext());
+
         // If the user is offline, handle offline fortune loading
         if (!new offlineHelpers().isNetworkAvailable(requireContext())) {
             loadOffline(view);
             return;
         }
 
-
-        tvNoLiked = view.findViewById(R.id.tvNoLiked);
 
         // Should the fortunes be loaded
         boolean load = true;
@@ -144,7 +161,6 @@ public class ProfileLikedFragment extends Fragment {
         // logged in user cannot access the other users info
         else if (mode == 3) {
             load = false;
-            tvBlockedLiked1 = view.findViewById(R.id.tvBlockedLiked2);
             tvBlockedLiked1.setVisibility(View.VISIBLE);
         }
 
@@ -152,15 +168,11 @@ public class ProfileLikedFragment extends Fragment {
         // logged in user cannot access the other users info
         else if (mode == 4) {
             load = false;
-            tvBlockedLiked2 = view.findViewById(R.id.tvBlockedLiked2);
             tvBlockedLiked2.setVisibility(View.VISIBLE);
         }
 
         // Load the fortunes if the user has access to do so
         if (load == true) {
-
-            // Get the elements
-            rvProfileLiked = view.findViewById(R.id.rvProfileLiked);
 
             // Initialize the fortunes
             Fortunes = new ArrayList<>();
@@ -171,7 +183,6 @@ public class ProfileLikedFragment extends Fragment {
         // If the user doesn't have access to the fortunes, display a message
         else {
             if (mode != 3 && mode != 4) {
-                tvNoAccess_liked = view.findViewById(R.id.tvNoAccess_liked);
                 tvNoAccess_liked.setVisibility(View.VISIBLE);
             }
         }
