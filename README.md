@@ -16,6 +16,7 @@
   - [Profile - Friend/Other User](#profile-menu---friendother-user)
   - [Profile Menu - Friend/Other User](#profile-menu---friendother-user)
   - [Settings](#settings)
+    - Supported Languages
   - [Fortune Detailed View](#fortune-detailed-view)
 - [Offline Mode](#offline-mode)
 
@@ -64,6 +65,7 @@ Additionally, the following permissions are used:
 The following APIs are used:
 - [Parse](https://parseplatform.org/)
 - [Google Maps](https://developers.google.com/maps)
+- [Google Cloud Translation](https://cloud.google.com/translate/docs)
 
 
 
@@ -178,6 +180,8 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   3. If the user doesn't have an account, the user can [register](#register-page) on a different page
   4. Pressing the back button exits the app
 
+- <b>Note:</b> If the langauge is changed in the [Settings](#settings), then the app may take a little longer to load as it requires a model to be downloaded, but once the model is downloaded, it is kept on the phone until the langauge is changed again.
+
 ### Register Page
 <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Register%20Page.png" height="400" title="Register Page"></p>
   
@@ -186,8 +190,11 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   
   1. The user is able to enter a username which will be used as that user's account username.
   2. The user can enter a password and reenter that password to create a new password for their new account.
-  3. If the passwords match and the username is not already taken, a new user is created with the specified username as their new username and the specified password as their new password. The user is then logged into their account and sent to their [homepage](#homepage---fortune)
-  4. Pressing the back button takes the user back to the login page
+  3. The user can select one of [many different languages](#supported-languages) for the app to be displayed in
+  4. If the passwords match and the username is not already taken, a new user is created with the specified username as their new username and the specified password as their new password. The user is then logged into their account and sent to their [homepage](#homepage---fortune)
+  5. Pressing the back button takes the user back to the login page
+
+- <b>Note:</b> If the user selcts a language other than English to load the app in, then registration may take a little longer than usual as language models required for translation need to be downloaded. This is a one time download and only happens when the user selects a new langauge in [Settings](#settings) or when registering.
 
 ### Main Menu
 <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Main%20Menu.png" height="400" title="Main Menu"></p>
@@ -367,6 +374,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
 - <b>Features:</b>
   1. Clicking on the user's profile picture pops up a window allowing the user to upload an image from their device to change their profile picture.
   2. User's can set whether they want to display the app in dark mode or light mode (default)
+  3. User's can change the language which the app is displayed in.
   3. The user can change their privacy/user settings:
      - User's can set whether they are allowing other users to friend them. Turning this off does not allow any other users to make new friend requests to the current user.
      - User's can set whether they are allowing friends to see their fortunes or not. Setting this off hides all fortunes when <b>friends</b> are viewing the current user's profile. This setting does not effect other users.
@@ -379,6 +387,72 @@ The user account is used to keep track of the user's fortunes, friends, etc.
      - If the user has not given the app location permission, the user can do so by clicking the "Give permission" button. If the user already gave location permission, this button does nothing.
   5. The user can delete their account which unfriends the user from all other users and removes fortunes from this user. This deleting is permanent and the user has no way of getting their account back.
   6. Pressing the back button sends the user back to their [profile](#profile---logged-in-user)
+  
+#### Supported Languages
+Below are the supported languages in the app, which can be changed in the settings or upon registration.
+
+The list of supported lagauges by Google ML can be found at the following link: 
+https://developers.google.com/ml-kit/language/identification/langid-support
+
+Supported Languages:
+- Afrikaans
+- Arabic
+- Belarusian
+- Bulgarian
+- Bengali
+- Catalan
+- Czech
+- Welsh
+- Danish
+- German
+- Greek
+- English
+- Esperanto
+- Spanish
+- Estonian
+- Persian
+- Finnish
+- French
+- Irish
+- Galician
+- Gujarati
+- Hebrew
+- Hindi
+- Croatian
+- Haitian
+- Hungarian
+- Indonesian
+- Icelandic
+- Italian
+- Japanese
+- Georgian
+- Kannada
+- Korean
+- Lithuanian
+- Latvian
+- Macedonian
+- Marathi
+- Malay
+- Maltese
+- Dutch
+- Norwegian
+- Polish
+- Portuguese
+- Romanian
+- Russian
+- Slovak
+- Slovenian
+- Albanian
+- Swedish
+- Swahili
+- Tamil
+- Telugu
+- Thai
+- Turkish
+- Ukrainian
+- Urdu
+- Vietnamese
+- Chinese (Traditional)
 
 ### Fortune Detailed View
 <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Fortune%20Detailed%20View.png" title="Fortune Detailed View" height="400"></p>
