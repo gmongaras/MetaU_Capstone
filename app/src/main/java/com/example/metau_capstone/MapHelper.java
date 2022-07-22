@@ -56,6 +56,8 @@ public class MapHelper {
     // Used to work with offline data
     offlineHelpers h;
 
+    translationManager manager;
+
 
 
     // Constructor taking in a map and the support fragment
@@ -65,6 +67,7 @@ public class MapHelper {
         this.context = context;
         this.df = new dateFormatter();
         this.h = new offlineHelpers();
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
     }
 
 
@@ -110,7 +113,7 @@ public class MapHelper {
         else {
             if (errorText != null) {
                 errorText.setVisibility(View.VISIBLE);
-                (new translationManager(ParseUser.getCurrentUser().getString("lang"))).addText(errorText, R.string.mapError, context);
+                manager.addText(errorText, R.string.mapError, context);
             }
         }
     }
@@ -160,7 +163,7 @@ public class MapHelper {
             public void done(List<Fortune> objects, ParseException e) {
                 // If an error occurred, show an error message
                 if (e != null) {
-                    (new translationManager(ParseUser.getCurrentUser().getString("lang"))).createToast(context, "Unable to load map");
+                    manager.createToast(context, "Unable to load map");
                     Log.e("MapHelper", "Unable to load in fortunes", e);
                     return;
                 }
@@ -182,19 +185,30 @@ public class MapHelper {
                     LatLng latLng = new LatLng(point.getLatitude(), point.getLongitude());
                     options.position(latLng);
 
-                    // Set the title and snippet from the given view
-                    options.title(df.toMonthDayTime(fortune.getCreatedAt()));
-                    String message = fortune.getMessage();
-                    if (message.length() > 50) {
-                        message = message.substring(0, 50) + "...";
-                    }
-                    options.snippet(message);
+                    // Get the title translated and snippet of the fortune
+                    manager.getText(df.toMonthDayTime(fortune.getCreatedAt()), new translationManager.onCompleteListener() {
+                        @Override
+                        public void onComplete(String title) {
+                            String message = fortune.getMessage();
+                            if (message.length() > 50) {
+                                message = message.substring(0, 50) + "...";
+                            }
+                            manager.getText(message, new translationManager.onCompleteListener() {
+                                @Override
+                                public void onComplete(String text) {
+                                    // Set the title and snippet from the given view
+                                    options.title(title);
+                                    options.snippet(text);
 
-                    // Define custom marker
-                    //options.icon(bitmapDescriptorFromVector(MapDemoActivity.this, R.drawable.marker));
+                                    // Define custom marker
+                                    //options.icon(bitmapDescriptorFromVector(MapDemoActivity.this, R.drawable.marker));
 
-                    // Add the marker with an animation
-                    dropPinEffect(map.addMarker(options));
+                                    // Add the marker with an animation
+                                    dropPinEffect(map.addMarker(options));
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });
@@ -217,19 +231,30 @@ public class MapHelper {
             LatLng latLng = new LatLng(fortune.Lat_, fortune.Long_);
             options.position(latLng);
 
-            // Set the title and snippet from the given view
-            options.title(df.toMonthDayTime(h.toDate(fortune.date)));
-            String message = fortune.message;
-            if (message.length() > 50) {
-                message = message.substring(0, 50) + "...";
-            }
-            options.snippet(message);
+            // Get the title translated and snippet of the fortune
+            manager.getText(df.toMonthDayTime(h.toDate(fortune.date)), new translationManager.onCompleteListener() {
+                @Override
+                public void onComplete(String title) {
+                    String message = fortune.message;
+                    if (message.length() > 50) {
+                        message = message.substring(0, 50) + "...";
+                    }
+                    manager.getText(message, new translationManager.onCompleteListener() {
+                        @Override
+                        public void onComplete(String text) {
+                            // Set the title and snippet from the given view
+                            options.title(title);
+                            options.snippet(text);
 
-            // Define custom marker
-            //options.icon(bitmapDescriptorFromVector(MapDemoActivity.this, R.drawable.marker));
+                            // Define custom marker
+                            //options.icon(bitmapDescriptorFromVector(MapDemoActivity.this, R.drawable.marker));
 
-            // Add the marker with an animation
-            dropPinEffect(map.addMarker(options));
+                            // Add the marker with an animation
+                            dropPinEffect(map.addMarker(options));
+                        }
+                    });
+                }
+            });
         }
     }
 

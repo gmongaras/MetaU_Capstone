@@ -25,7 +25,7 @@ public class CustomWindowAdapter implements GoogleMap.InfoWindowAdapter {
         View v = mInflater.inflate(R.layout.custom_info_window, null);
         // Populate fields
         TextView tvDate_map = (TextView) v.findViewById(R.id.tvDate_map);
-        tvDate_map.setText("Date: " + marker.getTitle());
+        tvDate_map.setText(marker.getTitle());
 
         TextView tvFortuneText_map = (TextView) v.findViewById(R.id.tvFortuneText_map);
         tvFortuneText_map.setText(marker.getSnippet());

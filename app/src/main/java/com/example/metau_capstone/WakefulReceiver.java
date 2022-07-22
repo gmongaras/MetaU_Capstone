@@ -14,6 +14,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.example.metau_capstone.BootReceiver;
+import com.parse.ParseUser;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -38,6 +39,8 @@ public class WakefulReceiver extends WakefulBroadcastReceiver {
     // provides access to the system alarm services.
     private AlarmManager mAlarmManager;
 
+    translationManager manager;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onReceive(Context context, Intent intent) {
         int notifyId = 1;
@@ -51,26 +54,36 @@ public class WakefulReceiver extends WakefulBroadcastReceiver {
         notificationChannel.enableVibration(true);
         notificationChannel.setVibrationPattern(new long[]{1000, 2000});
 
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification.Builder(context, channelId)
-                .setContentTitle("New Fortune!")
-                .setContentText("It's time! A new fortune cookie is available to open")
-                .setSmallIcon(R.drawable.cookie)
-                .build();
+        manager.getText("New Fortune!", new translationManager.onCompleteListener() {
+            @Override
+            public void onComplete(String title) {
+                manager.getText("It's time! A new fortune cookie is available to open", new translationManager.onCompleteListener() {
+                    @Override
+                    public void onComplete(String text) {
+                        NotificationManager notificationManager =
+                                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        Notification notification = new Notification.Builder(context, channelId)
+                                .setContentTitle(title)
+                                .setContentText(text)
+                                .setSmallIcon(R.drawable.cookie)
+                                .build();
 
-        // When clicked, go to the login activity
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-                new Intent(context, LoginActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.contentIntent = contentIntent;
+                        // When clicked, go to the login activity
+                        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+                                new Intent(context, LoginActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                        notification.contentIntent = contentIntent;
 
-        notificationManager.createNotificationChannel(notificationChannel);
-        notificationManager.notify(notifyId, notification);
-
-
+                        notificationManager.createNotificationChannel(notificationChannel);
+                        notificationManager.notify(notifyId, notification);
 
 
-        WakefulReceiver.completeWakefulIntent(intent);
+
+
+                        WakefulReceiver.completeWakefulIntent(intent);
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -83,6 +96,7 @@ public class WakefulReceiver extends WakefulBroadcastReceiver {
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, WakefulReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
