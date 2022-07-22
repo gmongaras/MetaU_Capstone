@@ -213,7 +213,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // When the user logs in, check if they have any new friends and add them
-        addFriends();
+        if (new offlineHelpers().isNetworkAvailable(this)) {
+            addFriends();
+        }
 
         // Save context state
         Context context = this;
@@ -227,12 +229,17 @@ public class LoginActivity extends AppCompatActivity {
 
         // Create a new translation manager object
         String language = null;
-        try {
-            language = ParseUser.getCurrentUser().fetch().getString("lang");
-        } catch (ParseException e) {
+        if (new offlineHelpers().isNetworkAvailable(this)) {
+            try {
+                language = ParseUser.getCurrentUser().fetch().getString("lang");
+            } catch (ParseException e) {
+                language = ParseUser.getCurrentUser().getString("lang");
+            }
+        }
+        else {
             language = ParseUser.getCurrentUser().getString("lang");
         }
-        translationManager manager = new translationManager(language, new translationManager.onLanguageSetListener() {
+        new translationManager(language, new translationManager.onLanguageSetListener() {
             @Override
             public void onLanguageSet() {
                 // Change if the user is in dark or light mode
