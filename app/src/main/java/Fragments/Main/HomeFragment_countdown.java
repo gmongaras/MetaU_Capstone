@@ -343,6 +343,6 @@ public class HomeFragment_countdown extends Fragment {
 
         // Change the fragment
         ft.replace(R.id.flContainer, fragmentHome);
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 }
