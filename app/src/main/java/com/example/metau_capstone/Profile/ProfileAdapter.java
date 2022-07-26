@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,8 +32,13 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import Fragments.Friends.FriendsListFragment;
 import Fragments.Main.ProfileDetailFragment;
+import Fragments.Main.ProfileFragment;
+import Fragments.Profile.ProfileLikedFragment;
+import Fragments.Profile.ProfileList;
 
 /**
  ** Adapter used to manage fortune loading for all views in the Profile Fragment
@@ -51,6 +57,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     FragmentManager fragmentManager;
 
     Context context;
+
+    // Class calling this adapter
+    String clsString;
+    boolean isList;
+    boolean isLikedList;
 
     // User to load the profile for
     ParseUser user;
@@ -75,13 +86,21 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
      * @param context What object is using this adapter?
      * @param manager The manager which manages the fragments this adapter is in
      * @param mode The user mode to load the fortunes ^
+     * @param clsString The string of the class calling this fragment
      */
-    public ProfileAdapter(List<Fortune> fortunes, ParseUser user, Context context, FragmentManager manager, int mode) {
+    public ProfileAdapter(List<Fortune> fortunes, ParseUser user, Context context, FragmentManager manager, int mode, String clsString) {
         this.fortunes = fortunes;
         this.user = user;
         this.context = context;
         fragmentManager = manager;
         this.mode = mode;
+        if (clsString.contains("$")) {
+            this.clsString = clsString.substring(0, clsString.indexOf("$"));
+        }
+
+        // Is the fragment calling this adapter the profile list or profile liked list?
+        this.isList = Objects.equals(this.clsString, ProfileList.class.toString());
+        this.isLikedList = Objects.equals(this.clsString, ProfileLikedFragment.class.toString());
 
         // Get the translation manager
         manager_T = new translationManager(ParseUser.getCurrentUser().getString("lang"));
@@ -162,6 +181,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     itemView.performClick();
+
                     return gestureDetector.onTouchEvent(event);
                 }
             });
@@ -279,6 +299,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                     liked = false;
                     likedFortunes.remove(fortune.getObjectId());
 
+                    // If the fragment is the liked fragment, remove the
+                    // liked fortune from the list
+                    if (isLikedList) {
+                        int pos = getAdapterPosition();
+                        fortunes.remove(pos);
+                        notifyDataSetChanged();
+                    }
+
                     // Update the image;
                     ivLiked.setImageResource(R.drawable.like);
                 }
@@ -312,6 +340,34 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
                     // Update the image;
                     ivLiked.setImageResource(R.drawable.like_filled);
+                }
+
+
+                // Find the friends fragment manager
+                Fragment f = null;
+                for (Fragment frag : fragmentManager.getFragments()) {
+                    if (frag.getClass() == ProfileFragment.class) {
+                        f = frag;
+                        break;
+                    }
+                }
+
+
+                // Unload the profile list or profile liked list fragment
+                if (f != null) {
+                    for (Fragment frag : f.getChildFragmentManager().getFragments()) {
+                        if (isList) {
+                            if (frag.getClass() == ProfileLikedFragment.class) {
+                                f.getChildFragmentManager().beginTransaction().remove(frag).commit();
+                                break;
+                            }
+                        } else if (isLikedList) {
+                            if (frag.getClass() == ProfileList.class) {
+                                f.getChildFragmentManager().beginTransaction().remove(frag).commit();
+                                break;
+                            }
+                        }
+                    }
                 }
 
 

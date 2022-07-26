@@ -217,7 +217,7 @@ public class ProfileSearchLoc extends Fragment {
 
         // When the fortunes have been loaded, setup the recycler view -->
         // Bind the adapter to the recycler view
-        adapter = new ProfileAdapter(Fortunes, user, getContext(), requireActivity().getSupportFragmentManager(), mode);
+        adapter = new ProfileAdapter(Fortunes, user, getContext(), requireActivity().getSupportFragmentManager(), mode, getClass().toString());
         rvProfileSearchLoc.setAdapter(adapter);
 
         // Configure the Recycler View: Layout Manager

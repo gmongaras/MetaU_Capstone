@@ -148,7 +148,7 @@ public class HomeFragment_fortune extends Fragment {
                 // If we don't have location permission, ask for permission.
                 if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // If we don't have permission, request permission and don't open the fortune
-                    Toast.makeText(requireContext(), "Location required to get fortune", Toast.LENGTH_LONG).show();
+                    manager.createToast(requireContext(), "Location required to get fortune");
                     ActivityCompat.requestPermissions(requireActivity(),
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             1);
