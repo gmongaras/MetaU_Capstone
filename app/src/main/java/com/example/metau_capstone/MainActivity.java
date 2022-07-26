@@ -102,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Change the bottom navigation text
         manger.addText(bottomNav.getMenu().getItem(0), (String)bottomNav.getMenu().getItem(0).getTitle());
-        manger.addText(bottomNav.getMenu().getItem(1), (String)bottomNav.getMenu().getItem(0).getTitle());
-        manger.addText(bottomNav.getMenu().getItem(2), (String)bottomNav.getMenu().getItem(0).getTitle());
-        manger.addText(bottomNav.getMenu().getItem(3), (String)bottomNav.getMenu().getItem(0).getTitle());
+        manger.addText(bottomNav.getMenu().getItem(1), (String)bottomNav.getMenu().getItem(1).getTitle());
+        manger.addText(bottomNav.getMenu().getItem(2), (String)bottomNav.getMenu().getItem(2).getTitle());
+        manger.addText(bottomNav.getMenu().getItem(3), (String)bottomNav.getMenu().getItem(3).getTitle());
 
         // Hide the action bar
         try {

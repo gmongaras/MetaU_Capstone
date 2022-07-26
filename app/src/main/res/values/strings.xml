@@ -45,10 +45,12 @@
     <string name="noAccessMap">You do not have access\nto this user\'s map data</string>
 
     <!-- Profile Liked -->
-    <string name="noLiked">You currently have no liked fortunes</string>
+    <string name="noLikedUser">You currently have no liked fortunes</string>
+    <string name="noLikedOther">This user currently has no liked fortunes</string>
 
     <!-- Profile List -->
-    <string name="noFortunes">You currently have no fortunes</string>
+    <string name="noFortunesUser">You currently have no fortunes</string>
+    <string name="noFortunesOther">This user currently has no fortunes</string>
 
     <!-- Profile Search Loc -->
     <string name="searchLocPrompt">Use the search bar above to search for\nfortunes by latitude and longitude!</string>

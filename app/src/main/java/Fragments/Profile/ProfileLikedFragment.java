@@ -127,7 +127,12 @@ public class ProfileLikedFragment extends Fragment {
         manager.addText(tvBlockedLiked2, R.string.blocked2, requireContext());
         manager.addText(tvBlockedLiked1, R.string.blocked1, requireContext());
         manager.addText(tvNoAccess_liked, R.string.noAccessProfile, requireContext());
-        manager.addText(tvNoLiked, R.string.noLiked, requireContext());
+        if (mode == 0) {
+            manager.addText(tvNoLiked, R.string.noLikedUser, requireContext());
+        }
+        else {
+            manager.addText(tvNoLiked, R.string.noLikedOther, requireContext());
+        }
 
         // If the user is offline, handle offline fortune loading
         if (!new offlineHelpers().isNetworkAvailable(requireContext())) {

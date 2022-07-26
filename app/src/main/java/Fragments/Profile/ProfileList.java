@@ -137,7 +137,12 @@ public class ProfileList extends Fragment {
         manager.addText(tvNoAccess, R.string.noAccessProfile, requireContext());
         manager.addText(tvBlocked1, R.string.blocked1, requireContext());
         manager.addText(tvBlocked2, R.string.blocked2, requireContext());
-        manager.addText(tvNoFortunes, R.string.noFortunes, requireContext());
+        if (mode == 0) {
+            manager.addText(tvNoFortunes, R.string.noFortunesUser, requireContext());
+        }
+        else {
+            manager.addText(tvNoFortunes, R.string.noFortunesOther, requireContext());
+        }
 
         // Should the fortunes be loaded
         boolean load = true;
