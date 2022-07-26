@@ -255,6 +255,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   1. <b>Fortune List:</b> The fortune list view lists the fortunes the user owns.
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Logged%20in%20user%201.png" title="Profile Menu - Logged in user" height="400"></p>
      - <b>Features:</b>
+     
        1. The date the user received each fortune is shown
        2. A text snippet of each fortune is shown
        3. A heart for each fortune is either red, if the used has liked the fortune, or black, if the user has not liked the fortune.
@@ -263,12 +264,14 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   2. <b>Text Search:</b> Allows the user to search for any fortunes they own by text.
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Logged%20in%20user%202.png" title="Profile Menu - Logged in user" height="400"></p>
      - <b>Features:</b>
+     
        1. The user can enter some text in the search bar and press enter or search to search through all their fortunes for the given text they entered.
        2. Upon searching, if fortunes were found, they will be displayed. If no fortunes were found, error text will be displayed.
        - This view also contains all features from the fortune list.
   3. <b>Location Search:</b> Allows the user to search for any fortunes they own by latitude and longitude within a given mile radius.
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Logged%20in%20user%203.png" title="Profile Menu - Logged in user" height="400"></p>
      - <b>Features:</b>
+     
        1. The user can enter latitude and logitude values which describes the location they want to search for fortune for. Additionally, the user can add a mile value which is the radius the user wants to query fortunes within.
        2. Upon searching, if fortunes were found withing the given radius at the given latitude and logitude values, they will be displayed. If no fortunes were found within that radius, error text will be shown.
        - This view also contains all features from the fortune list.
@@ -286,6 +289,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   1. <b>Friends List:</b> The friends list shows all the user's current friends
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Friends%201.png" title="Friends" height="400"></p>
      - <b>Features:</b>
+     
        1. The name of each friend is shown
        2. The profile picture of each friend is shown
        3. The number of fortunes of each friend is shown
@@ -294,6 +298,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   2. <b>Friend Requests:</b> The friends request list shows all the user's who have sent a friend request to the current user
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Friends%202.png" title="Friends" height="400"></p>
      - <b>Features:</b>
+     
        1. The name of each user who sent a request is shown
        2. The profile picture of each user who sent a request is shown
        3. The number of fortunes of each user who sent a request is shown
@@ -303,6 +308,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   3. <b>Friend Search:</b> The friends search page allows the user to search for new friends
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Friends%203.png" title="Friends" height="400"></p>
      - <b>Features:</b>
+     
        1. The search bar at the top of the page allows the user to enter text to query for new users. When the user presses the search button, users are queried. If no users were found, error text is shown. If users were found, they are displayed.
        2. Each displayed user has the name of the user shown.
        3. Each displayed user has the profile picture of the user shown.
@@ -338,6 +344,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   1. <b>Fortune List:</b> The fortune list view lists the fortunes the other user owns.
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%201.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features:</b>
+     
        1. The date the other user received each fortune is shown
        2. A text snippet of each fortune is shown
        3. A heart for each fortune is either red, if the current used has liked the fortune, or black, if the current user has not liked the fortune.
@@ -346,12 +353,14 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   2. <b>Text Search:</b> Allows the current user to search for any fortunes the other user owns by text.
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%202.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features:</b>
+     
        1. The current user can enter some text in the search bar and press enter or search to search through all the other user's fortunes for the given text they entered.
        2. Upon searching, if fortunes were found, they will be displayed. If no fortunes were found, error text will be displayed.
        - This view also contains all features from the fortune list.
   3. <b>Location Search:</b> Allows the current user to search for any fortunes the other user owns by latitude and longitude within a given mile radius.
      <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%203.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features:</b>
+     
        1. The current user can enter latitude and logitude values which describes the location they want to search the other user's fortunes for. Additionally, the user can add a mile value which is the radius the user wants to query fortunes within.
        2. Upon searching, if fortunes were found withing the given radius at the given latitude and logitude values, they will be displayed. If no fortunes were found within that radius, error text will be shown.
        - This view also contains all features from the fortune list.
