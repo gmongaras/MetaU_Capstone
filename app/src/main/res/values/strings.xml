@@ -80,7 +80,7 @@
     <string name="deleteAcct">Delete Account</string>
 
     <!-- item Friend -->
-    <string name="numForts">Number of fortunes: </string>
+    <string name="numForts">Number of fortunes:\ </string>
 
     <!-- item Friend Requests -->
     <string name="requestAccept">Accept Request</string>

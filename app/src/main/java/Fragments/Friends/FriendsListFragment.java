@@ -223,9 +223,8 @@ public class FriendsListFragment extends Fragment {
                 // If any users were updated, update the friends list
                 // as well.
                 for (Fragment frag : getParentFragmentManager().getFragments()) {
-                    if (frag.getClass() == FriendsListFragment.class) {
+                    if (frag.getClass() == FriendsListFragment.class || frag.getClass() == FriendsSearchFragment.class) {
                         getParentFragmentManager().beginTransaction().remove(frag).commit();
-                        break;
                     }
                 }
 

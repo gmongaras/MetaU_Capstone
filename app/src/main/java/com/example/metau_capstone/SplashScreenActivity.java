@@ -13,6 +13,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash_screen);
         Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
         ActivityOptions options =
                 ActivityOptions.makeCustomAnimation(this, R.anim.fade_in, R.anim.fade_out);

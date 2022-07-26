@@ -416,7 +416,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
             }
 
             // Is the other user blocked by the current user?
-            if (displayed == false) {
+            if (!displayed) {
                 for (ParseUser b : blocked) {
                     if (Objects.equals(b.getObjectId(), friend.getObjectId())) {
                         displayButton("You blocked this user", colorRed, colorPrimary, null);
@@ -439,7 +439,7 @@ public class FriendsSearchAdapter extends RecyclerView.Adapter<FriendsSearchAdap
 
             // Does this user have a request from the other user?
             if (!displayed) {
-                for (ParseUser r : sent) {
+                for (ParseUser r : requests) {
                     if (Objects.equals(r.getObjectId(), friend.getObjectId())) {
                         displayButton("Currently have a request", tertiaryColor, colorSecondary, null);
                         displayed = true;

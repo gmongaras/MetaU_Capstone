@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Objects;
 
 import Fragments.Friends.FriendsListFragment;
+import Fragments.Friends.FriendsSearchFragment;
 import Fragments.Main.FriendsFragment;
 
 /**
@@ -199,7 +200,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
                     // Find the list fragment and unload it
                     for (Fragment frag : FriendsFragManager.getFragments()) {
-                        if (frag.getClass() == FriendsListFragment.class) {
+                        if (frag.getClass() == FriendsListFragment.class || frag.getClass() == FriendsSearchFragment.class) {
                             FriendsFragManager.beginTransaction().remove(frag).commit();
                             break;
                         }
@@ -226,6 +227,28 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
                     // Remove the user from the requests
                     removeRequest(curUser, friend, "declined");
+
+
+                    // Find the friends fragment
+                    FragmentManager FriendsFragManager = null;
+                    for (Fragment frag : fragmentManager.getFragments()) {
+                        if (frag.getClass() == FriendsFragment.class) {
+                            FriendsFragManager = frag.getChildFragmentManager();
+                            break;
+                        }
+                    }
+
+                    if (FriendsFragManager == null) {
+                        return;
+                    }
+
+                    // Find the list fragment and unload it
+                    for (Fragment frag : FriendsFragManager.getFragments()) {
+                        if (frag.getClass() == FriendsListFragment.class || frag.getClass() == FriendsSearchFragment.class) {
+                            FriendsFragManager.beginTransaction().remove(frag).commit();
+                            break;
+                        }
+                    }
                 }
             });
         }

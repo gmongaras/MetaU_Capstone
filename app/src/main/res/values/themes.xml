@@ -23,6 +23,7 @@
 
     <style name="Splashscreen" parent="Theme.MetaU_Capstone" >
         <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:background">@drawable/splash_background</item>
     </style>
 
 

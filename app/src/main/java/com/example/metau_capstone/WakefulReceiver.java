@@ -95,7 +95,13 @@ public class WakefulReceiver extends WakefulBroadcastReceiver {
     public void setAlarm(Context context) {
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, WakefulReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent alarmIntent;
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) >= 31) {
+            alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
+        }
+        else {
+            alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        }
         manager = new translationManager(ParseUser.getCurrentUser().getString("lang"));
 
         Calendar calendar = Calendar.getInstance();
@@ -128,7 +134,13 @@ public class WakefulReceiver extends WakefulBroadcastReceiver {
 
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, WakefulReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent alarmIntent;
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) >= 31) {
+            alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
+        }
+        else {
+            alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        }
 
         mAlarmManager.cancel(alarmIntent);
 

@@ -305,6 +305,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                         int pos = getAdapterPosition();
                         fortunes.remove(pos);
                         notifyDataSetChanged();
+
+                        if (fortunes.size() == 0) {
+                            ;
+                        }
                     }
 
                     // Update the image;
@@ -356,16 +360,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 // Unload the profile list or profile liked list fragment
                 if (f != null) {
                     for (Fragment frag : f.getChildFragmentManager().getFragments()) {
-                        if (isList) {
-                            if (frag.getClass() == ProfileLikedFragment.class) {
-                                f.getChildFragmentManager().beginTransaction().remove(frag).commit();
-                                break;
-                            }
-                        } else if (isLikedList) {
-                            if (frag.getClass() == ProfileList.class) {
-                                f.getChildFragmentManager().beginTransaction().remove(frag).commit();
-                                break;
-                            }
+                        if (!frag.getClass().toString().equals(clsString)) {
+                            f.getChildFragmentManager().beginTransaction().remove(frag).commit();
                         }
                     }
                 }
