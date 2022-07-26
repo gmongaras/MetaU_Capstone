@@ -284,9 +284,10 @@ public class MapHelper {
                 if (t > 0.0) {
                     // Post this event again 15ms from now.
                     handler.postDelayed(this, 15);
-                } else { // done elapsing, show window
-                    marker.showInfoWindow();
                 }
+//                else { // done elapsing, show window
+//                    marker.showInfoWindow();
+//                }
             }
         });
     }
