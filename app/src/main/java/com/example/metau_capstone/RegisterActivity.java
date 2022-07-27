@@ -169,6 +169,9 @@ public class RegisterActivity extends AppCompatActivity {
                     btnRegister.setVisibility(View.INVISIBLE); btnRegister.setClickable(false);
                     findViewById(R.id.pbRegister).setVisibility(View.VISIBLE);
 
+                    // Put the user in light mode
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
                     // Sign the user up
                     user.signUpInBackground(new SignUpCallback() {
                         @Override

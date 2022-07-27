@@ -15,6 +15,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
@@ -405,6 +406,9 @@ public class ProfileFragment extends Fragment {
                                     // Log the user out
                                     manager.createToast(requireContext(), "Logging out...");
                                     ParseUser.logOutInBackground();
+
+                                    // Put the user in light mode
+                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
                                     // Exit this fragment
                                     requireActivity().finishAffinity();
