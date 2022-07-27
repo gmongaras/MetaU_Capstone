@@ -274,9 +274,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 // If the item is already liked, unlike it
                 if (liked) {
                     // Update the backend
-                    ParseRelation<Fortune> likedRel = user.getRelation("liked");
+                    ParseRelation<Fortune> likedRel = ParseUser.getCurrentUser().getRelation("liked");
                     likedRel.remove(fortune);
-                    user.saveInBackground(new SaveCallback() {
+                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e != null) {
@@ -305,10 +305,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                         int pos = getAdapterPosition();
                         fortunes.remove(pos);
                         notifyDataSetChanged();
-
-                        if (fortunes.size() == 0) {
-                            ;
-                        }
                     }
 
                     // Update the image;
@@ -317,9 +313,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 // If the item is not liked, like it
                 else {
                     // Update the backend
-                    ParseRelation<Fortune> likedRel = user.getRelation("liked");
+                    ParseRelation<Fortune> likedRel = ParseUser.getCurrentUser().getRelation("liked");
                     likedRel.add(fortune);
-                    user.saveInBackground(new SaveCallback() {
+                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e != null) {
