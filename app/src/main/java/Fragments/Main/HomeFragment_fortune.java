@@ -305,6 +305,9 @@ public class HomeFragment_fortune extends Fragment {
 
         // Get the location of the phone
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (location == null) {
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
 
         // The saved location
         ParseGeoPoint loc = null;
