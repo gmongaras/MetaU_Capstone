@@ -223,7 +223,7 @@ public class HomeFragment_fortune extends Fragment {
                         else {
                             // Get a random number in the range of the number
                             // of loaded fortunes
-                            int i = ThreadLocalRandom.current().nextInt(0, finalFortunes.size() + 1);
+                            int i = (int) ((Math.random() * (finalFortunes.size() - 1)));
 
                             // Get the fortune and save it
                             fortune = finalFortunes.get(i);
