@@ -349,7 +349,7 @@ public class ProfileDetailFragment extends Fragment {
 
                 // Create an intent after translating the sentences
                 String finalWhoTxt = whoTxt;
-                manager.getText("Check out this fortune " + whoTxt + " from a Fortune Cookie app:\n" + tvFortune_detail.getText(), new translationManager.onCompleteListener() {
+                manager.getText("Check out this fortune " + whoTxt + " from FortuneDroid:\n" + tvFortune_detail.getText(), new translationManager.onCompleteListener() {
                     @Override
                     public void onComplete(String text) {
                         manager.getText("Check out this fortune " + finalWhoTxt, new translationManager.onCompleteListener() {

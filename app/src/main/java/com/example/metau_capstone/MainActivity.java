@@ -19,6 +19,7 @@ import com.example.metau_capstone.offlineDB.FortuneDB;
 import com.example.metau_capstone.offlineDB.FortuneDao;
 import com.example.metau_capstone.offlineDB.databaseApp;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -70,8 +71,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Set the apps language so that the map can be loaded in
-        // teh correct language
-        String languageToLoad = ParseUser.getCurrentUser().getString("lang");
+        // the correct language
+        String languageToLoad;
+        try {
+            try {
+                languageToLoad = ParseUser.getCurrentUser().fetch().getString("lang");
+            }
+            catch (NullPointerException e) {
+                languageToLoad = "en";
+            }
+        } catch (ParseException e) {
+            languageToLoad = ParseUser.getCurrentUser().getString("lang");
+        }
         if (languageToLoad == null) {
             languageToLoad = "en";
         }

@@ -510,9 +510,9 @@ public class ProfileFragment extends Fragment {
                                                                     blockFriend();
 
                                                                     // Go back to the friends fragment
-                                                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-                                                                    ft.replace(R.id.flContainer, FriendsFragment.newInstance(0));
-                                                                    ft.commit();
+//                                                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+//                                                                    ft.replace(R.id.flContainer, FriendsFragment.newInstance(0));
+//                                                                    ft.commit();
 
                                                                 }
                                                             })
@@ -731,43 +731,11 @@ public class ProfileFragment extends Fragment {
 
     // Block a friend
     private void blockFriend() {
-        // Get the needed translations
-        manager.getText("Block this friend?", new translationManager.onCompleteListener() {
-            @Override
-            public void onComplete(String title) {
-                manager.getText("Are you sure you want to block " + tvUsername.getText().toString() + "?\nBlocking will also unfriend them and remove all liked fortunes between you two.", new translationManager.onCompleteListener() {
-                    @Override
-                    public void onComplete(String text) {
-                        // Show a prompt to confirm if the user wants to block a friend
-                        AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                                .setTitle(title)
-                                .setMessage(text)
+        // Unfriend the user
+        unfriend();
 
-                                // If the user clicks yes, block this friend
-                                .setPositiveButton(YesTrans, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        // Unfriend the user
-                                        unfriend();
-
-                                        // Block the user
-                                        block();
-
-                                    }
-                                })
-
-                                // If the user clicks no, do nothing
-                                .setNegativeButton(NoTrans, null)
-                                .show();
-
-                        // Change the color of the buttons
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
-                    }
-                });
-            }
-        });
+        // Block the user
+        block();
     }
 
 
@@ -839,18 +807,23 @@ public class ProfileFragment extends Fragment {
                                                 public void done(ParseException e) {
                                                     // When the users have been updated,
                                                     // notify the user
-                                                    manager.createToast(requireContext(), "User blocked");
+                                                    manager.getText("User blocked", new translationManager.onCompleteListener() {
+                                                        @Override
+                                                        public void onComplete(String text) {
+                                                            Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show();
 
-                                                    // Setup the fragment switch
-                                                    FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+                                                            // Setup the fragment switch
+                                                            FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
 
-                                                    // Go back to the friends fragment
-                                                    ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-                                                    FriendsFragment friendsFragment = FriendsFragment.newInstance(0);
+                                                            // Go back to the friends fragment
+                                                            ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+                                                            FriendsFragment friendsFragment = FriendsFragment.newInstance(0);
 
-                                                    // Add back the friends fragment
-                                                    ft.replace(R.id.flContainer, friendsFragment);
-                                                    ft.commit();
+                                                            // Add back the friends fragment
+                                                            ft.replace(R.id.flContainer, friendsFragment);
+                                                            ft.commit();
+                                                        }
+                                                    });
                                                 }
                                             });
                                         }
