@@ -328,7 +328,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
   - Clicking on a menu item takes the user to that view.
 
 ### Profile - Friend/Other User
-<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20-%20Friend:Other%20User.png" title="Profile - Friend/Other User" height="400"></p>
+<p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20-%20Friend_Other%20User.png" title="Profile - Friend/Other User" height="400"></p>
   
 - <b>Description:</b> The friend or other user profile shows the user's current fortunes and has [a menu](#profile-menu---friendother-user) allowing the current user more access to other user's fortunes. Each part of the menu is described in more detail below.
   
@@ -342,7 +342,7 @@ The user account is used to keep track of the user's fortunes, friends, etc.
 - <b>Description:</b> The other user's profile page has a menu with 4 views, allowing the current user to view the other user's fortunes or search through the other user's fortunes.
   - If the other user does not allow the current user (whether they are a friend or not a friend) to view their fortunes, none of the view will show up and error text will be displayed.
   1. <b>Fortune List:</b> The fortune list view lists the fortunes the other user owns.
-     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%201.png" title="Profile Menu - Friend/Other User" height="400"></p>
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend_Other%20User%201.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features:</b>
      
        1. The date the other user received each fortune is shown
@@ -351,21 +351,21 @@ The user account is used to keep track of the user's fortunes, friends, etc.
        4. Single tapping on a fortune will go into the [detailed view](#fortune-detailed-view) of that fortune.
        5. Double tapping on a fortue will cause the current user to like or unlike it and will add or unadd the fortune to the current user's liked list.
   2. <b>Text Search:</b> Allows the current user to search for any fortunes the other user owns by text.
-     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%202.png" title="Profile Menu - Friend/Other User" height="400"></p>
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend_Other%20User%202.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features:</b>
      
        1. The current user can enter some text in the search bar and press enter or search to search through all the other user's fortunes for the given text they entered.
        2. Upon searching, if fortunes were found, they will be displayed. If no fortunes were found, error text will be displayed.
        - This view also contains all features from the fortune list.
   3. <b>Location Search:</b> Allows the current user to search for any fortunes the other user owns by latitude and longitude within a given mile radius.
-     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%203.png" title="Profile Menu - Friend/Other User" height="400"></p>
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend_Other%20User%203.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features:</b>
      
        1. The current user can enter latitude and logitude values which describes the location they want to search the other user's fortunes for. Additionally, the user can add a mile value which is the radius the user wants to query fortunes within.
        2. Upon searching, if fortunes were found withing the given radius at the given latitude and logitude values, they will be displayed. If no fortunes were found within that radius, error text will be shown.
        - This view also contains all features from the fortune list.
   4. <b>Liked List:</b> Allows the user to view any fortunes the other user has liked, whether that's from the other user's own fortune list or another user's fortune list.
-     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend:Other%20User%204.png" title="Profile Menu - Friend/Other User" height="400"></p>
+     <p align="left"><img src="https://github.com/gmongaras/MetaU_Capstone/blob/main/Images/Profile%20Menu%20-%20Friend_Other%20User%204.png" title="Profile Menu - Friend/Other User" height="400"></p>
      - <b>Features</b>
        - This view contains all features from the fortune list.
   
